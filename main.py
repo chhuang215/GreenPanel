@@ -37,7 +37,7 @@ class Example(QWidget):
 
         
         grid = QGridLayout()
-
+        grid.setSpacing(20)
 
 
         for i in range(2):
@@ -65,7 +65,7 @@ class Example(QWidget):
 
         self.setGeometry(0, 0, 800, 480)
         self.setWindowTitle('Touch Panel')
-        # self.showFullScreen()
+        self.showFullScreen()
         self.show()
 
 if __name__ == '__main__':
