@@ -106,6 +106,7 @@ if __name__ == '__main__':
     GPIO.setup(PIN_BLUE_LED, GPIO.OUT)
     GPIO.setup(PIN_PUSH_BUTTON,GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
+    GPIO.add_event_detect(PIN_PUSH_BUTTON, GPIO.RISING, callback=push_button_callback, bouncetime=300) 
     GPIO.add_event_detect(PIN_PUSH_BUTTON, GPIO.FALLING, callback=push_button_callback, bouncetime=300) 
 
     try:  
