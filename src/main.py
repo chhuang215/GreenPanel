@@ -3,11 +3,28 @@
 
 import sys
 
+import RPi.GPIO as GPIO
+
+import time
 from PyQt5.QtCore import (Qt, QCoreApplication)
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QWidget, QToolTip, QPushButton, QLabel,
                              QApplication, QVBoxLayout, QGridLayout, QHBoxLayout)
 
+
+PIN_YELLOW_LED = 18
+PIN_BLUE_LED = 23
+PIN_PUSH_BUTTON = 17
+
+# Set up GPIO
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+GPIO.setup(PIN_YELLOW_LED, GPIO.OUT)
+GPIO.setup(PIN_BLUE_LED, GPIO.OUT)
+GPIO.setup(PIN_PUSH_BUTTON,GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+
+LEDStatus = 1
 
 class Example(QWidget):
     
@@ -21,27 +38,19 @@ class Example(QWidget):
         
         
     def initUI(self):
-        
-        # QToolTip.setFont(QFont('SansSerif', 10))
-        
-        # self.setToolTip('This is a <b>QWidget</b> widget')
-        
-
-        
-
-        # btn = QPushButton('Button', self)
-        # btn.setToolTip('This is a <b>QPushButton</b> widget')
-        # btn.resize(btn.sizeHint())
-        # btn.move(50, 50)       
-        
-
+    
         
         grid = QGridLayout()
         grid.setSpacing(20)
 
+        btnLedOnOff = QPushButton("LED Bro")
+        btnLedOnOff.setFixedSize(200, 180)
+        btnLedOnOff.clicked.connect(self.turnLedOnOff)    
+        grid.addWidget(btnLedOnOff, 0, 0)
 
-        for i in range(2):
-            for j in range(4):
+
+        for i in range(0, 2):
+            for j in range(1, 4):
                 button = QPushButton("Button" + str(i + j))
                 button.setFixedSize(200, 180)
                 grid.addWidget(button, i, j)
@@ -68,8 +77,23 @@ class Example(QWidget):
         self.showFullScreen()
         self.show()
 
+    def turnLedOnOff(self):
+        if LEDStatus == 1:
+            print('LED OFF')
+
+            GPIO.output(PIN_YELLOW_LED, GPIO.LOW)
+            #GPIO.output(23, GPIO.HIGH)
+        else:
+            print('LED ON')
+            GPIO.output(PIN_YELLOW_LED, GPIO.HIGH)
+            #GPIO.output(23, GPIO.LOW)
+
 if __name__ == '__main__':
 
     app = QApplication(sys.argv)
     ex = Example()
+    RET = app.exec_()
+    # clean up
+    GPIO.cleanup()
+    sys.exit(RET)
     sys.exit(app.exec_())
