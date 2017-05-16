@@ -78,14 +78,17 @@ class Example(QWidget):
         self.show()
 
     def turnLedOnOff(self):
+        global LEDStatus
         if LEDStatus == 1:
             print('LED OFF')
 
             GPIO.output(PIN_YELLOW_LED, GPIO.LOW)
+            LEDStatus = 0
             #GPIO.output(23, GPIO.HIGH)
         else:
             print('LED ON')
             GPIO.output(PIN_YELLOW_LED, GPIO.HIGH)
+            LEDStatus = 1
             #GPIO.output(23, GPIO.LOW)
 
 if __name__ == '__main__':
