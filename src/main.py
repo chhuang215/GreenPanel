@@ -17,16 +17,13 @@ PIN_BLUE_LED = 23
 PIN_PUSH_BUTTON = 17
 
 # Set up GPIO
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
-GPIO.setup(PIN_YELLOW_LED, GPIO.OUT)
-GPIO.setup(PIN_BLUE_LED, GPIO.OUT)
-GPIO.setup(PIN_PUSH_BUTTON,GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
 
 LEDStatus = 1
 
-class Example(QWidget):
+'''
+    Main UI for the control
+'''
+class MainUI(QWidget):
     
     def __init__(self):
         super().__init__()
@@ -35,8 +32,7 @@ class Example(QWidget):
         self.window().setWindowFlags(Qt.FramelessWindowHint)
 
         self.initUI()
-        
-        
+
     def initUI(self):
     
         
@@ -45,9 +41,8 @@ class Example(QWidget):
 
         btnLedOnOff = QPushButton("LED Bro")
         btnLedOnOff.setFixedSize(200, 180)
-        btnLedOnOff.clicked.connect(self.turnLedOnOff)    
+        btnLedOnOff.clicked.connect(self.turn_led_on_off)    
         grid.addWidget(btnLedOnOff, 0, 0)
-
 
         for i in range(0, 2):
             for j in range(1, 4):
@@ -77,7 +72,7 @@ class Example(QWidget):
         self.showFullScreen()
         self.show()
 
-    def turnLedOnOff(self):
+    def turn_led_on_off(self):
         global LEDStatus
         if LEDStatus == 1:
             print('LED OFF')
@@ -90,13 +85,30 @@ class Example(QWidget):
             GPIO.output(PIN_YELLOW_LED, GPIO.HIGH)
             LEDStatus = 1
             #GPIO.output(23, GPIO.LOW)
+    
+   
+def push_button_callback():
+    print("button pushed")
+
 
 if __name__ == '__main__':
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
+    GPIO.setup(PIN_YELLOW_LED, GPIO.OUT)
+    GPIO.setup(PIN_BLUE_LED, GPIO.OUT)
+    GPIO.setup(PIN_PUSH_BUTTON,GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-    app = QApplication(sys.argv)
-    ex = Example()
-    RET = app.exec_()
-    # clean up
-    GPIO.cleanup()
-    sys.exit(RET)
-    sys.exit(app.exec_())
+    GPIO.add_event_detect(PIN_PUSH_BUTTON, GPIO.FALLING, callback=push_button_callback, bouncetime=300) 
+
+    try:  
+        app = QApplication(sys.argv)
+        ex = MainUI()
+        RET = app.exec_()
+        # clean up
+        GPIO.cleanup()
+        sys.exit(RET)
+        sys.exit(app.exec_())
+
+    except KeyboardInterrupt:  
+        GPIO.cleanup()       # clean up GPIO on CTRL+C exit 
+    
