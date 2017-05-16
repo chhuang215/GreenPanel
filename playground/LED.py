@@ -26,7 +26,7 @@ except KeyboardInterrupt:
 	GPIO.cleanup()
 
 finally:
-	gpio.cleanup()
+	GPIO.cleanup()
 
 
 #print("LED on")

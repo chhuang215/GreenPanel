@@ -19,7 +19,7 @@ PIN_PUSH_BUTTON = 17
 # Set up GPIO
 
 LEDStatus = 1
-
+LID_STATUS = 0
 '''
     Main UI for the control
 '''
@@ -74,13 +74,14 @@ class MainUI(QWidget):
 
     def turn_led_on_off(self):
         global LEDStatus
-        if LEDStatus == 1:
+        global LID_STATUS
+        if LEDStatus == 1 or LID_STATUS == 1:
             print('LED OFF')
 
             GPIO.output(PIN_YELLOW_LED, GPIO.LOW)
             LEDStatus = 0
             #GPIO.output(23, GPIO.HIGH)
-        else:
+        elif LEDStatus == 0 and LID_STATUS == 0:
             print('LED ON')
             GPIO.output(PIN_YELLOW_LED, GPIO.HIGH)
             LEDStatus = 1
@@ -88,8 +89,14 @@ class MainUI(QWidget):
     
    
 def push_button_callback(channel):
-    print(channel)
-    print("button pushed")
+    global LID_STATUS
+    if LID_STATUS == 0:
+        print("LID is open")
+        LID_STATUS = 1
+    else:
+        print("LID closed")
+        LID_STATUS = 0
+
 
 
 if __name__ == '__main__':
