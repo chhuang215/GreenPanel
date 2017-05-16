@@ -90,15 +90,14 @@ class MainUI(QWidget):
    
 def push_button_callback(channel):
     global LID_STATUS
-    if LID_STATUS == 0:
-        print("LID is open")
-        LID_STATUS = 1
+
+    if GPIO.input(channel):
+       print("LID closed")
+       LID_STATUS = 0
     else:
-        print("LID closed")
-        LID_STATUS = 0
-
-
-
+       print("LID is open")
+       LID_STATUS = 1
+       
 if __name__ == '__main__':
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
@@ -106,8 +105,8 @@ if __name__ == '__main__':
     GPIO.setup(PIN_BLUE_LED, GPIO.OUT)
     GPIO.setup(PIN_PUSH_BUTTON,GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-    GPIO.add_event_detect(PIN_PUSH_BUTTON, GPIO.RISING, callback=push_button_callback, bouncetime=300) 
-    GPIO.add_event_detect(PIN_PUSH_BUTTON, GPIO.FALLING, callback=push_button_callback, bouncetime=300) 
+    GPIO.add_event_detect(PIN_PUSH_BUTTON, GPIO.BOTH, callback=push_button_callback, bouncetime=1) 
+#    GPIO.add_event_detect(PIN_PUSH_BUTTON, GPIO.FALLING, callback=push_button_down_callback, bouncetime=300) 
 
     try:  
         app = QApplication(sys.argv)
