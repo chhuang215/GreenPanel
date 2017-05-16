@@ -16,7 +16,6 @@ PIN_YELLOW_LED = 18
 PIN_BLUE_LED = 23
 PIN_PUSH_BUTTON = 17
 
-
 LID_STATUS = 0
 
 '''
@@ -27,8 +26,8 @@ class LED():
         self.status = status
         self.pin = gpio_pin
 
-        if status == 1:
-            self.turn_on()
+#        if status == 1:
+ #           self.turn_on()
 
     def switch(self):
         global LID_STATUS
@@ -50,6 +49,9 @@ class LED():
         self.status = 0
         
 
+
+YELLOW_LED = LED(1, PIN_YELLOW_LED)
+BLUE_LED = LED(0, PIN_BLUE_LED)
 
 '''
     Main UI for the control
@@ -123,9 +125,6 @@ if __name__ == '__main__':
     GPIO.setup(PIN_BLUE_LED, GPIO.OUT)
     GPIO.setup(PIN_PUSH_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-
-    YELLOW_LED = LED(1, PIN_YELLOW_LED)
-    BLUE_LED = LED(0, PIN_YELLOW_LED)
     GPIO.add_event_detect(PIN_PUSH_BUTTON, GPIO.BOTH, callback=push_button_callback, bouncetime=1)
 
     try:
