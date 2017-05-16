@@ -87,7 +87,8 @@ class MainUI(QWidget):
             #GPIO.output(23, GPIO.LOW)
     
    
-def push_button_callback():
+def push_button_callback(channel):
+    print(channel)
     print("button pushed")
 
 
