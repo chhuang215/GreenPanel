@@ -16,9 +16,41 @@ PIN_YELLOW_LED = 18
 PIN_BLUE_LED = 23
 PIN_PUSH_BUTTON = 17
 
-# Set up GPIO
 
 LID_STATUS = 0
+
+'''
+    LED class
+'''
+class LED():
+    def __init__(self, status, gpio_pin):
+        self.status = status
+        self.pin = gpio_pin
+
+        if status == 1:
+            self.turn_on()
+
+    def switch(self):
+        global LID_STATUS
+        if self.status == 1 or LID_STATUS == 1:
+            print('LED OFF')
+
+            self.turn_off()
+
+        elif self.status == 0 and LID_STATUS == 0:
+            print('LED ON')
+
+            self.turn_on()
+    
+    def turn_on(self):
+        GPIO.output(self.pin, GPIO.HIGH)
+        self.status = 1
+    def turn_off(self):
+        GPIO.output(self.pin, GPIO.LOW)
+        self.status = 0
+        
+
+
 '''
     Main UI for the control
 '''
@@ -27,14 +59,13 @@ class MainUI(QWidget):
     def __init__(self):
         super().__init__()
         
-        #Borderless
         self.window().setWindowFlags(Qt.FramelessWindowHint)
 
         self.initUI()
 
     def initUI(self):
         global YELLOW_LED
-        
+
         grid = QGridLayout()
         grid.setSpacing(20)
 
@@ -71,33 +102,7 @@ class MainUI(QWidget):
         self.showFullScreen()
         self.show()
 
-'''
-    LED class
-'''
-class LED():
-    def __init__(self, status, gpio_pin):
-        self.status = status
-        self.pin = gpio_pin
 
-    def switch(self):
-        global LID_STATUS
-        if self.status == 1 or LID_STATUS == 1:
-            print('LED OFF')
-
-            self.turn_off()
-            
-        elif self.status == 0 and LID_STATUS == 0:
-            print('LED ON')
-
-            self.turn_on()
-    
-    def turn_on(self):
-        GPIO.output(self.pin, GPIO.HIGH)
-        self.status = 1
-    def turn_off(self):
-        GPIO.output(self.pin, GPIO.LOW)
-        self.status = 0
-        
 
    
 def push_button_callback(channel):
@@ -110,20 +115,20 @@ def push_button_callback(channel):
         print("LID is open")
         LID_STATUS = 1
 
-YELLOW_LED = LED(1, PIN_YELLOW_LED)
-BLUE_LED = LED(0, PIN_YELLOW_LED)
-
-
 if __name__ == '__main__':
+    # Set up GPIO
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
     GPIO.setup(PIN_YELLOW_LED, GPIO.OUT)
     GPIO.setup(PIN_BLUE_LED, GPIO.OUT)
     GPIO.setup(PIN_PUSH_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
+
+    YELLOW_LED = LED(1, PIN_YELLOW_LED)
+    BLUE_LED = LED(0, PIN_YELLOW_LED)
     GPIO.add_event_detect(PIN_PUSH_BUTTON, GPIO.BOTH, callback=push_button_callback, bouncetime=1)
 
-    try:  
+    try:
         app = QApplication(sys.argv)
         ex = MainUI()
         RET = app.exec_()
@@ -132,6 +137,6 @@ if __name__ == '__main__':
         sys.exit(RET)
         sys.exit(app.exec_())
 
-    except KeyboardInterrupt:  
-        GPIO.cleanup()       # clean up GPIO on CTRL+C exit 
-    
+    except KeyboardInterrupt:
+        GPIO.cleanup()       # clean up GPIO on CTRL+C exit
+
