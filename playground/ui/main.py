@@ -1,13 +1,9 @@
-
+import sys
 
 from PyQt5.QtCore import (Qt, QCoreApplication)
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QWidget, QToolTip, QPushButton, QLabel,
                              QApplication, QVBoxLayout, QGridLayout, QHBoxLayout)
-
-import pins as PINS
-
-from led import LED
 
 
 class MainPanel(QWidget):
@@ -19,13 +15,13 @@ class MainPanel(QWidget):
         self.init_ui()
 
     def init_ui(self):
-
+        #self.setGeometry(0, 0, 700, 300)
         grid = QGridLayout()
         grid.setSpacing(20)
 
         btn_led_on_off = QPushButton("LED Bro")
         btn_led_on_off.setFixedSize(200, 180)
-        btn_led_on_off.clicked.connect(LED.LED_LIST[str(PINS.PIN_YELLOW_LED)].switch)
+
         grid.addWidget(btn_led_on_off, 0, 0)
 
         for i in range(0, 2):
@@ -33,8 +29,10 @@ class MainPanel(QWidget):
                 button = QPushButton("Button" + str(i + j))
                 button.setFixedSize(200, 180)
                 grid.addWidget(button, i, j)
-        
+
         self.setLayout(grid)
+
+        
 
 class MainUI(QWidget):
 
@@ -47,8 +45,7 @@ class MainUI(QWidget):
 
     def init_ui(self):
 
-        mainPanel = MainPanel()
-      
+        main_panel = MainPanel()
         hbox = QHBoxLayout()
         lbl3 = QLabel('Huge Label')
 
@@ -61,7 +58,7 @@ class MainUI(QWidget):
         hbox.addWidget(qbtn)
 
         vbox = QVBoxLayout()
-        vbox.addWidget(mainPanel)
+        vbox.addWidget(main_panel)
         vbox.addLayout(hbox)
         self.setLayout(vbox)
 
@@ -69,3 +66,12 @@ class MainUI(QWidget):
         self.setWindowTitle('Touch Panel')
         
 
+if __name__ == '__main__':
+    APP = QApplication(sys.argv)
+    ex = MainUI()
+    ex.showFullScreen()
+    ex.show()
+    RET = APP.exec_()
+    # clean up
+    # GPIO.cleanup()
+    sys.exit(RET)
