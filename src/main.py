@@ -63,10 +63,10 @@ from led import LED
     Main UI for the control
 '''
 class MainUI(QWidget):
-    
+
     def __init__(self):
         super().__init__()
-        
+
         self.window().setWindowFlags(Qt.FramelessWindowHint)
 
         self.initUI()
