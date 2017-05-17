@@ -10,7 +10,7 @@ import pins as PINS
 from led import LED
 
 
-class MainPanel(QWidget):
+class HomePanel(QWidget):
     def __init__(self):
         super().__init__()
 
@@ -33,7 +33,7 @@ class MainPanel(QWidget):
                 button = QPushButton("Button" + str(i + j))
                 button.setFixedSize(200, 180)
                 grid.addWidget(button, i, j)
-        
+
         self.setLayout(grid)
 
 
@@ -52,8 +52,8 @@ class MainUI(QWidget):
 
     def init_ui(self):
 
-        mainPanel = MainPanel()
-      
+        panel = HomePanel()
+
         hbox = QHBoxLayout()
         lbl3 = QLabel('Huge Label')
 
@@ -66,7 +66,7 @@ class MainUI(QWidget):
         hbox.addWidget(qbtn)
 
         vbox = QVBoxLayout()
-        vbox.addWidget(mainPanel)
+        vbox.addWidget(panel)
         vbox.addLayout(hbox)
         self.setLayout(vbox)
 
