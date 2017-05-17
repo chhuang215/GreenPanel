@@ -12,7 +12,7 @@ class LED():
  #           self.turn_on()
 
     def switch(self):
-        global LID_STATUS
+    
         if self.status == 1 or Lid.STATUS == 1:
             print('LED OFF')
 
