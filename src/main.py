@@ -5,7 +5,6 @@ import sys
 
 import RPi.GPIO as GPIO
 
-import time
 from PyQt5.QtCore import (Qt, QCoreApplication)
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QWidget, QToolTip, QPushButton, QLabel,
@@ -14,50 +13,6 @@ from PyQt5.QtWidgets import (QWidget, QToolTip, QPushButton, QLabel,
 import pins as PINS
 from lid import Lid
 from led import LED
-
-#LID_STATUS = 0
-
-'''
-    LED class
-'''
-# class LED():
-#     def __init__(self, status, gpio_pin):
-#         self.status = status
-#         self.pin = gpio_pin
-
-# #        if status == 1:
-#  #           self.turn_on()
-
-#     def switch(self):
-#         if self.status == 1 or Lid.STATUS == 1:
-#             print('LED OFF')
-
-#             self.turn_off()
-
-#         elif self.status == 0 and Lid.STATUS == 0:
-#             print('LED ON')
-
-#             self.turn_on()
-
-#     def turn_on(self):
-#         GPIO.output(self.pin, GPIO.HIGH)
-#         self.status = 1
-#     def turn_off(self):
-#         GPIO.output(self.pin, GPIO.LOW)
-#         self.status = 0
-    
-#     def turn_on_temporary(self):
-#         GPIO.output(self.pin, GPIO.HIGH)
-
-#     def turn_off_temporary(self):
-#         GPIO.output(self.pin, GPIO.LOW)
-
-#     def resume(self):
-#         if self.status == 1:
-#             self.turn_on()
-#         else:
-#             self.turn_off()
-
 
 '''
     Main UI for the control

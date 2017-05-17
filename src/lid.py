@@ -1,3 +1,9 @@
+"""
+lid.py
+
+Lid module
+"""
+
 import RPi.GPIO as GPIO
 
 import led

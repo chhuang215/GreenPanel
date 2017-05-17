@@ -1,5 +1,14 @@
+"""
+led.py
+LED module
+"""
 import RPi.GPIO as GPIO
 import lid
+
+
+'''
+    LED class
+'''
 class LED():
 
     LED_LIST = {}
