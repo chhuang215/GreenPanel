@@ -73,7 +73,7 @@ class MainUI(QWidget):
 
         btn_led_on_off = QPushButton("LED Bro")
         btn_led_on_off.setFixedSize(200, 180)
-        btn_led_on_off.clicked.connect(switch_yellow_led())
+        btn_led_on_off.clicked.connect(switch_yellow_led)
         grid.addWidget(btn_led_on_off, 0, 0)
 
         for i in range(0, 2):
@@ -106,6 +106,8 @@ class MainUI(QWidget):
 
 
 def switch_yellow_led():
+    global YELLOW_LED
+    print(YELLOW_LED)
     YELLOW_LED.switch()
 
    
