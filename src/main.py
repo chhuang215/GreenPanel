@@ -11,57 +11,53 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QWidget, QToolTip, QPushButton, QLabel,
                              QApplication, QVBoxLayout, QGridLayout, QHBoxLayout)
 
+import pins as PINS
+from lid import Lid
+from led import LED
 
-PIN_YELLOW_LED = 18
-PIN_BLUE_LED = 23
-PIN_PUSH_BUTTON = 17
-
-LID_STATUS = 0
+#LID_STATUS = 0
 
 '''
     LED class
 '''
-class LED():
-    def __init__(self, status, gpio_pin):
-        self.status = status
-        self.pin = gpio_pin
+# class LED():
+#     def __init__(self, status, gpio_pin):
+#         self.status = status
+#         self.pin = gpio_pin
 
-#        if status == 1:
- #           self.turn_on()
+# #        if status == 1:
+#  #           self.turn_on()
 
-    def switch(self):
-        global LID_STATUS
-        if self.status == 1 or LID_STATUS == 1:
-            print('LED OFF')
+#     def switch(self):
+#         if self.status == 1 or Lid.STATUS == 1:
+#             print('LED OFF')
 
-            self.turn_off()
+#             self.turn_off()
 
-        elif self.status == 0 and LID_STATUS == 0:
-            print('LED ON')
+#         elif self.status == 0 and Lid.STATUS == 0:
+#             print('LED ON')
 
-            self.turn_on()
+#             self.turn_on()
+
+#     def turn_on(self):
+#         GPIO.output(self.pin, GPIO.HIGH)
+#         self.status = 1
+#     def turn_off(self):
+#         GPIO.output(self.pin, GPIO.LOW)
+#         self.status = 0
     
-    def turn_on(self):
-        GPIO.output(self.pin, GPIO.HIGH)
-        self.status = 1
-    def turn_off(self):
-        GPIO.output(self.pin, GPIO.LOW)
-        self.status = 0
-    
-    def turn_on_temporary(self):
-        GPIO.output(self.pin, GPIO.HIGH)
+#     def turn_on_temporary(self):
+#         GPIO.output(self.pin, GPIO.HIGH)
 
-    def turn_off_temporary(self):
-        GPIO.output(self.pin, GPIO.LOW)
-    
-    def resume(self):
-        if(self.status == 1):
-            self.turn_on()
-        else:
-            self.turn_off()
+#     def turn_off_temporary(self):
+#         GPIO.output(self.pin, GPIO.LOW)
 
-YELLOW_LED = LED(1, PIN_YELLOW_LED)
-BLUE_LED = LED(0, PIN_BLUE_LED)
+#     def resume(self):
+#         if self.status == 1:
+#             self.turn_on()
+#         else:
+#             self.turn_off()
+
 
 '''
     Main UI for the control
@@ -76,14 +72,13 @@ class MainUI(QWidget):
         self.initUI()
 
     def initUI(self):
-        global YELLOW_LED
 
         grid = QGridLayout()
         grid.setSpacing(20)
 
         btn_led_on_off = QPushButton("LED Bro")
         btn_led_on_off.setFixedSize(200, 180)
-        btn_led_on_off.clicked.connect(switch_yellow_led)
+        btn_led_on_off.clicked.connect(LED.LED_LIST[str(PINS.PIN_YELLOW_LED)].switch)
         grid.addWidget(btn_led_on_off, 0, 0)
 
         for i in range(0, 2):
@@ -94,7 +89,6 @@ class MainUI(QWidget):
 
         hbox = QHBoxLayout()
         lbl3 = QLabel('Huge Label')
-        
 
         qbtn = QPushButton('Quit')
         qbtn.clicked.connect(QCoreApplication.instance().quit)
@@ -114,45 +108,27 @@ class MainUI(QWidget):
         self.showFullScreen()
         self.show()
 
-
-def switch_yellow_led():
-    global YELLOW_LED
-    print(YELLOW_LED)
-    YELLOW_LED.switch()
-
-   
-def push_button_callback(channel):
-    global LID_STATUS
-
-    if GPIO.input(channel):
-        print("LID closed")
-        BLUE_LED.resume()
-        YELLOW_LED.resume()
-        LID_STATUS = 0
-    else:
-        print("LID is open")
-        BLUE_LED.turn_on_temporary()
-        YELLOW_LED.turn_off_temporary()
-        LID_STATUS = 1
-
 if __name__ == '__main__':
     # Set up GPIO
     GPIO.setmode(GPIO.BCM)
-    GPIO.setwarnings(False)
-    GPIO.setup(PIN_YELLOW_LED, GPIO.OUT)
-    GPIO.setup(PIN_BLUE_LED, GPIO.OUT)
-    GPIO.setup(PIN_PUSH_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    #GPIO.setwarnings(False)
+    GPIO.setup(PINS.PIN_YELLOW_LED, GPIO.OUT)
+    GPIO.setup(PINS.PIN_BLUE_LED, GPIO.OUT)
+    GPIO.setup(PINS.PIN_PUSH_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-    GPIO.add_event_detect(PIN_PUSH_BUTTON, GPIO.BOTH, callback=push_button_callback, bouncetime=1)
+    LED(1, PINS.PIN_YELLOW_LED)
+    LED(0, PINS.PIN_BLUE_LED)
+
+    GPIO.add_event_detect(PINS.PIN_PUSH_BUTTON, GPIO.BOTH,
+                          callback=Lid.push_button_callback, bouncetime=1)
 
     try:
-        app = QApplication(sys.argv)
+        APP = QApplication(sys.argv)
         ex = MainUI()
-        RET = app.exec_()
+        RET = APP.exec_()
         # clean up
         GPIO.cleanup()
         sys.exit(RET)
-        sys.exit(app.exec_())
 
     except KeyboardInterrupt:
         GPIO.cleanup()       # clean up GPIO on CTRL+C exit
