@@ -13,9 +13,6 @@ from led import LED
 
 from ui.main import MainUI
 
-'''
-    Main UI for the control
-'''
 
 if __name__ == '__main__':
     # Set up GPIO
@@ -31,6 +28,8 @@ if __name__ == '__main__':
     GPIO.add_event_detect(PINS.PIN_PUSH_BUTTON, GPIO.BOTH,
                           callback=Lid.open_close)
 
+    Lid.resume()
+
     try:
         APP = QApplication(sys.argv)
         ex = MainUI()
@@ -38,7 +37,7 @@ if __name__ == '__main__':
         ex.show()
         RET = APP.exec_()
         # clean up
-        #GPIO.cleanup()
+        GPIO.cleanup()
         sys.exit(RET)
 
     except KeyboardInterrupt:

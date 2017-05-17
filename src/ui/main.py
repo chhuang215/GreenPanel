@@ -36,8 +36,13 @@ class MainPanel(QWidget):
         
         self.setLayout(grid)
 
-class MainUI(QWidget):
 
+
+class MainUI(QWidget): 
+    '''
+        Main UI for the control
+    '''
+    
     def __init__(self):
         super().__init__()
 
