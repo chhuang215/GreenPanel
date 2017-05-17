@@ -14,7 +14,7 @@ class Lid :
 
         print(yellow_led)
 
-        if GPIO.input(channel):
+        if GPIO.input(channel) == 1:
             print("LID closed")
             blue_led.resume()
             yellow_led.resume()
