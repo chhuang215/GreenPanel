@@ -10,12 +10,11 @@ import pins as PINS
 from led import LED
 
 
-class MainUI(QWidget):
-
+class MainPanel(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.window().setWindowFlags(Qt.FramelessWindowHint)
+        #self.window().setWindowFlags(Qt.FramelessWindowHint)
 
         self.init_ui()
 
@@ -35,6 +34,20 @@ class MainUI(QWidget):
                 button.setFixedSize(200, 180)
                 grid.addWidget(button, i, j)
 
+
+class MainUI(QWidget):
+
+    def __init__(self):
+        super().__init__()
+
+        self.window().setWindowFlags(Qt.FramelessWindowHint)
+
+        self.init_ui()
+
+    def init_ui(self):
+
+        mainPanel = MainPanel()
+      
         hbox = QHBoxLayout()
         lbl3 = QLabel('Huge Label')
 
@@ -47,11 +60,11 @@ class MainUI(QWidget):
         hbox.addWidget(qbtn)
 
         vbox = QVBoxLayout()
-        vbox.addLayout(grid)
+        vbox.addWidget(mainPanel)
         vbox.addLayout(hbox)
         self.setLayout(vbox)
 
         self.setGeometry(0, 0, 800, 480)
         self.setWindowTitle('Touch Panel')
-        self.showFullScreen()
-        self.show()
+        
+

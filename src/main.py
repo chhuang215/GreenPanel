@@ -34,6 +34,8 @@ if __name__ == '__main__':
     try:
         APP = QApplication(sys.argv)
         ex = MainUI()
+        ex.showFullScreen()
+        ex.show()
         RET = APP.exec_()
         # clean up
         GPIO.cleanup()
