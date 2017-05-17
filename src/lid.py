@@ -7,12 +7,10 @@ class Lid :
     STATUS = 0
 
     @staticmethod
-    def push_button_callback(channel):
+    def open_close(channel):
         led_list = led.LED.LED_LIST
         blue_led = led_list[str(PINS.PIN_BLUE_LED)]
         yellow_led = led_list[str(PINS.PIN_YELLOW_LED)]
-
-        print(yellow_led)
 
         if GPIO.input(channel) == 1:
             print("LID closed")

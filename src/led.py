@@ -8,6 +8,8 @@ class LED():
         self.status = status
         self.pin = gpio_pin
         LED.LED_LIST[str(self.pin)] = self
+
+        self.resume()
 #        if status == 1:
  #           self.turn_on()
 
@@ -15,12 +17,15 @@ class LED():
 
         lid_status = lid.Lid.STATUS
 
-        if self.status == 1 or lid_status == 1:
+        if lid_status == 1:
+            return
+	
+        if self.status == 1:
             print('LED OFF')
 
             self.turn_off()
 
-        elif self.status == 0 and lid_status == 0:
+        elif self.status == 0:
             print('LED ON')
 
             self.turn_on()

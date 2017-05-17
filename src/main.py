@@ -120,7 +120,7 @@ if __name__ == '__main__':
     LED(0, PINS.PIN_BLUE_LED)
 
     GPIO.add_event_detect(PINS.PIN_PUSH_BUTTON, GPIO.BOTH,
-                          callback=Lid.push_button_callback)
+                          callback=Lid.open_close)
 
     try:
         APP = QApplication(sys.argv)
