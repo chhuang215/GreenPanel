@@ -47,8 +47,18 @@ class LED():
     def turn_off(self):
         GPIO.output(self.pin, GPIO.LOW)
         self.status = 0
-        
+    
+    def turn_on_temporary(self):
+        GPIO.output(self.pin, GPIO.HIGH)
 
+    def turn_off_temporary(self):
+        GPIO.output(self.pin, GPIO.LOW)
+    
+    def resume(self):
+        if(self.status == 1):
+            self.turn_on()
+        else:
+            self.turn_off()
 
 YELLOW_LED = LED(1, PIN_YELLOW_LED)
 BLUE_LED = LED(0, PIN_BLUE_LED)
@@ -116,13 +126,13 @@ def push_button_callback(channel):
 
     if GPIO.input(channel):
         print("LID closed")
-        BLUE_LED.turn_off()
-        YELLOW_LED.turn_on()
+        BLUE_LED.resume()
+        YELLOW_LED.resume()
         LID_STATUS = 0
     else:
         print("LID is open")
-        BLUE_LED.turn_on()
-        YELLOW_LED.turn_off()
+        BLUE_LED.turn_on_temporary()
+        YELLOW_LED.turn_off_temporary()
         LID_STATUS = 1
 
 if __name__ == '__main__':
