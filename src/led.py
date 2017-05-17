@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-from lid import Lid
+import lid
 class LED():
 
     LED_LIST = {}
@@ -12,13 +12,15 @@ class LED():
  #           self.turn_on()
 
     def switch(self):
-        global LID_STATUS
-        if self.status == 1 or Lid.STATUS == 1:
+
+        lid_status = lid.Lid.STATUS
+
+        if self.status == 1 or lid_status == 1:
             print('LED OFF')
 
             self.turn_off()
 
-        elif self.status == 0 and Lid.STATUS == 0:
+        elif self.status == 0 and lid_status == 0:
             print('LED ON')
 
             self.turn_on()
