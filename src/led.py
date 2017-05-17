@@ -5,7 +5,6 @@ LED module
 import RPi.GPIO as GPIO
 import lid
 
-
 '''
     LED class
 '''

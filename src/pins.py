@@ -1,4 +1,6 @@
-
+"""
+pins.py
+"""
 
 PIN_YELLOW_LED = 18
 PIN_BLUE_LED = 23

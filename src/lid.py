@@ -9,16 +9,24 @@ import RPi.GPIO as GPIO
 import led
 import pins as PINS
 
-class Lid :
+
+class Lid:
+    """
+    Lid class
+    """
+
     STATUS = 0
 
     @staticmethod
-    def open_close(channel):
+    def open_close(pin):
+        """
+        open_close method
+        """
         led_list = led.LED.LED_LIST
         blue_led = led_list[str(PINS.PIN_BLUE_LED)]
         yellow_led = led_list[str(PINS.PIN_YELLOW_LED)]
 
-        if GPIO.input(channel) == 1:
+        if GPIO.input(pin) == 1:
             print("LID closed")
             blue_led.resume()
             yellow_led.resume()
