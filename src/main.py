@@ -123,9 +123,6 @@ if __name__ == '__main__':
     GPIO.setup(PIN_BLUE_LED, GPIO.OUT)
     GPIO.setup(PIN_PUSH_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-
-    YELLOW_LED = LED(1, PIN_YELLOW_LED)
-    BLUE_LED = LED(0, PIN_YELLOW_LED)
     GPIO.add_event_detect(PIN_PUSH_BUTTON, GPIO.BOTH, callback=push_button_callback, bouncetime=1)
 
     try:
