@@ -19,7 +19,7 @@ class Lid:
     PIN = PINS.PIN_PUSH_BUTTON
 
     @staticmethod
-    def open_close(pin=Lid.PIN):
+    def open_close(pin=PIN):
         """
         open_close method
         """
