@@ -19,7 +19,7 @@ class Lid:
     PIN = PINS.PIN_PUSH_BUTTON
 
     @staticmethod
-    def open_close(pin):
+    def open_close(pin=Lid.PIN):
         """
         open_close method
         """
@@ -40,14 +40,14 @@ class Lid:
             Lid.STATUS = 1
 
     
-    @staticmethod
-    def resume():
-        led_list = led.LED.LED_LIST
-        blue_led = led_list[str(PINS.PIN_BLUE_LED)]
-        yellow_led = led_list[str(PINS.PIN_YELLOW_LED)]
-        if not GPIO.input(Lid.PIN):
-            print("LID is open")
-            blue_led.turn_on_temporary()
-            yellow_led.turn_off_temporary()
+    # @staticmethod
+    # def resume():
+    #     led_list = led.LED.LED_LIST
+    #     blue_led = led_list[str(PINS.PIN_BLUE_LED)]
+    #     yellow_led = led_list[str(PINS.PIN_YELLOW_LED)]
+    #     if not GPIO.input(Lid.PIN):
+    #         print("LID is open")
+    #         blue_led.turn_on_temporary()
+    #         yellow_led.turn_off_temporary()
 
-            Lid.STATUS = 1
+    #         Lid.STATUS = 1

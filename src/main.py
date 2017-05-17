@@ -28,8 +28,8 @@ if __name__ == '__main__':
     GPIO.add_event_detect(PINS.PIN_PUSH_BUTTON, GPIO.BOTH,
                           callback=Lid.open_close)
 
-    Lid.resume()
-
+    Lid.open_close()
+    
     try:
         APP = QApplication(sys.argv)
         ex = MainUI()
