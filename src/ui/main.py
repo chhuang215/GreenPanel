@@ -23,7 +23,7 @@ class HomePanel(QWidget):
         grid = QGridLayout()
         grid.setSpacing(20)
 
-        btn_led_on_off = QPushButton("LED Bro")
+        btn_led_on_off = QPushButton("LED On/Off")
         btn_led_on_off.setFixedSize(200, 180)
         btn_led_on_off.clicked.connect(LED.LED_LIST[str(PINS.PIN_YELLOW_LED)].switch)
         grid.addWidget(btn_led_on_off, 0, 0)
