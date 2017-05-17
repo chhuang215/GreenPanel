@@ -116,9 +116,13 @@ def push_button_callback(channel):
 
     if GPIO.input(channel):
         print("LID closed")
+        BLUE_LED.turn_off()
+        YELLOW_LED.turn_on()
         LID_STATUS = 0
     else:
         print("LID is open")
+        BLUE_LED.turn_on()
+        YELLOW_LED.turn_off()
         LID_STATUS = 1
 
 if __name__ == '__main__':
