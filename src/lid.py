@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 
-from led import LED
+import led
 import pins as PINS
 
 class Lid :
@@ -9,8 +9,9 @@ class Lid :
 
     @staticmethod
     def push_button_callback(channel):
-        blue_led = LED.LED_LIST[str(PINS.PIN_BLUE_LED)]
-        yellow_led = LED.LED_LIST[str(PINS.PIN_BLUE_LED)]
+        led_list = led.LED.LED_LIST
+        blue_led = led_list[str(PINS.PIN_BLUE_LED)]
+        yellow_led = led_list[str(PINS.PIN_BLUE_LED)]
 
 
         if GPIO.input(channel):
