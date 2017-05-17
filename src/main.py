@@ -38,7 +38,7 @@ if __name__ == '__main__':
         ex.show()
         RET = APP.exec_()
         # clean up
-        GPIO.cleanup()
+        #GPIO.cleanup()
         sys.exit(RET)
 
     except KeyboardInterrupt:
