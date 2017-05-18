@@ -10,10 +10,26 @@ from PyQt5.QtWidgets import QApplication
 import controller
 
 import pins as PINS
-
+from temperature import Temperature
 from lid import Lid
 from led import LED
 
+
+def start_app():
+
+    temperature_module = Temperature()
+    temperature_module.start()
+
+    Lid.open_close()
+
+    app = QApplication(sys.argv)
+    ui_view = controller.get_ui()
+    ui_view.showFullScreen()
+    ui_view.show()
+    ret = app.exec_()
+    # clean up
+    # GPIO.cleanup()
+    sys.exit(ret)
 
 if __name__ == '__main__':
     # Set up GPIO
@@ -29,17 +45,8 @@ if __name__ == '__main__':
     GPIO.add_event_detect(PINS.PIN_PUSH_BUTTON, GPIO.BOTH,
                           callback=Lid.open_close)
 
-    Lid.open_close()
-
     try:
-        APP = QApplication(sys.argv)
-        ex = controller.get_ui()
-        ex.showFullScreen()
-        ex.show()
-        RET = APP.exec_()
-        # clean up
-        # GPIO.cleanup()
-        sys.exit(RET)
+        start_app()
 
     except KeyboardInterrupt:
         GPIO.cleanup()       # clean up GPIO on CTRL+C exit

@@ -8,7 +8,7 @@ import controller
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
 
-class Temerature(threading.Thread):
+class Temperature(threading.Thread):
 
     def __init__(self):
         base_dir = '/sys/bus/w1/devices/'

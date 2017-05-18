@@ -11,8 +11,9 @@ class Controller:
 class Temperature:
     @staticmethod
     def update_temperature(temp):
-        homepanel = Controller.MAIN_UI.panels[0]
-        homepanel.update_temperature_display(temp)
+        if(Controller.MAIN_UI is not None):
+            homepanel = Controller.MAIN_UI.panels[0]
+            homepanel.update_temperature_display(temp)
 
 def get_ui():
     if Controller.MAIN_UI is None:
