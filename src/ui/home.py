@@ -5,9 +5,7 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QWidget, QToolTip, QPushButton, QLabel,
                              QApplication, QVBoxLayout, QGridLayout, QHBoxLayout)
 
-import pins as PINS
-
-from led import LED
+import controller
 
 class HomePanel(QWidget):
     def __init__(self):
@@ -25,7 +23,7 @@ class HomePanel(QWidget):
         btn_led_on_off = QPushButton("LED On/Off", parent=self)
         btn_led_on_off.setFixedSize(200, 180)
         btn_led_on_off.setObjectName("btnLed")
-        btn_led_on_off.clicked.connect(LED.LED_LIST[str(PINS.PIN_YELLOW_LED)].switch)
+        btn_led_on_off.clicked.connect(controller.LED.switch())
 
 
         lbl_temperature_display = QLabel("0", parent=self)

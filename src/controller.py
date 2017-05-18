@@ -1,5 +1,7 @@
 
-from ui.main import MainUI
+from ui import MainUI
+from led.LED import LED_LIST
+import pins as PINS
 
 class Controller:
     MAIN_UI = None
@@ -14,6 +16,11 @@ class Temperature:
         if(Controller.MAIN_UI is not None):
             homepanel = Controller.MAIN_UI.panels[0]
             homepanel.update_temperature_display(temp)
+
+class LED:
+    @staticmethod
+    def switch():
+        LED_LIST[str(PINS.PIN_YELLOW_LED)].switch
 
 def get_ui():
     if Controller.MAIN_UI is None:
