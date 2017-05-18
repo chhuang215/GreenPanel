@@ -1,6 +1,6 @@
 
 from ui import MainUI
-from led.LED import LED_LIST
+from led import LED as LEDModal
 import pins as PINS
 
 class Controller:
@@ -20,7 +20,7 @@ class Temperature:
 class LED:
     @staticmethod
     def switch():
-        LED_LIST[str(PINS.PIN_YELLOW_LED)].switch
+        LEDModal.LED_LIST[str(PINS.PIN_YELLOW_LED)].switch()
 
 def get_ui():
     if Controller.MAIN_UI is None:

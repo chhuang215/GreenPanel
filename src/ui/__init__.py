@@ -1,2 +1,2 @@
-from .main import MainUI
-from .home import HomePanel
+from ui.main import MainUI
+from ui.home import HomePanel
