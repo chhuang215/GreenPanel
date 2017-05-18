@@ -5,7 +5,7 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QWidget, QToolTip, QPushButton, QLabel,
                              QApplication, QVBoxLayout, QGridLayout, QHBoxLayout)
 
-import home
+import ui.home
 
 class MainUI(QWidget): 
     '''
@@ -22,7 +22,7 @@ class MainUI(QWidget):
 
     def init_ui(self):
 
-        panel = home.HomePanel()
+        panel = ui.home.HomePanel()
         self.panels.append(panel)
 
         hbox = QHBoxLayout()
