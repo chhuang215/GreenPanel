@@ -5,11 +5,11 @@ import time
 import threading
 from PyQt5.QtCore import (QUrl, QObject)
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtQuick import QQuickView
-from PyQt5.QtQml import QQmlApplicationEngine
+from PyQt5.QtQuick import QQuickView, QQuickItem
+from PyQt5.QtQml import QQmlApplicationEngine, QQmlProperty
 
 class TemperatureSensor(threading.Thread):
-    def __init__(self, text_temp):
+    def __init__(self):
         os.system('modprobe w1-gpio')
         os.system('modprobe w1-therm')
         threading.Thread.__init__(self)
@@ -40,10 +40,21 @@ class TemperatureSensor(threading.Thread):
 
             return temp_c
     def run(self):
-        while True:
 
-            text_temp.setProperty("text", str(self.read_temp()))
-            time.sleep(1)
+        time.sleep(4)
+        text_property.write("are you ready")
+        time.sleep(2)
+        text_property.write("please")
+        time.sleep(2)
+        text_property.write("Change")
+        time.sleep(2)
+
+
+        while True:
+            tem = str(self.read_temp())
+            print(tem)
+            text_property.write(tem)
+            time.sleep(2)
 
 
 
@@ -59,10 +70,13 @@ if __name__ == "__main__":
 
 
     text_temp = root.findChild(QObject, "txtTemp")
+    
+    text_property = QQmlProperty(text_temp, "text")
 
-    tsensor = TemperatureSensor(text_temp)
+    tsensor = TemperatureSensor()
 
     tsensor.start()
-
-    sys.exit(app.exec_())
+    ret = app.exec_()
+    print("Hi")
+    sys.exit(ret)
 
