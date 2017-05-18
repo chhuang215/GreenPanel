@@ -21,9 +21,9 @@ class MainUI(QWidget):
 
     def init_ui(self):
 
-        homepanel = HomePanel()
-        homepanel.setParent(self)
-        homepanel.setObjectName("panelHome")
+        self.panel_home = HomePanel()
+        self.panel_home.setParent(self)
+        self.panel_home.setObjectName("panelHome")
 
         hbox = QHBoxLayout()
         lbl3 = QLabel('Huge Label')
@@ -35,7 +35,7 @@ class MainUI(QWidget):
         hbox.addWidget(qbtn)
 
         vbox = QVBoxLayout()
-        vbox.addWidget(homepanel)
+        vbox.addWidget(self.panel_home)
         vbox.addLayout(hbox)
         self.setLayout(vbox)
 

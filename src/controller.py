@@ -21,8 +21,7 @@ class Temperature:
     @staticmethod
     def update_temperature(temp):
         if(UIController.MAIN_UI is not None):
-            homepanel = UIController.MAIN_UI.findChild("panelHome")
-            homepanel.update_temperature_display(temp)
+            UIController.MAIN_UI.panel_home.update_temperature_display(temp)
 
 class LED:
     @staticmethod
