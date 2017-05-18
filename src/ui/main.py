@@ -14,7 +14,6 @@ class MainUI(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.panels = []
 
         self.window().setWindowFlags(Qt.FramelessWindowHint)
         self.init_ui()
@@ -23,7 +22,8 @@ class MainUI(QWidget):
     def init_ui(self):
 
         homepanel = HomePanel()
-        self.panels.append(homepanel)
+        homepanel.setParent(self)
+        homepanel.setObjectName("panelHome")
 
         hbox = QHBoxLayout()
         lbl3 = QLabel('Huge Label')

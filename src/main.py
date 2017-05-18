@@ -23,7 +23,7 @@ def start_app():
     Lid.open_close()
 
     app = QApplication(sys.argv)
-    ui_view = controller.get_ui()
+    ui_view = controller.UIController.get_ui()
     ui_view.showFullScreen()
     ui_view.show()
     ret = app.exec_()

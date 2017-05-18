@@ -23,7 +23,7 @@ class HomePanel(QWidget):
         btn_led_on_off = QPushButton("LED On/Off", parent=self)
         btn_led_on_off.setFixedSize(200, 180)
         btn_led_on_off.setObjectName("btnLed")
-        btn_led_on_off.clicked.connect(controller.LED.switch)
+        btn_led_on_off.clicked.connect(controller.LED.switch_yellow_led)
 
 
         lbl_temperature_display = QLabel("0", parent=self)
