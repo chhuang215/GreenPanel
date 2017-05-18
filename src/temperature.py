@@ -11,6 +11,8 @@ os.system('modprobe w1-therm')
 class Temperature(threading.Thread):
 
     def __init__(self):
+        threading.Thread.__init__(self)
+        self.daemon = True
         base_dir = '/sys/bus/w1/devices/'
         device_folder = glob.glob(base_dir + '28*')[0]
         self.__device_file = device_folder + '/w1_slave'

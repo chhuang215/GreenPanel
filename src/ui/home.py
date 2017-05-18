@@ -43,6 +43,6 @@ class HomePanel(QWidget):
         self.setLayout(grid)
 
     def update_temperature_display(self, temp):
-        lbl_temperature = self.findChild(type=QLabel, name="lblTemperature")
-        lbl_temperature.text = temp
+        lbl_temperature = self.findChild(QLabel, "lblTemperature")
+        lbl_temperature.setText(str(temp))
         
