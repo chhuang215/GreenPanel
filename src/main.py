@@ -7,11 +7,12 @@ import RPi.GPIO as GPIO
 
 from PyQt5.QtWidgets import QApplication
 
+import controller
+
 import pins as PINS
+
 from lid import Lid
 from led import LED
-
-from ui.main import MainUI
 
 
 if __name__ == '__main__':
@@ -29,10 +30,10 @@ if __name__ == '__main__':
                           callback=Lid.open_close)
 
     Lid.open_close()
-    
+
     try:
         APP = QApplication(sys.argv)
-        ex = MainUI()
+        ex = controller.get_ui()
         ex.showFullScreen()
         ex.show()
         RET = APP.exec_()
