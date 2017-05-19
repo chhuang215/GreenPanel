@@ -8,14 +8,14 @@ from PyQt5.QtWidgets import (QWidget, QToolTip, QPushButton, QLabel,
 import controller
 
 class HomePanel(QWidget):
+    """Home display of the system"""
+
     def __init__(self):
         super().__init__()
-
-        #self.window().setWindowFlags(Qt.FramelessWindowHint)
-
         self.init_ui()
 
     def init_ui(self):
+        """Initialize the UI"""
 
         grid = QGridLayout()
         grid.setSpacing(20)

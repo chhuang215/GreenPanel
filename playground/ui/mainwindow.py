@@ -34,7 +34,7 @@ class MainPanel(QWidget):
 
         
 
-class MainUI(QWidget):
+class MainWindow(QWidget):
 
     def __init__(self):
         super().__init__()
@@ -68,7 +68,7 @@ class MainUI(QWidget):
 
 if __name__ == '__main__':
     APP = QApplication(sys.argv)
-    ex = MainUI()
+    ex = MainWindow()
     ex.showFullScreen()
     ex.show()
     RET = APP.exec_()

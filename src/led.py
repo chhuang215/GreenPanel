@@ -1,6 +1,6 @@
 """
 led.py
-LED module
+LED modal
 """
 import RPi.GPIO as GPIO
 import lid
@@ -9,6 +9,7 @@ import lid
     LED class
 '''
 class LED():
+    """LED Modal class"""
 
     LED_LIST = {}
     ON = 1
@@ -27,7 +28,7 @@ class LED():
 
         if lid.Lid.STATUS == lid.Lid.OPENED:
             return
-	
+
         if self.status == LED.ON:
             print('Turned LED OFF')
 

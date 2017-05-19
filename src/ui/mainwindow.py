@@ -1,13 +1,13 @@
-
+"""mainwindow.py"""
 
 from PyQt5.QtCore import (Qt, QCoreApplication)
-from PyQt5.QtGui import QFont
+#from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QWidget, QToolTip, QPushButton, QLabel,
                              QApplication, QVBoxLayout, QGridLayout, QHBoxLayout)
 
 from .home import HomePanel
 
-class MainUI(QWidget): 
+class MainWindow(QWidget):
     '''
         Main UI for the control
     '''
@@ -20,7 +20,7 @@ class MainUI(QWidget):
 
 
     def init_ui(self):
-
+        """Initialize the UI"""
         self.panel_home = HomePanel()
         self.panel_home.setParent(self)
         self.panel_home.setObjectName("panelHome")
