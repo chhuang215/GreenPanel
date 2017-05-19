@@ -14,8 +14,10 @@ class Lid:
     """
     Lid class
     """
+    CLOSED = 0
+    OPENED = 1
 
-    STATUS = 0
+    STATUS = CLOSED
     PIN = PINS.PIN_PUSH_BUTTON
 
     @staticmethod
@@ -33,13 +35,12 @@ class Lid:
             print("LID closed")
             blue_led.resume()
             yellow_led.resume()
-            Lid.STATUS = 0
+            Lid.STATUS = Lid.CLOSED
         else:
             print("LID is open")
             blue_led.turn_on_temporary()
             yellow_led.turn_off_temporary()
-
-            Lid.STATUS = 1
+            Lid.STATUS = Lid.OPENED
 
     
     # @staticmethod

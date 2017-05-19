@@ -11,6 +11,8 @@ import lid
 class LED():
 
     LED_LIST = {}
+    ON = 1
+    OFF = 0
 
     def __init__(self, status, gpio_pin):
         self.status = status
@@ -23,27 +25,25 @@ class LED():
 
     def switch(self):
 
-        lid_status = lid.Lid.STATUS
-
-        if lid_status == 1:
+        if lid.Lid.STATUS == lid.Lid.OPENED:
             return
 	
-        if self.status == 1:
-            print('LED OFF')
+        if self.status == LED.ON:
+            print('Turned LED OFF')
 
             self.turn_off()
 
-        elif self.status == 0:
-            print('LED ON')
+        elif self.status == LED.OFF:
+            print('Turned LED ON')
 
             self.turn_on()
-            
+
     def turn_on(self):
         GPIO.output(self.pin, GPIO.HIGH)
-        self.status = 1
+        self.status = LED.ON
     def turn_off(self):
         GPIO.output(self.pin, GPIO.LOW)
-        self.status = 0
+        self.status = LED.OFF
 
     def turn_on_temporary(self):
         GPIO.output(self.pin, GPIO.HIGH)
