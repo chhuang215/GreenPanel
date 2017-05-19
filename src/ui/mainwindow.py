@@ -1,6 +1,6 @@
 """mainwindow.py"""
 
-from PyQt5.QtCore import (Qt, QCoreApplication)
+from PyQt5.QtCore import (Qt, QCoreApplication, QTimer)
 #from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QWidget, QToolTip, QPushButton, QLabel,
                              QApplication, QVBoxLayout, QGridLayout, QHBoxLayout)
@@ -17,6 +17,7 @@ class MainWindow(QWidget):
 
         self.window().setWindowFlags(Qt.FramelessWindowHint)
         self.init_ui()
+
 
 
     def init_ui(self):

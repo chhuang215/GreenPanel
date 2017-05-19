@@ -2,6 +2,7 @@
 from ui import MainWindow
 from led import LED as LEDModal
 import pins as PINS
+import temperature
 
 class UIController:
     """Controller for UI"""
@@ -23,6 +24,21 @@ class UIController:
 
 class Temperature:
     """Controller for Temperature modal"""
+
+    SENSOR = None
+
+    @staticmethod
+    def init_sensors():
+        import os
+        if os.name == 'nt':
+            Temperature.SENSOR = temperature.TemperatureSensorWindows()
+        else:
+            Temperature.SENSOR = temperature.TemperatureSensor()
+    @staticmethod
+    def get_temperature():
+        """Update temperature display onto the UI"""
+        return Temperature.SENSOR.get_temp_c()
+
     @staticmethod
     def update_temperature(temp):
         """Update temperature display onto the UI"""

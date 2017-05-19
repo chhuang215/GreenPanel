@@ -1,6 +1,6 @@
 
 
-from PyQt5.QtCore import (Qt, QCoreApplication)
+from PyQt5.QtCore import (Qt, QCoreApplication, QTimer)
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QWidget, QToolTip, QPushButton, QLabel,
                              QApplication, QVBoxLayout, QGridLayout, QHBoxLayout)
@@ -13,6 +13,7 @@ class HomePanel(QWidget):
     def __init__(self):
         super().__init__()
         self.init_ui()
+        self.update_temperature_display()
 
     def init_ui(self):
         """Initialize the UI"""
@@ -38,9 +39,14 @@ class HomePanel(QWidget):
         #         button.setFixedSize(200, 180)
         #         grid.addWidget(button, i, j)
 
+
+
         self.setLayout(grid)
 
-    def update_temperature_display(self, temp):
+    def update_temperature_display(self):
+
+        temp = controller.Temperature.get_temperature()
+        print("update temp: " + str(temp))
         lbl_temperature = self.findChild(QLabel, "lblTemperature")
         lbl_temperature.setText(str(temp))
-        
+

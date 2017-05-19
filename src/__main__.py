@@ -5,33 +5,36 @@ import sys
 
 import RPi.GPIO as GPIO
 
+from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QApplication
 
 import controller
 
 import pins as PINS
-import temperature
-from temperature import Temperature
+import controller
 from lid import Lid
 from led import LED
 
 
-def start_app():
-    import os
-    
-    if os.name == 'nt':
-        temperature_module = temperature.TemperatureWindows()
-    else:
-        temperature_module = Temperature()
 
-    temperature_module.start()
+def start_app():
+
+    controller.Temperature.init_sensors()
 
     Lid.open_close()
 
     app = QApplication(sys.argv)
+
     ui_view = controller.UIController.get_ui()
+
+    temperature_display_timer = QTimer()
+    temperature_display_timer.timeout.connect(ui_view.panel_home.update_temperature_display)
+    # get_temperature_timer.setInterval(1000)
+    temperature_display_timer.start(5000) # milliseconds
+
     ui_view.showFullScreen()
     ui_view.show()
+
     ret = app.exec_()
     # clean up
     # GPIO.cleanup()
