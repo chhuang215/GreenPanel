@@ -7,8 +7,9 @@ Rectangle {
 
     Text {
         id: helloText
+        objectName: "textDisplay"
         text: "Hello world!"
-        y: 30
+        y: 100
         anchors.horizontalCenter: page.horizontalCenter
         font.pointSize: 24; font.bold: true
     }

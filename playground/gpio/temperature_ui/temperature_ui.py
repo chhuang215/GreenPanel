@@ -2,19 +2,17 @@ import sys
 import os
 import glob
 import time
-import threading
-from PyQt5.QtCore import (QUrl, QObject)
+from PyQt5.QtCore import (QUrl, QObject, QTimer)
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQuick import QQuickView, QQuickItem
 from PyQt5.QtQml import QQmlApplicationEngine, QQmlProperty
 
-class TemperatureSensor(threading.Thread):
+class TemperatureSensor():
+
     def __init__(self):
         os.system('modprobe w1-gpio')
         os.system('modprobe w1-therm')
-        threading.Thread.__init__(self)
-        self.daemon = True
-        self.text_temp = text_temp
+
         base_dir = '/sys/bus/w1/devices/'
 
         device_folder = glob.glob(base_dir + '28*')[0]
@@ -40,22 +38,16 @@ class TemperatureSensor(threading.Thread):
 
             return temp_c
     def run(self):
-
-        time.sleep(4)
-        text_property.write("are you ready")
-        time.sleep(2)
-        text_property.write("please")
-        time.sleep(2)
-        text_property.write("Change")
-        time.sleep(2)
-
-
         while True:
             tem = str(self.read_temp())
             print(tem)
             text_property.write(tem)
             time.sleep(2)
 
+    def display_temp(self):
+        tem = str(self.read_temp())
+        print(tem)
+        text_property.write(tem)
 
 
 if __name__ == "__main__":
@@ -75,7 +67,11 @@ if __name__ == "__main__":
 
     tsensor = TemperatureSensor()
 
-    tsensor.start()
+    _update_timer = QTimer()
+    _update_timer.timeout.connect(tsensor.display_temp)
+    _update_timer.setInterval(5000)
+    _update_timer.start() # milliseconds
+
     ret = app.exec_()
     print("Hi")
     sys.exit(ret)
