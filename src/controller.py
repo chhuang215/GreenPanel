@@ -25,8 +25,8 @@ class Temperature:
 
 class LED:
     @staticmethod
-
-
     def switch_yellow_led():
         LEDModal.LED_LIST[str(PINS.PIN_YELLOW_LED)].switch()
 
+class GPIOController:
+    pass

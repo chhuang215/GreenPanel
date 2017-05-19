@@ -10,14 +10,20 @@ from PyQt5.QtWidgets import QApplication
 import controller
 
 import pins as PINS
+import temperature
 from temperature import Temperature
 from lid import Lid
 from led import LED
 
 
 def start_app():
+    import os
+    
+    if os.name == 'nt':
+        temperature_module = temperature.TemperatureWindows()
+    else:
+        temperature_module = Temperature()
 
-    temperature_module = Temperature()
     temperature_module.start()
 
     Lid.open_close()

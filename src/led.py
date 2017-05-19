@@ -37,7 +37,7 @@ class LED():
             print('LED ON')
 
             self.turn_on()
-
+            
     def turn_on(self):
         GPIO.output(self.pin, GPIO.HIGH)
         self.status = 1

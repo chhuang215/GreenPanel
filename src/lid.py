@@ -27,6 +27,8 @@ class Lid:
         blue_led = led_list[str(PINS.PIN_BLUE_LED)]
         yellow_led = led_list[str(PINS.PIN_YELLOW_LED)]
 
+        print("Lid GPIO input: " + str(GPIO.input(pin)))
+
         if GPIO.input(pin) == 1:
             print("LID closed")
             blue_led.resume()
