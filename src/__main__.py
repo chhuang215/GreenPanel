@@ -27,10 +27,10 @@ def start_app():
 
     ui_view = controller.UIController.get_ui()
 
-    temperature_display_timer = QTimer()
-    temperature_display_timer.timeout.connect(ui_view.panel_home.update_temperature_display)
-    # get_temperature_timer.setInterval(1000)
-    temperature_display_timer.start(5000) # milliseconds
+    # self.temperature_display_timer = QTimer()
+    # temperature_display_timer.timeout.connect(ui_view.panel_home.update_temperature_display)
+    # # get_temperature_timer.setInterval(1000)
+    # temperature_display_timer.start(5000) # milliseconds
 
     ui_view.showFullScreen()
     ui_view.show()

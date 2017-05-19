@@ -13,7 +13,14 @@ class HomePanel(QWidget):
     def __init__(self):
         super().__init__()
         self.init_ui()
+
+        # Update temperature display initially
         self.update_temperature_display()
+
+        # Set timer to retrieve temperature data periodically
+        self.temperature_display_timer = QTimer()
+        self.temperature_display_timer.timeout.connect(self.update_temperature_display)
+        self.temperature_display_timer.start(4000) # milliseconds
 
     def init_ui(self):
         """Initialize the UI"""
@@ -38,9 +45,6 @@ class HomePanel(QWidget):
         #         button = QPushButton("Button" + str(i + j))
         #         button.setFixedSize(200, 180)
         #         grid.addWidget(button, i, j)
-
-
-
         self.setLayout(grid)
 
     def update_temperature_display(self):
