@@ -2,6 +2,7 @@ import sys
 import os
 import glob
 import time
+import random
 from PyQt5.QtCore import (QUrl, QObject, QTimer)
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQuick import QQuickView, QQuickItem
@@ -45,7 +46,8 @@ class TemperatureSensor():
             time.sleep(2)
 
     def display_temp(self):
-        tem = str(self.read_temp())
+        tem = random.choice([1,2,3,4,5,6,7,8,9,10]) 
+#        tem = str(self.read_temp())
         print(tem)
         text_property.write(tem)
 
@@ -69,7 +71,7 @@ if __name__ == "__main__":
 
     _update_timer = QTimer()
     _update_timer.timeout.connect(tsensor.display_temp)
-    _update_timer.setInterval(5000)
+    _update_timer.setInterval(1000)
     _update_timer.start() # milliseconds
 
     ret = app.exec_()
