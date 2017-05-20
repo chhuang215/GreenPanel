@@ -64,15 +64,8 @@ class QLabelTemperatureDisplay(QLabel):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.temperature_display_timer = QTimer()
-        # self.temperature_display_timer.timeout.connect(self.update_text)
-        # self.temperature_display_timer.setInterval(0)
-        # self.temperature_display_timer.start(4000) # milliseconds
+
         self.t_thread = self.TemperatureRetrieveThread(self)
         # self.t_thread.get_temp_sig.connect(self.update_text)
         self.t_thread.start()
 
-    # def update_text(self):
-    #     temp = controller.Temperature.get_temperature()
-    #     print("update temp: " + str(temp))
-    #     QLabelTemperatureDisplay.setText(str(temp))
