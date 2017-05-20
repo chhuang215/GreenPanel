@@ -1,6 +1,6 @@
 
 
-
+import time
 from PyQt5.QtCore import (Qt, QCoreApplication, QTimer, QThread, pyqtSignal, pyqtSlot)
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QWidget, QToolTip, QPushButton, QLabel,
@@ -15,18 +15,6 @@ class HomePanel(QWidget):
         super().__init__()
         self.init_ui()
 
-        # Update temperature display initially
-        self.update_temperature_display()
-
-        # Set timer to retrieve temperature data periodically
-        # self.temperature_display_timer = QTimer()
-        # self.temperature_display_timer.timeout.connect(self.update_temperature_display)
-        # self.temperature_display_timer.start(4000) # milliseconds
-
-        self.temperature_display_timer = QTimer()
-        self.temperature_display_timer.timeout.connect(self.update_temperature_display)
-        self.temperature_display_timer.start(4000) # milliseconds
-
     def init_ui(self):
         """Initialize the UI"""
 
@@ -39,7 +27,7 @@ class HomePanel(QWidget):
         btn_led_on_off.clicked.connect(controller.LED.switch_yellow_led)
 
 
-        self.__lbl_temperature_display = QLabel("0", parent=self)
+        self.__lbl_temperature_display = QLabelTemperatureDisplay("0", parent=self)
         self.__lbl_temperature_display.setObjectName("lblTemperature")
 
         grid.addWidget(btn_led_on_off, 0, 0)
@@ -52,9 +40,31 @@ class HomePanel(QWidget):
         #         grid.addWidget(button, i, j)
         self.setLayout(grid)
 
-    def update_temperature_display(self):
 
+class QLabelTemperatureDisplay(QLabel):
+
+    
+    class TemperatureRetrieveThread(QThread):
+
+        get_temp_sig = pyqtSignal()
+        def run(self):
+            while True:
+                print("EMIT sig")
+                self.get_temp_sig.emit()
+                time.sleep(4)
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # self.temperature_display_timer = QTimer()
+        # self.temperature_display_timer.timeout.connect(self.update_text)
+        # self.temperature_display_timer.setInterval(0)
+        # self.temperature_display_timer.start(4000) # milliseconds
+        self.t_thread = self.TemperatureRetrieveThread()
+        self.t_thread.get_temp_sig.connect(self.update_text)
+        self.t_thread.start()
+
+    def update_text(self):
         temp = controller.Temperature.get_temperature()
         print("update temp: " + str(temp))
-        self.__lbl_temperature_display.setText(str(temp))
-
+        self.setText(str(temp))
