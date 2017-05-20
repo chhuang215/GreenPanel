@@ -46,11 +46,19 @@ class QLabelTemperatureDisplay(QLabel):
     
     class TemperatureRetrieveThread(QThread):
 
-        get_temp_sig = pyqtSignal()
+        # get_temp_sig = pyqtSignal()
+
+        def __init__(self, parent):
+            super().__init__()
+            self.parent_label = parent
+
         def run(self):
             while True:
-                print("EMIT sig")
-                self.get_temp_sig.emit()
+                # print("Won't do stuff")
+                # self.get_temp_sig.emit()
+                temp = controller.Temperature.get_temperature()
+                print("update temp: " + str(temp))
+                self.parent_label.setText(str(temp))
                 time.sleep(4)
 
 
@@ -60,11 +68,11 @@ class QLabelTemperatureDisplay(QLabel):
         # self.temperature_display_timer.timeout.connect(self.update_text)
         # self.temperature_display_timer.setInterval(0)
         # self.temperature_display_timer.start(4000) # milliseconds
-        self.t_thread = self.TemperatureRetrieveThread()
-        self.t_thread.get_temp_sig.connect(self.update_text)
+        self.t_thread = self.TemperatureRetrieveThread(self)
+        # self.t_thread.get_temp_sig.connect(self.update_text)
         self.t_thread.start()
 
-    def update_text(self):
-        temp = controller.Temperature.get_temperature()
-        print("update temp: " + str(temp))
-        self.setText(str(temp))
+    # def update_text(self):
+    #     temp = controller.Temperature.get_temperature()
+    #     print("update temp: " + str(temp))
+    #     QLabelTemperatureDisplay.setText(str(temp))
