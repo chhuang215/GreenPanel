@@ -1,6 +1,7 @@
 
 
-from PyQt5.QtCore import (Qt, QCoreApplication, QTimer)
+
+from PyQt5.QtCore import (Qt, QCoreApplication, QTimer, QThread, pyqtSignal, pyqtSlot)
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QWidget, QToolTip, QPushButton, QLabel,
                              QApplication, QVBoxLayout, QGridLayout, QHBoxLayout)
@@ -18,6 +19,10 @@ class HomePanel(QWidget):
         self.update_temperature_display()
 
         # Set timer to retrieve temperature data periodically
+        # self.temperature_display_timer = QTimer()
+        # self.temperature_display_timer.timeout.connect(self.update_temperature_display)
+        # self.temperature_display_timer.start(4000) # milliseconds
+
         self.temperature_display_timer = QTimer()
         self.temperature_display_timer.timeout.connect(self.update_temperature_display)
         self.temperature_display_timer.start(4000) # milliseconds
@@ -34,11 +39,11 @@ class HomePanel(QWidget):
         btn_led_on_off.clicked.connect(controller.LED.switch_yellow_led)
 
 
-        lbl_temperature_display = QLabel("0", parent=self)
-        lbl_temperature_display.setObjectName("lblTemperature")
+        self.__lbl_temperature_display = QLabel("0", parent=self)
+        self.__lbl_temperature_display.setObjectName("lblTemperature")
 
         grid.addWidget(btn_led_on_off, 0, 0)
-        grid.addWidget(lbl_temperature_display, 0, 1)
+        grid.addWidget(self.__lbl_temperature_display, 0, 1)
 
         # for i in range(0, 2):
         #     for j in range(1, 4):
@@ -51,6 +56,5 @@ class HomePanel(QWidget):
 
         temp = controller.Temperature.get_temperature()
         print("update temp: " + str(temp))
-        lbl_temperature = self.findChild(QLabel, "lblTemperature")
-        lbl_temperature.setText(str(temp))
+        self.__lbl_temperature_display.setText(str(temp))
 
