@@ -3,23 +3,25 @@ import os
 import glob
 import time
 import random
-from PyQt5.QtCore import (QUrl, QObject, QTimer)
+from PyQt5.QtCore import (QUrl, QObject, QTimer, QThread, pyqtSignal)
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQuick import QQuickView, QQuickItem
 from PyQt5.QtQml import QQmlApplicationEngine, QQmlProperty
 
-class TemperatureSensor():
-
+class TemperatureSensor(QThread):
+    mySignal = pyqtSignal(int)
     def __init__(self):
-        os.system('modprobe w1-gpio')
-        os.system('modprobe w1-therm')
+        super().__init__()
+        if(os.name != 'nt'):
+            os.system('modprobe w1-gpio')
+            os.system('modprobe w1-therm')
 
-        base_dir = '/sys/bus/w1/devices/'
+            base_dir = '/sys/bus/w1/devices/'
 
-        device_folder = glob.glob(base_dir + '28*')[0]
+            device_folder = glob.glob(base_dir + '28*')[0]
 
-        self.device_file = device_folder + '/w1_slave'
-
+            self.device_file = device_folder + '/w1_slave'
+        self.mySignal.connect(self.display_temp)
     def read_temp_raw(self):
         f = open(self.device_file, 'r')
         lines = f.readlines()
@@ -37,14 +39,18 @@ class TemperatureSensor():
             temp_c = float(temp_string) / 1000.0
 
             return temp_c
-   
-    def display_temp(self):
-        #tem = random.choice([1,2,3,4,5,6,7,8,9,10]) 
-        tem = str(self.read_temp())
-        print(tem)
-        if tem != False:
-            text_property.write(tem)
 
+    def run(self):
+        while True:
+            #tem = str(self.read_temp())
+            tem = random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+            if tem != False:
+                self.mySignal.emit(tem)
+            time.sleep(2)
+
+    def display_temp(self, t):
+        print(t)
+        text_property.write(t)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -61,14 +67,17 @@ if __name__ == "__main__":
     
     text_property = QQmlProperty(text_temp, "text")
 
-    tsensor = TemperatureSensor()
+    # tsensor = TemperatureSensor()
+    
+    tsensor_thread = TemperatureSensor()
 
-    _update_timer = QTimer()
-    _update_timer.timeout.connect(tsensor.display_temp)
-    _update_timer.setInterval(1000)
-    _update_timer.start() # milliseconds
-
+    # _update_timer = QTimer()
+    # _update_timer.timeout.connect(tsensor.display_temp)
+    # _update_timer.setInterval(1000)
+    # _update_timer.start() # milliseconds
+    tsensor_thread.start()
     ret = app.exec_()
     print("Hi")
+    tsensor_thread.stop()
     sys.exit(ret)
 
