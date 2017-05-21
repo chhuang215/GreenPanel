@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Controls 2.0
+import QtQuick.Controls 1.2
 
 
 Rectangle {
@@ -11,12 +11,10 @@ Rectangle {
         x: 60
         spacing: 30
         
-        Switch {
-
-            text: qsTr("LED")
-            objectName: "swtLight"
-            font.pointSize: 24; font.bold: true
-            
+        Button {
+            text: "Light Switch"
+            objectName: "swtLight"            
+            checked: true
         }
 
         Text {
