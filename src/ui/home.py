@@ -56,7 +56,7 @@ class QLabelTemperatureDisplay(QLabel):
                 # self.get_temp_sig.emit()
                 temp = controller.Temperature.get_temperature()
                 print("update temp: " + str(temp))
-                self.get_temp_sig.emit(temp)
+                self.get_temp_sig.emit(str(temp))
                 time.sleep(3)
 
 
@@ -64,7 +64,7 @@ class QLabelTemperatureDisplay(QLabel):
         super().__init__(*args, **kwargs)
 
         self.t_thread = self.TemperatureRetrieveThread()
-        self.thread.get_temp_sig.connect(self.setText)
+        self.t_thread.get_temp_sig.connect(self.setText)
         # self.t_thread.get_temp_sig.connect(self.update_text)
         self.t_thread.start()
 
