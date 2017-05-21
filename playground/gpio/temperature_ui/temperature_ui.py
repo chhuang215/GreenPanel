@@ -28,9 +28,8 @@ class TemperatureSensor():
 
     def read_temp(self):
         lines = self.read_temp_raw()
-        while lines[0].strip()[-3:] != 'YES':
-            time.sleep(0.2)
-            lines = self.read_temp_raw()
+        if lines[0].strip()[-3:] != 'YES':
+            return False
 
         equals_pos = lines[1].find('t=')
         if equals_pos != -1:
@@ -38,18 +37,13 @@ class TemperatureSensor():
             temp_c = float(temp_string) / 1000.0
 
             return temp_c
-    def run(self):
-        while True:
-            tem = str(self.read_temp())
-            print(tem)
-            text_property.write(tem)
-            time.sleep(2)
-
+   
     def display_temp(self):
-        tem = random.choice([1,2,3,4,5,6,7,8,9,10]) 
-#        tem = str(self.read_temp())
+        #tem = random.choice([1,2,3,4,5,6,7,8,9,10]) 
+        tem = str(self.read_temp())
         print(tem)
-        text_property.write(tem)
+        if tem != False:
+            text_property.write(tem)
 
 
 if __name__ == "__main__":
