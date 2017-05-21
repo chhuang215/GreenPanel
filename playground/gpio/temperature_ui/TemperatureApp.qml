@@ -1,23 +1,36 @@
 import QtQuick 2.0
+import QtQuick.Controls 2.1
+
 
 Rectangle {
     id: page
-    width: 320; height: 480
+    width: 800; height: 480
     color: "lightgray"
 
+    Row {
+        x: 60
+        spacing: 30
+        
+        Switch {
 
-    function setText(temp){
-        helloText.text = temp
+            text: qsTr("LED")
+            objectName: "swtLight"
+            font.pointSize: 24; font.bold: true
+            
+        }
+
+        Text {
+            id: helloText
+            objectName: "txtTemp"
+            text: "Temp display here"
+
+            font.pointSize: 24; font.bold: true
+        }
+
     }
 
-    Text {
-        id: helloText
-        objectName: "txtTemp"
-        text: "Temp display here"
-        y: 100
-        anchors.horizontalCenter: page.horizontalCenter
-        font.pointSize: 24; font.bold: true
-    }
+    
+
 
     Grid {
         id: grid

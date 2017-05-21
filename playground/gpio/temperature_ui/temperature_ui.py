@@ -3,10 +3,10 @@ import os
 import glob
 import time
 import random
-from PyQt5.QtCore import (QUrl, QObject, QTimer, QThread, pyqtSignal)
+from PyQt5.QtCore import (QUrl, QThread, pyqtSignal)
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQuick import QQuickView, QQuickItem
-from PyQt5.QtQml import QQmlApplicationEngine, QQmlProperty
+from PyQt5.QtQml import QQmlApplicationEngine, QQmlProperty, QQmlComponent 
 
 class TemperatureSensor(QThread):
     mySignal = pyqtSignal(object)
@@ -40,46 +40,69 @@ class TemperatureSensor(QThread):
 
             return temp_c
 
+    def display_temp(self, t):
+        print(t)
+        text_temp.setProperty("text", t)
+
     def run(self):
         while True:
-            tem = str(self.read_temp())
-            #tem = random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+            tem = random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+            if(os.name != 'nt'):
+                tem = str(self.read_temp())
+            
             print("")
             if tem != False:
                 self.mySignal.emit(tem)
             time.sleep(2)
 
 
-    def display_temp(self, t):
-        print(t)
-        text_property.write(t)
+
+def light_switch_event():
+    print("LIGHT: ", light_switch.property("checked"))
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     # Create a label and set its properties
-    appview = QQuickView()
-    appview.setSource(QUrl('TemperatureApp.qml'))
+
+    # engine = QQmlApplicationEngine()
+
+    # # guifile = QUrl('TemperatureApp.qml')
+    # # component = QQmlComponent(engine, guifile)
+    # # rec = component.create()
+
+    # # print(rec)
+    # # rec.parentItem().show()
+    # engine.load(QUrl('TemperatureApp.qml'))
+    # rec = engine.rootObjects()[0]
+    # rec.window().show()
+    # # win = engine.rootObjects()[0]
+    # # win.show()
+
+    view = QQuickView()
+    view.setSource(QUrl('TemperatureApp.qml'))
 
     # Show the Label
-    appview.show()
-    root = appview.rootObject()
+    view.show()
 
 
-    text_temp = root.findChild(QObject, "txtTemp")
-    
-    text_property = QQmlProperty(text_temp, "text")
+    root = view.rootObject()
 
-    # tsensor = TemperatureSensor()
-    
+    text_temp = root.findChild(QQuickItem, "txtTemp")
+
+    light_switch = root.findChild(QQuickItem, "swtLight")
+    light_switch.clicked.connect(light_switch_event)
+
     tsensor_thread = TemperatureSensor()
 
+
+    tsensor_thread.start()
+    ret = app.exec_()
+    print("Hi")
+    sys.exit(ret)
+
+
+    # tsensor = TemperatureSensor()
     # _update_timer = QTimer()
     # _update_timer.timeout.connect(tsensor.display_temp)
     # _update_timer.setInterval(1000)
     # _update_timer.start() # milliseconds
-    tsensor_thread.start()
-    ret = app.exec_()
-    print("Hi")
-    tsensor_thread.stop()
-    sys.exit(ret)
-
