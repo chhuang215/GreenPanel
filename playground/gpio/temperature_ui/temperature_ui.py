@@ -9,7 +9,7 @@ from PyQt5.QtQuick import QQuickView, QQuickItem
 from PyQt5.QtQml import QQmlApplicationEngine, QQmlProperty
 
 class TemperatureSensor(QThread):
-    mySignal = pyqtSignal(int)
+    mySignal = pyqtSignal(object)
     def __init__(self):
         super().__init__()
         if(os.name != 'nt'):
@@ -21,7 +21,7 @@ class TemperatureSensor(QThread):
             device_folder = glob.glob(base_dir + '28*')[0]
 
             self.device_file = device_folder + '/w1_slave'
-        self.mySignal.connect(display_temp)
+        self.mySignal.connect(self.display_temp)
     def read_temp_raw(self):
         f = open(self.device_file, 'r')
         lines = f.readlines()
@@ -43,7 +43,6 @@ class TemperatureSensor(QThread):
     def run(self):
         while True:
             tem = str(self.read_temp())
-            print(tem)
             #tem = random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
             print("")
             if tem != False:
@@ -51,9 +50,9 @@ class TemperatureSensor(QThread):
             time.sleep(2)
 
 
-def display_temp(self, t):
-    print(t)
-    text_property.write(t)
+    def display_temp(self, t):
+        print(t)
+        text_property.write(t)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
