@@ -40,17 +40,15 @@ class HomePanel(QWidget):
         #         grid.addWidget(button, i, j)
         self.setLayout(grid)
 
-
 class QLabelTemperatureDisplay(QLabel):
 
     
     class TemperatureRetrieveThread(QThread):
 
-        # get_temp_sig = pyqtSignal()
+        get_temp_sig = pyqtSignal(object)
 
-        def __init__(self, parent):
+        def __init__(self):
             super().__init__()
-            self.parent_label = parent
 
         def run(self):
             while True:
@@ -58,14 +56,15 @@ class QLabelTemperatureDisplay(QLabel):
                 # self.get_temp_sig.emit()
                 temp = controller.Temperature.get_temperature()
                 print("update temp: " + str(temp))
-                self.parent_label.setText(str(temp))
-                time.sleep(4)
+                self.get_temp_sig.emit(temp)
+                time.sleep(3)
 
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.t_thread = self.TemperatureRetrieveThread(self)
+        self.t_thread = self.TemperatureRetrieveThread()
+        self.thread.get_temp_sig.connect(self.setText)
         # self.t_thread.get_temp_sig.connect(self.update_text)
         self.t_thread.start()
 
