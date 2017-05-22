@@ -39,12 +39,6 @@ class Temperature:
         """Update temperature display onto the UI"""
         return Temperature.SENSOR.get_temp_c()
 
-    @staticmethod
-    def update_temperature(temp):
-        """Update temperature display onto the UI"""
-        if UIController.MAIN_UI is not None:
-            UIController.MAIN_UI.panel_home.update_temperature_display(temp)
-
 class LED:
     """Controller for LED modal"""
     @staticmethod
