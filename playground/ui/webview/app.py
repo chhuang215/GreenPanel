@@ -21,7 +21,7 @@ class FlaskServerThread(threading.Thread):
 
     def run(self):
         print("Start Flask Server!")
-        flask_app.run()
+        flask_app.run(host="0.0.0.0")
 
 flask_app = Flask(__name__)
 @flask_app.route("/")
