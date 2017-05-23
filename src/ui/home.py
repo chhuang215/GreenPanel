@@ -5,9 +5,8 @@ from PyQt5.QtCore import (Qt, QCoreApplication, QTimer, QThread, QTime,
                           pyqtSignal, pyqtSlot)
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QWidget, QToolTip, QPushButton, QLabel, QLCDNumber,
-                             QApplication, QVBoxLayout, QGridLayout, QHBoxLayout, 
+                             QApplication, QVBoxLayout, QGridLayout, QHBoxLayout,
                              QSizePolicy)
-
 import controller
 
 class HomePanel(QWidget):
@@ -31,7 +30,7 @@ class HomePanel(QWidget):
         btn_led_on_off = QPushButton("LED On/Off", parent=self)
         btn_led_on_off.setFixedSize(200, 180)
         btn_led_on_off.setObjectName("btnLed")
-        btn_led_on_off.clicked.connect(controller.LED.switch_yellow_led)
+        btn_led_on_off.clicked.connect(controller.LightController.switch_yellow_led)
 
 
         self.__lbl_temperature_display = QLabel("0", parent=self)
