@@ -4,7 +4,8 @@ LED modal
 """
 import RPi.GPIO as GPIO
 import lid
-
+import threading
+import datetime
 '''
     LED class
 '''
@@ -53,7 +54,19 @@ class LED():
         GPIO.output(self.pin, GPIO.LOW)
 
     def resume(self):
-        if self.status == 1:
+        if self.status == LED.ON:
             self.turn_on()
         else:
             self.turn_off()
+
+class LightTimer():
+    def __init__(self, led, begin_hr=7, duration_hr=17):
+        super().__init__(self)
+        self.led = led
+        self.set_timer(begin_hr, duration_hr)
+
+    def check_timer(self):
+        pass
+
+    def set_timer(self, begin, duration):
+        pass

@@ -26,12 +26,6 @@ def start_app():
     app = QApplication(sys.argv)
 
     ui_view = controller.UIController.get_ui()
-
-    # self.temperature_display_timer = QTimer()
-    # temperature_display_timer.timeout.connect(ui_view.panel_home.update_temperature_display)
-    # # get_temperature_timer.setInterval(1000)
-    # temperature_display_timer.start(5000) # milliseconds
-
     ui_view.showFullScreen()
     ui_view.show()
 
@@ -40,24 +34,27 @@ def start_app():
     # GPIO.cleanup()
     sys.exit(ret)
 
+def main():
+    # Set up GPIO
+    GPIO.setmode(GPIO.BCM)
+    #GPIO.setwarnings(False)
+    GPIO.setup(PINS.PIN_YELLOW_LED, GPIO.OUT)
+    GPIO.setup(PINS.PIN_BLUE_LED, GPIO.OUT)
+    GPIO.setup(PINS.PIN_PUSH_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-# Set up GPIO
-GPIO.setmode(GPIO.BCM)
-#GPIO.setwarnings(False)
-GPIO.setup(PINS.PIN_YELLOW_LED, GPIO.OUT)
-GPIO.setup(PINS.PIN_BLUE_LED, GPIO.OUT)
-GPIO.setup(PINS.PIN_PUSH_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    LED(LED.ON, PINS.PIN_YELLOW_LED)
+    LED(LED.OFF, PINS.PIN_BLUE_LED)
 
-LED(LED.ON, PINS.PIN_YELLOW_LED)
-LED(LED.OFF, PINS.PIN_BLUE_LED)
+    GPIO.add_event_detect(PINS.PIN_PUSH_BUTTON, GPIO.BOTH,
+                          callback=Lid.open_close)
 
-GPIO.add_event_detect(PINS.PIN_PUSH_BUTTON, GPIO.BOTH,
-                      callback=Lid.open_close)
+    try:
+        start_app()
 
-try:
-    start_app()
+    except KeyboardInterrupt:
+        GPIO.cleanup()       # clean up GPIO on CTRL+C exit
+    finally:
+        GPIO.cleanup()
 
-except KeyboardInterrupt:
-    GPIO.cleanup()       # clean up GPIO on CTRL+C exit
-finally:
-    GPIO.cleanup()
+if __name__ == '__main__':
+    main()

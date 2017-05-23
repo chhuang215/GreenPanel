@@ -41,16 +41,3 @@ class Lid:
             blue_led.turn_on_temporary()
             yellow_led.turn_off_temporary()
             Lid.STATUS = Lid.OPENED
-
-    
-    # @staticmethod
-    # def resume():
-    #     led_list = led.LED.LED_LIST
-    #     blue_led = led_list[str(PINS.PIN_BLUE_LED)]
-    #     yellow_led = led_list[str(PINS.PIN_YELLOW_LED)]
-    #     if not GPIO.input(Lid.PIN):
-    #         print("LID is open")
-    #         blue_led.turn_on_temporary()
-    #         yellow_led.turn_off_temporary()
-
-    #         Lid.STATUS = 1

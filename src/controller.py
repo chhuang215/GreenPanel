@@ -1,6 +1,6 @@
 """controller.py"""
 from ui import MainWindow
-from led import LED as LEDModal
+from led import LED
 import pins as PINS
 import temperature
 
@@ -39,9 +39,9 @@ class Temperature:
         """Update temperature display onto the UI"""
         return Temperature.SENSOR.get_temp_c()
 
-class LED:
+class LightController:
     """Controller for LED modal"""
     @staticmethod
     def switch_yellow_led():
         """Turn switch of the yellow LED"""
-        LEDModal.LED_LIST[str(PINS.PIN_YELLOW_LED)].switch()
+        LED.LED_LIST[str(PINS.PIN_YELLOW_LED)].switch()
