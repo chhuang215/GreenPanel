@@ -24,13 +24,13 @@ class TestLight(unittest.TestCase):
     def test_turn_light_on(self, mock_gpio_output):
         self.led.turn_on()
         self.assertEqual(self.led.status, 1)
-        # mock_gpio_output.assert_called_once_with(self.led.pin, RPi.GPIO.HIGH)
+        mock_gpio_output.assert_any_call(self.led.pin, RPi.GPIO.HIGH)
     
     @patch("RPi.GPIO.output")
     def test_turn_light_off(self, mock_gpio_output):
         self.led.turn_off()
         self.assertEqual(self.led.status, 0)
-        # mock_gpio_output.assert_called_once_with(self.led.pin, RPi.GPIO.LOW)
+        mock_gpio_output.assert_any_call(self.led.pin, RPi.GPIO.LOW)
 
     def test_set_timer(self):
         b_hr = 12
