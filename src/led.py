@@ -61,7 +61,7 @@ class LED():
 
 class LightTimer():
     def __init__(self, led, begin_hr=7, duration_hr=17):
-        super().__init__(self)
+
         self.led = led
         self.set_timer(begin_hr, duration_hr)
 
@@ -69,4 +69,5 @@ class LightTimer():
         pass
 
     def set_timer(self, begin, duration):
-        pass
+        self.begin_hour = begin
+        self.end_hour = (begin + duration) % 24
