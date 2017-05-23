@@ -1,6 +1,18 @@
 import unittest
+from unittest.mock import patch, MagicMock
 import led
 import pins
+
+
+MockRPi = MagicMock()
+modules = {
+    "RPi": MockRPi,
+    "RPi.GPIO": MockRPi.GPIO
+}
+patcher = patch.dict("sys.modules", modules)
+patcher.start()
+
+import RPi.GPIO
 
 class TestLight(unittest.TestCase):
 
@@ -8,13 +20,17 @@ class TestLight(unittest.TestCase):
         self.led = led.LED(led.LED.OFF, pins.PIN_YELLOW_LED)
         self.lighttimer = led.LightTimer(led)
 
-    def test_turn_light_on(self):
+    @patch("RPi.GPIO.output")
+    def test_turn_light_on(self, mock_gpio_output):
         self.led.turn_on()
         self.assertEqual(self.led.status, 1)
+        # mock_gpio_output.assert_called_once_with(self.led.pin, RPi.GPIO.HIGH)
     
-    def test_turn_light_off(self):
+    @patch("RPi.GPIO.output")
+    def test_turn_light_off(self, mock_gpio_output):
         self.led.turn_off()
         self.assertEqual(self.led.status, 0)
+        # mock_gpio_output.assert_called_once_with(self.led.pin, RPi.GPIO.LOW)
 
     def test_set_timer(self):
         b_hr = 12
