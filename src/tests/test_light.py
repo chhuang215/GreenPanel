@@ -9,7 +9,7 @@ class TestLight(unittest.TestCase):
     @patch("RPi.GPIO.output", autospec=True)
     def setUp(self, mock_gpio_output):
         self.led = led.LED(led.LED.OFF, pins.PIN_YELLOW_LED)
-        self.lighttimer = led.LightTimer(led)
+        self.lighttimer = led.LightTimer(self.led)
         mock_gpio_output.assert_called_with(self.led.pin, RPi.GPIO.LOW)
 
     @patch("RPi.GPIO.output", autospec=True)
