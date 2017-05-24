@@ -2,7 +2,8 @@ language: python
 python:
   - "3.6"
 # command to install dependencies
-script: python -m unittest discover src/tests
+before_install: cd src
+script: python -m unittest discover tests
 branches:
   only:
     - master
