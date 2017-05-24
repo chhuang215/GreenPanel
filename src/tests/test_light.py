@@ -12,13 +12,15 @@ modules = {
 patcher = patch.dict("sys.modules", modules)
 patcher.start()
 
-import RPi.GPIO
+import RPi.GPIO 
 
 class TestLight(unittest.TestCase):
 
-    def setUp(self):
+    @patch("RPi.GPIO.output")
+    def setUp(self, mock_gpio_output):
         self.led = led.LED(led.LED.OFF, pins.PIN_YELLOW_LED)
         self.lighttimer = led.LightTimer(led)
+        mock_gpio_output.assert_any_call(self.led.pin, RPi.GPIO.LOW)
 
     @patch("RPi.GPIO.output")
     def test_turn_light_on(self, mock_gpio_output):
