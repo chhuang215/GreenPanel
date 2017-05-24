@@ -5,7 +5,9 @@ import led
 import pins
 
 mock_RPi = MagicMock()
+mock_RPi_GPIO = MagicMock()
 sys.modules["RPi"] = mock_RPi
+sys.modules["RPi.GPIO"] = mock_RPi_GPIO
 
 import RPi.GPIO
 
