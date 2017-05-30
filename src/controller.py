@@ -1,5 +1,6 @@
 """controller.py"""
 from ui import MainWindow
+import ui.temperature_ui as temperature_ui
 from led import LED
 import pins as PINS
 import temperature
@@ -8,19 +9,21 @@ class UIController:
     """Controller for UI"""
 
     MAIN_UI = None
-
+    MAIN_UI_QML = None
     @staticmethod
     def init_ui():
         """Instantiate the UI"""
-        UIController.MAIN_UI = MainWindow()
+        # UIController.MAIN_UI = MainWindow()
+        UIController.MAIN_UI_QML = temperature_ui.MainWindow()
 
     @staticmethod
     def get_ui():
         """Returns the main window, instantiate the UI if not instantiated yet"""
-        if UIController.MAIN_UI is None:
+        if UIController.MAIN_UI_QML is None:
             UIController.init_ui()
 
-        return UIController.MAIN_UI
+        print(UIController.MAIN_UI, UIController.MAIN_UI_QML)
+        return UIController.MAIN_UI_QML
 
 class Temperature:
     """Controller for Temperature modal"""
@@ -37,7 +40,7 @@ class Temperature:
     @staticmethod
     def get_temperature():
         """Update temperature display onto the UI"""
-        return Temperature.SENSOR.get_temp_c()
+        return str(Temperature.SENSOR.get_temp_c())
 
 class LightController:
     """Controller for LED modal"""

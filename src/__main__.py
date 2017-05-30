@@ -21,13 +21,17 @@ def start_app():
 
     controller.Temperature.init_sensors()
 
+    #initially manually detect lid open close event
     Lid.open_close()
 
     app = QApplication(sys.argv)
 
-    ui_view = controller.UIController.get_ui()
-    ui_view.showFullScreen()
-    ui_view.show()
+    ui_view_qml = controller.UIController.get_ui()
+    # ui_view.showFullScreen()
+    # ui_view.show()
+ 
+    ui_view_qml.show()
+    ui_view_qml.showFullScreen()
 
     ret = app.exec_()
     # clean up
