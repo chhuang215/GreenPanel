@@ -1,6 +1,6 @@
 """controller.py"""
+# from ui import MainWindow
 from ui import MainWindow
-import ui.temperature_ui as temperature_ui
 from led import LED
 import pins as PINS
 import temperature
@@ -14,7 +14,7 @@ class UIController:
     def init_ui():
         """Instantiate the UI"""
         # UIController.MAIN_UI = MainWindow()
-        UIController.MAIN_UI_QML = temperature_ui.MainWindow()
+        UIController.MAIN_UI_QML = MainWindow()
 
     @staticmethod
     def get_ui():
