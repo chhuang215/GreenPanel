@@ -4,7 +4,7 @@ import QtQuick.Controls 1.2
 
 Rectangle {
     id: page
-    width: 800; height: 480
+    width: 750; height: 400
     color: "lightgray"
 
     Row {
@@ -12,6 +12,8 @@ Rectangle {
         spacing: 30
         
         Button {
+            width:100
+            height:100
             text: "Light Switch"
             objectName: "swtLight"            
             checked: true
@@ -20,9 +22,9 @@ Rectangle {
         Text {
             id: helloText
             objectName: "txtTemp"
-            text: "Temp display here"
+            text: "-1"
 
-            font.pointSize: 24; font.bold: true
+            font.pointSize: 35; font.bold: true
         }
 
     }

@@ -3,6 +3,7 @@ import os
 import glob
 import time
 import random
+import RPi.GPIO as GPIO
 from PyQt5.QtCore import (QUrl, QThread, pyqtSignal)
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQuick import QQuickView, QQuickItem
@@ -42,15 +43,14 @@ class TemperatureSensor(QThread):
 
     def display_temp(self, t):
         print(t)
-        text_temp.setProperty("text", t)
+        text_temp.setProperty("text", t + " C")
 
     def run(self):
         while True:
             tem = random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
             if(os.name != 'nt'):
                 tem = str(self.read_temp())
-            
-            print("")
+
             if tem != False:
                 self.mySignal.emit(tem)
             time.sleep(2)
@@ -59,9 +59,17 @@ class TemperatureSensor(QThread):
 
 def light_switch_event():
     print("LIGHT: ", light_switch.property("checked"))
+    
+    GPIO.output(18, not GPIO.input(18))
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
+
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(18, GPIO.OUT, initial=GPIO.LOW)
+    
+    try :
+
+        app = QApplication(sys.argv)
     # Create a label and set its properties
 
     # engine = QQmlApplicationEngine()
@@ -78,28 +86,30 @@ if __name__ == "__main__":
     # # win = engine.rootObjects()[0]
     # # win.show()
 
-    view = QQuickView()
-    view.setSource(QUrl('TemperatureApp.qml'))
+        view = QQuickView()
+        view.setSource(QUrl('TemperatureApp.qml'))
 
     # Show the Label
-    view.show()
+        view.show()
+
+        root = view.rootObject()
+
+        text_temp = root.findChild(QQuickItem, "txtTemp")
+
+        light_switch = root.findChild(QQuickItem, "swtLight")
+        light_switch.clicked.connect(light_switch_event)
+    
+        tsensor_thread = TemperatureSensor()
 
 
-    root = view.rootObject()
+        tsensor_thread.start()
+        ret = app.exec_()
+        print("Hi")
+        sys.exit(ret)
 
-    text_temp = root.findChild(QQuickItem, "txtTemp")
-
-    light_switch = root.findChild(QQuickItem, "swtLight")
-    light_switch.clicked.connect(light_switch_event)
-
-    tsensor_thread = TemperatureSensor()
-
-
-    tsensor_thread.start()
-    ret = app.exec_()
-    print("Hi")
-    sys.exit(ret)
-
+    finally:
+        GPIO.cleanup()
+    
 
     # tsensor = TemperatureSensor()
     # _update_timer = QTimer()
