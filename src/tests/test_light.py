@@ -1,7 +1,15 @@
+import sys
 import unittest
 from unittest.mock import patch, MagicMock
+
+mock_RPi = MagicMock()
+mock_RPi_GPIO = MagicMock()
+sys.modules["RPi"] = mock_RPi
+sys.modules["RPi.GPIO"] = mock_RPi_GPIO
+
 import led
 import pins
+
 import RPi.GPIO
 
 class TestLight(unittest.TestCase):
