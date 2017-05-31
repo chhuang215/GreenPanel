@@ -2,6 +2,8 @@ import QtQuick 2.3
 import QtQuick.Controls 1.2
 
 Item{
+    property alias changeColor:helloText.color
+
     Column{
         width: parent.width
         spacing:40
