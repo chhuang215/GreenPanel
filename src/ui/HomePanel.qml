@@ -53,7 +53,7 @@ Item{
                 width:226
                 height:130
                 text: "water"
-                // objectName: "swtLight"            
+                objectName: "btnWater"            
             
             }
 
