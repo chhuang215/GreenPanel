@@ -14,14 +14,18 @@ from lid import Lid
 def start_app():
 
 
+
+    # start QT UI
+    app = QApplication(sys.argv)
+        
+    # initialize gpio components
+    controller.GPIOController.init_gpio_components()
+
     # manually detect lid open close event from the start
     Lid.open_close()
 
     # manually detect water sensor event from the start
     controller.WaterLevel.SENSOR.water_level_detect(controller.WaterLevel.SENSOR.pin)
-
-    # start QT UI
-    app = QApplication(sys.argv)
 
     ui_view = controller.UIController.get_ui()
     ui_view.show()
@@ -38,11 +42,6 @@ def main():
     GPIO.setup(PINS.PIN_BLUE_LED, GPIO.OUT)
     GPIO.setup(PINS.PIN_PUSH_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(PINS.PIN_WATER_LEVEL_SENSOR, GPIO.IN)
-
-    # initialize gpio components
-    controller.GPIOController.init_gpio_components()
-
-
 
     try:
         start_app()

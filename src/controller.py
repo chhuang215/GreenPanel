@@ -29,7 +29,6 @@ class UIController:
         # print(UIController.MAIN_UI, UIController.MAIN_UI_QML)
         return UIController.MAIN_UI
 
-
 class GPIOController:
 
     @staticmethod

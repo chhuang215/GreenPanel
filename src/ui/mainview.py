@@ -52,5 +52,5 @@ class MainWindow(QQuickView):
     def change_water_status(self, status):
         msg = "Add water yo"
         if status:
-            self.btn_water.setProperty("text", "Water is good.")
+            msg = "Water is good."
         self.btn_water.setProperty("text", msg)
