@@ -31,7 +31,7 @@ class Lid:
 
         print("Lid GPIO input: " + str(GPIO.input(pin)))
 
-        if GPIO.input(pin) == 1:
+        if GPIO.input(pin) == GPIO.HIGH:
             print("LID closed")
             blue_led.resume()
             yellow_led.resume()

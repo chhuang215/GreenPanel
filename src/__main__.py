@@ -4,38 +4,30 @@
 import sys
 
 import RPi.GPIO as GPIO
-
-from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QApplication
 
 import controller
 
 import pins as PINS
-import controller
 from lid import Lid
-from led import LED
-
-
 
 def start_app():
 
-    controller.Temperature.init_sensors()
 
-    #initially manually detect lid open close event
+    # manually detect lid open close event from the start
     Lid.open_close()
 
+    # manually detect water sensor event from the start
+    controller.WaterLevel.SENSOR.water_level_detect(controller.WaterLevel.SENSOR.pin)
+
+    # start QT UI
     app = QApplication(sys.argv)
 
-    ui_view_qml = controller.UIController.get_ui()
-    # ui_view.showFullScreen()
-    # ui_view.show()
- 
-    ui_view_qml.show()
-    ui_view_qml.showFullScreen()
+    ui_view = controller.UIController.get_ui()
+    ui_view.show()
+    ui_view.showFullScreen()
 
     ret = app.exec_()
-    # clean up
-    # GPIO.cleanup()
     sys.exit(ret)
 
 def main():
@@ -45,12 +37,12 @@ def main():
     GPIO.setup(PINS.PIN_YELLOW_LED, GPIO.OUT)
     GPIO.setup(PINS.PIN_BLUE_LED, GPIO.OUT)
     GPIO.setup(PINS.PIN_PUSH_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(PINS.PIN_WATER_LEVEL_SENSOR, GPIO.IN)
 
-    LED(LED.ON, PINS.PIN_YELLOW_LED)
-    LED(LED.OFF, PINS.PIN_BLUE_LED)
+    # initialize gpio components
+    controller.GPIOController.init_gpio_components()
 
-    GPIO.add_event_detect(PINS.PIN_PUSH_BUTTON, GPIO.BOTH,
-                          callback=Lid.open_close)
+
 
     try:
         start_app()

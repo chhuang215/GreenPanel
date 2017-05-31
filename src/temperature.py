@@ -38,7 +38,7 @@ class TemperatureSensor():
             return temp_c
     
     def get_temp_c(self):
-        return self.read_temp()
+        return round(self.read_temp(), 1)
 
     # def run(self):
     #     while True:
@@ -50,7 +50,7 @@ class TemperatureSensorWindows():
 
     def get_temp_c(self):
         import random
-        return random.choice([19, 20, 21, 22, 23, 24])
+        return round(random.choice([19.333, 20.444, 21.555, 22.666, 23.777, 24.111]), 1)
 
     # def run(self):
     #     import random

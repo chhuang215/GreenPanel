@@ -16,10 +16,13 @@ class LED():
     ON = 1
     OFF = 0
 
-    def __init__(self, status, gpio_pin):
+    @staticmethod
+    def add_led(gpio_pin, init_status=OFF):
+        LED.LED_LIST[str(gpio_pin)] = LED(gpio_pin, init_status)
+
+    def __init__(self, gpio_pin, status):
         self.status = status
         self.pin = gpio_pin
-        LED.LED_LIST[str(self.pin)] = self
 
         self.resume()
 #        if status == 1:
@@ -71,3 +74,9 @@ class LightTimer():
     def set_timer(self, begin, duration):
         self.begin_hour = begin
         self.end_hour = (begin + duration) % 24
+
+    def activate(self):
+        pass
+
+    def deactivate(self):
+        pass
