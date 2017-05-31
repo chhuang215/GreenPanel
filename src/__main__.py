@@ -1,6 +1,6 @@
 """main.py"""
 # pylint: disable=E0611, C0111
-
+import os
 import sys
 
 import RPi.GPIO as GPIO

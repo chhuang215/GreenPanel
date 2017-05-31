@@ -40,8 +40,16 @@ class MainWindow(QQuickView):
         self.btn_quit = self.root.findChild(QQuickItem, "btnQuit")
 
         self.btn_quit.clicked.connect(QCoreApplication.instance().quit)
+
+        self.btn_water = self.root.findChild(QQuickItem, "btnWater")
+
         # start temperature thread
         self.tsensor_thread = TemperatureDisplayThread(self.text_temp)
 
         self.tsensor_thread.start()
 
+    def change_water_status(self, status):
+        msg = "Add water yo"
+        if status:
+            self.btn_water.setProperty("text", "Water is good.")
+        self.btn_water.setProperty("text", msg)
