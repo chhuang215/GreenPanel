@@ -29,6 +29,7 @@ class MainWindow(QQuickView):
     def __init__(self):
         super().__init__()
 
+#        self.setSource(QUrl('MainView.qml'))
         self.setSource(QUrl.fromLocalFile('ui/MainView.qml'))
 
         self.root = self.rootObject()
