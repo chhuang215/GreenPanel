@@ -2,8 +2,10 @@ import QtQuick 2.3
 import QtQuick.Controls 1.2
 
 Item{
+    id:"panelHome"
+    signal btnLightClicked()
     property alias changeColor:helloText.color
-
+    
     Column{
         width: parent.width
         spacing:40
@@ -15,7 +17,7 @@ Item{
                 width: parent.width
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                text:"The time and setting and stuff should be here"
+                text:"The time, setting, and stuff be here."
                 font.pointSize: 30
                 
             }
@@ -52,6 +54,17 @@ Item{
             spacing: 30
             
             Button {
+                id:"btnLightTimer"
+                width:226
+                height:130
+                text: "Set Light Timer"
+                // objectName: "swtLight"            
+                onClicked: {
+                    panelHome.btnLightClicked()
+                }
+            }
+
+            Button {
                 width:226
                 height:130
                 text: "water"
@@ -59,13 +72,7 @@ Item{
             
             }
 
-            Button {
-                width:226
-                height:130
-                text: "light"
-                // objectName: "swtLight"            
-                
-            }
+         
 
             Button {
                 width:226

@@ -8,10 +8,22 @@ Rectangle {
     color: "lightgray"
     
     HomePanel{
-        id:"panelHome"
+        id: "panelHome"
         width: parent.width
+        onBtnLightClicked:{
+            panelHome.visible = false
+            panelLight.visible = true
+        }
     }
 
+    LightPanel{
+        id: "panelLight"
+        width:parent.width
+        onBtnBackClicked:{
+            panelLight.visible = false
+            panelHome.visible = true
+        }
+    }
 
     Grid {
         id: grid
