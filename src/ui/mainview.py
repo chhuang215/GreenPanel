@@ -54,7 +54,7 @@ class MainWindow(QQuickView):
         self.water_update_timer.start()
 
     def display_current_water_status(self):
-        status = controller.WaterLevel.SENSOR.has_enough_water()
+        status = controller.WaterLevel.get_status()
         msg = "Add water yo"
         if status:
             msg = "Water is good."

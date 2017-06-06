@@ -38,7 +38,13 @@ class TemperatureSensor():
             return temp_c
     
     def get_temp_c(self):
-        return round(self.read_temp(), 1)
+        temp = "NaN"
+        try:
+            temp = round(self.read_temp(), 1)
+        except FileNotFoundError:
+            print("Temperature Sensor Not Found")
+
+        return temp
 
     # def run(self):
     #     while True:

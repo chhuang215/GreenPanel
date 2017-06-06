@@ -23,8 +23,8 @@ def main():
     GPIO.setup(PINS.PIN_WATER_LEVEL_SENSOR, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
     Lid.PIN = PINS.PIN_PUSH_BUTTON
-    LED.add_led(PINS.PIN_YELLOW_LED, LED.ON)
-    LED.add_led(PINS.PIN_BLUE_LED)
+    controller.LightController.add_light(PINS.PIN_YELLOW_LED, LED.ON)
+    controller.LightController.add_light(PINS.PIN_BLUE_LED)
 
     if os.name == 'nt':
         controller.Temperature.SENSOR = temperature.TemperatureSensorWindows()
@@ -35,8 +35,8 @@ def main():
     controller.WaterLevel.SENSOR = water.WaterSensor(PINS.PIN_WATER_LEVEL_SENSOR)
 
     GPIO.add_event_detect(Lid.PIN, GPIO.BOTH, callback=Lid.open_close)
-    GPIO.add_event_detect(controller.WaterLevel.SENSOR.pin, GPIO.BOTH,
-                          callback=controller.WaterLevel.SENSOR.water_level_detect, bouncetime=1)
+    # GPIO.add_event_detect(controller.WaterLevel.SENSOR.pin, GPIO.BOTH,
+    #                       callback=controller.WaterLevel.SENSOR.water_level_detect, bouncetime=1)
 
     try:
         # start QT UI
@@ -46,7 +46,7 @@ def main():
         Lid.open_close()
 
         # manually detect water sensor event from the start
-        controller.WaterLevel.SENSOR.water_level_detect(controller.WaterLevel.SENSOR.pin)
+        # controller.WaterLevel.SENSOR.water_level_detect(controller.WaterLevel.SENSOR.pin)
 
         ui_view = controller.UIController.get_ui()
         ui_view.show()

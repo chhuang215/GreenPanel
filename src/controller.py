@@ -63,9 +63,19 @@ class Temperature:
 class WaterLevel:
     SENSOR = None
 
+    @staticmethod
+    def get_status():
+        return WaterLevel.SENSOR.has_enough_water()
+
 class LightController:
-    """Controller for LED modal"""
+    """Controller for Light/LED modal"""
+    LED_LIST = {}
+
+    @staticmethod
+    def add_light(gpio_pin, init_status=LED.OFF):
+        LightController.LED_LIST[str(gpio_pin)] = LED(gpio_pin, init_status)
+
     @staticmethod
     def switch_yellow_led():
         """Turn switch of the yellow LED"""
-        LED.LED_LIST[str(PINS.PIN_YELLOW_LED)].switch()
+        LightController.LED_LIST[str(PINS.PIN_YELLOW_LED)].switch()

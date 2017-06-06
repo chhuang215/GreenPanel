@@ -12,13 +12,8 @@ import datetime
 class LED():
     """LED Modal class"""
 
-    LED_LIST = {}
     ON = 1
     OFF = 0
-
-    @staticmethod
-    def add_led(gpio_pin, init_status=OFF):
-        LED.LED_LIST[str(gpio_pin)] = LED(gpio_pin, init_status)
 
     def __init__(self, gpio_pin, status):
         self.status = status
