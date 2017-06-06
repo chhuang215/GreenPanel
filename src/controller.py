@@ -31,25 +31,25 @@ class UIController:
         return UIController.MAIN_UI
 
 class GPIOController:
+    pass
+    #@staticmethod
+    # def init_gpio_components():
+    #     Lid.PIN = PINS.PIN_PUSH_BUTTON
+    #     LED.add_led(PINS.PIN_YELLOW_LED, LED.ON)
+    #     LED.add_led(PINS.PIN_BLUE_LED)
 
-    @staticmethod
-    def init_gpio_components():
-        Lid.PIN = PINS.PIN_PUSH_BUTTON
-        LED.add_led(PINS.PIN_YELLOW_LED, LED.ON)
-        LED.add_led(PINS.PIN_BLUE_LED)
-
-        import os
-        if os.name == 'nt':
-            Temperature.SENSOR = temperature.TemperatureSensorWindows()
-        else:
-            Temperature.SENSOR = temperature.TemperatureSensor()
+    #     import os
+    #     if os.name == 'nt':
+    #         Temperature.SENSOR = temperature.TemperatureSensorWindows()
+    #     else:
+    #         Temperature.SENSOR = temperature.TemperatureSensor()
 
 
-        WaterLevel.SENSOR = water.WaterSensor(PINS.PIN_WATER_LEVEL_SENSOR)
+    #     WaterLevel.SENSOR = water.WaterSensor(PINS.PIN_WATER_LEVEL_SENSOR)
 
-        GPIO.add_event_detect(Lid.PIN, GPIO.BOTH, callback=Lid.open_close)
-        GPIO.add_event_detect(WaterLevel.SENSOR.pin, GPIO.BOTH,
-                              callback=WaterLevel.SENSOR.water_level_detect, bouncetime=1)
+    #     GPIO.add_event_detect(Lid.PIN, GPIO.BOTH, callback=Lid.open_close)
+    #     GPIO.add_event_detect(WaterLevel.SENSOR.pin, GPIO.BOTH,
+    #                           callback=WaterLevel.SENSOR.water_level_detect, bouncetime=1)
 
 class Temperature:
     """Controller for Temperature modal"""
