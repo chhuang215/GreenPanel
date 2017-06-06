@@ -36,7 +36,7 @@ def main():
 
     GPIO.add_event_detect(Lid.PIN, GPIO.BOTH, callback=Lid.open_close)
     GPIO.add_event_detect(controller.WaterLevel.SENSOR.pin, GPIO.BOTH,
-                          callback=controller.WaterLevel.SENSOR.water_level_detect, bouncetime=1)
+                          callback=controller.WaterLevel.SENSOR.water_level_detect, bouncetime=5)
 
     try:
         # start QT UI
