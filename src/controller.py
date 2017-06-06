@@ -18,6 +18,7 @@ class UIController:
     def init_ui():
         """Instantiate the UI"""
         # UIController.MAIN_UI = MainWindow()
+        print("UI inited")
         UIController.MAIN_UI = MainWindow()
 
     @staticmethod
@@ -48,7 +49,7 @@ class GPIOController:
 
         GPIO.add_event_detect(Lid.PIN, GPIO.BOTH, callback=Lid.open_close)
         GPIO.add_event_detect(WaterLevel.SENSOR.pin, GPIO.BOTH,
-                              callback=WaterLevel.SENSOR.water_level_detect)
+                              callback=WaterLevel.SENSOR.water_level_detect, bouncetime=1)
 
 class Temperature:
     """Controller for Temperature modal"""

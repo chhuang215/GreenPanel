@@ -46,7 +46,7 @@ def main():
     try:
         start_app()
 
-    except KeyboardInterrupt:
+    except:
         GPIO.cleanup()       # clean up GPIO on CTRL+C exit
     finally:
         GPIO.cleanup()
