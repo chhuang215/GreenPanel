@@ -2,7 +2,7 @@ import os
 import time
 import controller
 
-from PyQt5.QtCore import (QUrl, QThread, QCoreApplication ,pyqtSignal)
+from PyQt5.QtCore import (QUrl, QThread, QCoreApplication, QTimer, pyqtSignal)
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQuick import QQuickView, QQuickItem
 from PyQt5.QtQml import QQmlApplicationEngine, QQmlProperty, QQmlComponent 
@@ -23,7 +23,6 @@ class TemperatureDisplayThread(QThread):
             tem = controller.Temperature.get_temperature()
             self.SIG_CHK_SHOW_TEMP.emit(tem)
             time.sleep(5)
-
 
 class MainWindow(QQuickView):
     def __init__(self):
@@ -46,10 +45,16 @@ class MainWindow(QQuickView):
 
         # start temperature thread
         self.tsensor_thread = TemperatureDisplayThread(self.text_temp)
-
         self.tsensor_thread.start()
 
-    def change_water_status(self, status):
+        #start water sensor timer
+        self.water_update_timer = QTimer()
+        self.water_update_timer.setInterval(1000)
+        self.water_update_timer.timeout.connect(self.display_current_water_status)
+        self.water_update_timer.start()
+
+    def display_current_water_status(self):
+        status = controller.WaterLevel.SENSOR.has_enough_water()
         msg = "Add water yo"
         if status:
             msg = "Water is good."
