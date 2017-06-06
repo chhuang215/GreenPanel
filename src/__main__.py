@@ -23,8 +23,8 @@ def main():
     GPIO.setup(PINS.PIN_WATER_LEVEL_SENSOR, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
     Lid.PIN = PINS.PIN_PUSH_BUTTON
-    controller.LightController.add_light(PINS.PIN_YELLOW_LED, LED.ON)
-    controller.LightController.add_light(PINS.PIN_BLUE_LED)
+    LED.add_light(PINS.PIN_YELLOW_LED, LED.ON)
+    LED.add_light(PINS.PIN_BLUE_LED)
 
     if os.name == 'nt':
         controller.Temperature.SENSOR = temperature.TemperatureSensorWindows()

@@ -3,8 +3,6 @@ import glob
 import time
 import threading
 
-import controller
-
 class TemperatureSensor():
 
     def __init__(self):

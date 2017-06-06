@@ -3,8 +3,6 @@
 import RPi.GPIO as GPIO
 from ui import MainWindow
 from led import LED
-from lid import Lid
-
 import pins as PINS
 import temperature
 import water
@@ -68,14 +66,10 @@ class WaterLevel:
         return WaterLevel.SENSOR.has_enough_water()
 
 class LightController:
+ 
     """Controller for Light/LED modal"""
-    LED_LIST = {}
-
-    @staticmethod
-    def add_light(gpio_pin, init_status=LED.OFF):
-        LightController.LED_LIST[str(gpio_pin)] = LED(gpio_pin, init_status)
-
     @staticmethod
     def switch_yellow_led():
         """Turn switch of the yellow LED"""
-        LightController.LED_LIST[str(PINS.PIN_YELLOW_LED)].switch()
+        LED.LED_LIST[str(PINS.PIN_YELLOW_LED)].switch()
+

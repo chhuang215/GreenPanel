@@ -6,7 +6,7 @@ Lid module
 
 import RPi.GPIO as GPIO
 
-import controller
+import led
 import pins as PINS
 
 class Lid:
@@ -24,7 +24,7 @@ class Lid:
         """
         open_close method
         """
-        led_list = controller.LightController.LED_LIST
+        led_list = led.LED.LED_LIST
         blue_led = led_list[str(PINS.PIN_BLUE_LED)]
         yellow_led = led_list[str(PINS.PIN_YELLOW_LED)]
 

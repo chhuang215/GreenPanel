@@ -1,6 +1,5 @@
 
 import RPi.GPIO as GPIO
-import controller
 
 class WaterSensor:
     def __init__(self, gpio_pin):
