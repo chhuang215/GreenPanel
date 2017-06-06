@@ -5,6 +5,7 @@ LED modal
 import RPi.GPIO as GPIO
 import threading
 import datetime
+import lid
 '''
     LED class
 '''
@@ -30,7 +31,7 @@ class LED():
 
     def switch(self):
 
-        if controller.LidController.is_open():
+        if lid.Lid.STATUS == lid.Lid.OPENED:
             return
 
         if self.status == LED.ON:
