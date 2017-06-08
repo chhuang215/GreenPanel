@@ -46,27 +46,3 @@ class HardwareController:
             pin = str(pin)
         return HardwareController.GPIO_COMPONENTS[pin]
 
-# class Temperature:
-#     """Controller for Temperature modal"""
-#     SENSOR = None
-
-#     @staticmethod
-#     def get_temperature():
-#         """Update temperature display onto the UI"""
-#         return str(Temperature.SENSOR.get_temp_c())
-
-# class WaterLevel:
-#     SENSOR = None
-
-#     @staticmethod
-#     def get_status():
-#         return WaterLevel.SENSOR.has_enough_water()
-
-# class LightController:
- 
-#     """Controller for Light/LED modal"""
-#     @staticmethod
-#     def switch_yellow_led():
-#         """Turn switch of the yellow LED"""
-#         LED.LED_LIST[str(PINS.PIN_YELLOW_LED)].switch()
-

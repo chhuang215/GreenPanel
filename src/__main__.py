@@ -30,13 +30,11 @@ def main():
     HardwareController.add_gpio_component(LED, PINS.BLUE_LED, LED.OFF)
 
     t_sensor_ref = temperature.TemperatureSensor
-    if os.name == 'nt':
-        t_sensor_ref = temperature.TemperatureSensorWindows
+    # if os.name == 'nt':
+    #     t_sensor_ref = temperature.TemperatureSensorWindows
 
     HardwareController.add_gpio_component(t_sensor_ref, PINS.TEMPERATURE_SENSOR)
     HardwareController.add_gpio_component(water.WaterSensor, PINS.WATER_LEVEL_SENSOR)
-
-    # controller.WaterLevel.SENSOR = water.WaterSensor(PINS.WATER_LEVEL_SENSOR)
 
     lid = HardwareController.get_gpio_component(PINS.PUSH_BUTTON)
 

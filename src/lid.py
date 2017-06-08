@@ -21,7 +21,6 @@ class Lid:
     def __init__(self, pin):
         self.pin = pin
 
-
     def open_close(self):
         """
         open_close method

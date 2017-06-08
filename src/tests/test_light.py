@@ -8,15 +8,15 @@ sys.modules["RPi"] = mock_RPi
 sys.modules["RPi.GPIO"] = mock_RPi_GPIO
 
 import led
-import pins
-
+import controller
 import RPi.GPIO
 
 class TestLight(unittest.TestCase):
 
     @patch("RPi.GPIO.output", autospec=True)
     def setUp(self, mock_gpio_output):
-        self.led = led.LED(led.LED.OFF, pins.PIN_YELLOW_LED)
+        pin = controller.HardwareController.PIN.YELLOW_LED
+        self.led = led.LED(led.LED.OFF, pin)
         self.lighttimer = led.LightTimer(self.led)
         mock_gpio_output.assert_called_with(self.led.pin, RPi.GPIO.LOW)
 
