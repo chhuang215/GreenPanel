@@ -1,6 +1,5 @@
 """main.py"""
 # pylint: disable=E0611, C0111
-import os
 import sys
 
 import RPi.GPIO as GPIO
@@ -24,20 +23,19 @@ def main():
     GPIO.setup(PINS.PUSH_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(PINS.WATER_LEVEL_SENSOR, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-    # initialize software modals of connected gpio hardwares
-    HardwareController.add_gpio_component(Lid, PINS.PUSH_BUTTON)
+    ### initialize software modals of connected gpio hardwares ###
+
+    # Lights
     HardwareController.add_gpio_component(LED, PINS.YELLOW_LED, LED.ON)
     HardwareController.add_gpio_component(LED, PINS.BLUE_LED, LED.OFF)
 
-    t_sensor_ref = temperature.TemperatureSensor
-    # if os.name == 'nt':
-    #     t_sensor_ref = temperature.TemperatureSensorWindows
-
-    HardwareController.add_gpio_component(t_sensor_ref, PINS.TEMPERATURE_SENSOR)
+    # Sensors
+    HardwareController.add_gpio_component(Lid, PINS.PUSH_BUTTON)
+    HardwareController.add_gpio_component(temperature.TemperatureSensor, PINS.TEMPERATURE_SENSOR)
     HardwareController.add_gpio_component(water.WaterSensor, PINS.WATER_LEVEL_SENSOR)
 
+    # Lid open/close event listen
     lid = HardwareController.get_gpio_component(PINS.PUSH_BUTTON)
-
     GPIO.add_event_detect(Lid.PIN, GPIO.BOTH, callback=lid.open_close)
 
     try:
