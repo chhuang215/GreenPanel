@@ -8,4 +8,5 @@ script: python -m unittest discover tests
 branches:
   only:
     - master
-
+notifications:
+  slack: ngreen:rIZV8SbYFa6RJrxThTyNHd6U
