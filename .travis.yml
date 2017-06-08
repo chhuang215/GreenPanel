@@ -3,6 +3,7 @@ python:
   - "3.6"
 # command to install dependencies
 before_install: cd src
+install: pip install pyqt5
 script: python -m unittest discover tests
 branches:
   only:
