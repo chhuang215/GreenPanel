@@ -15,13 +15,12 @@ class LED():
     OFF = 0
 
     def __init__(self, gpio_pin, status):
+ 
         self.status = status
         self.pin = gpio_pin
 
         self.resume()
-#        if status == 1:
- #           self.turn_on()
-
+        
     def switch(self):
         '''Switch light off if on, else switch it on'''
 

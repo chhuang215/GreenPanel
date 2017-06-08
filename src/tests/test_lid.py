@@ -2,38 +2,44 @@ import sys
 import unittest
 from unittest.mock import call, patch, MagicMock, Mock
 
-mock_RPi = MagicMock()
-mock_RPi_GPIO = MagicMock()
-sys.modules["RPi"] = mock_RPi
-sys.modules["RPi.GPIO"] = mock_RPi_GPIO
+try:
+    if(not isinstance(sys.modules["RPi"], MagicMock)):
+        mock_RPi = MagicMock()
+        sys.modules["RPi"] = mock_RPi
+
+    if(not isinstance(sys.modules["RPi.GPIO"] , MagicMock)):
+        mock_RPi_GPIO = MagicMock()
+        sys.modules["RPi.GPIO"] = mock_RPi_GPIO
+except KeyError:
+    mock_RPi = MagicMock()
+    sys.modules["RPi"] = mock_RPi
+    mock_RPi_GPIO = MagicMock()
+    sys.modules["RPi.GPIO"] = mock_RPi_GPIO
 
 import led
 import lid
 import controller
 import RPi.GPIO
 
-# RPi.GPIO.HIGH = 1
-# RPi.GPIO.LOW = 0
-
 class TestLid(unittest.TestCase):
 
-    # @patch("RPi.GPIO.input", autospec=True)
-    # @patch("RPi.GPIO.output", autospec=True)
     def setUp(self):
-    
         RPi.GPIO.input.return_value = RPi.GPIO.HIGH
         hwc = controller.HardwareController
         pins = hwc.PIN
-        hwc.add_gpio_component(lid.Lid, pins.PUSH_BUTTON)
-        hwc.add_gpio_component(led.LED, pins.YELLOW_LED, led.LED.ON)
-        hwc.add_gpio_component(led.LED, pins.BLUE_LED, led.LED.OFF)
-
-        self.lid = hwc.get_gpio_component(pins.PUSH_BUTTON)
-        self.led_yellow = hwc.get_gpio_component(pins.YELLOW_LED)
-        self.led_blue = hwc.get_gpio_component(pins.BLUE_LED)
         
+        hwc.add_gpio_component(lid.Lid, pins.PUSH_BUTTON)
+        self.lid = hwc.get_gpio_component(pins.PUSH_BUTTON)
         self.assertEqual(self.lid.STATUS, self.lid.CLOSED)        
-        RPi.GPIO.output.assert_has_calls([call(self.led_yellow.pin, RPi.GPIO.HIGH), call(self.led_blue.pin, RPi.GPIO.LOW)])
+
+        hwc.add_gpio_component(led.LED, pins.YELLOW_LED, led.LED.ON)
+        self.led_yellow = hwc.get_gpio_component(pins.YELLOW_LED)
+        RPi.GPIO.output.assert_called_with(self.led_yellow.pin, RPi.GPIO.HIGH)
+        
+        hwc.add_gpio_component(led.LED, pins.BLUE_LED, led.LED.OFF)
+        self.led_blue = hwc.get_gpio_component(pins.BLUE_LED)
+        RPi.GPIO.output.assert_called_with(self.led_blue.pin, RPi.GPIO.LOW)
+        # RPi.GPIO.output.assert_has_calls([call(self.led_yellow.pin, RPi.GPIO.HIGH), call(self.led_blue.pin, RPi.GPIO.LOW)])
 
     def test_trigger_open_lid(self):
         
@@ -50,15 +56,15 @@ class TestLid(unittest.TestCase):
         self.assertEqual(self.lid.STATUS, self.lid.OPENED)
 
         RPi.GPIO.output.assert_has_calls([call(self.led_blue.pin, RPi.GPIO.HIGH), call(self.led_yellow.pin, RPi.GPIO.LOW)])
-
-    @patch("RPi.GPIO.output", autospec=True)
-    def test_trigger_close_lid(self, mock_gpio_output):
+        
+    def test_trigger_close_lid(self):
         
         RPi.GPIO.input.return_value = RPi.GPIO.HIGH
         self.lid.open_close()
 
         self.assertEqual(self.lid.STATUS, self.lid.CLOSED)
         RPi.GPIO.output.assert_has_calls([call(self.led_blue.pin, RPi.GPIO.LOW), call(self.led_yellow.pin, RPi.GPIO.HIGH)])
+       
 
-
-
+    def tearDown(self):
+        RPi.GPIO.reset_mock()
