@@ -36,7 +36,7 @@ def main():
 
     # Lid open/close event listen
     lid = HardwareController.get_gpio_component(PINS.PUSH_BUTTON)
-    GPIO.add_event_detect(Lid.PIN, GPIO.BOTH, callback=lid.open_close)
+    GPIO.add_event_detect(lid.PIN, GPIO.BOTH, callback=lid.open_close)
 
     try:
         # start QT UI
