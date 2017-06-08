@@ -37,10 +37,8 @@ class HardwareController:
 
     @staticmethod
     def add_gpio_component(component, pin, *argv, **kwargs):
-        if not isinstance(pin, str):
-            pin = str(pin)
 
-        HardwareController.GPIO_COMPONENTS[pin] = component(pin, *argv, **kwargs)
+        HardwareController.GPIO_COMPONENTS[str(pin)] = component(pin, *argv, **kwargs)
 
     @staticmethod
     def get_gpio_component(pin):
