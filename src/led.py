@@ -5,21 +5,14 @@ LED modal
 import RPi.GPIO as GPIO
 import threading
 import datetime
-import lid
+from controller import HardwareController
 '''
     LED class
 '''
 class LED():
     """LED Modal class"""
-
-    LED_LIST = {}
-
     ON = 1
     OFF = 0
-
-    @staticmethod
-    def add_light(gpio_pin, init_status=OFF):
-        LED.LED_LIST[str(gpio_pin)] = LED(gpio_pin, init_status)
 
     def __init__(self, gpio_pin, status):
         self.status = status
@@ -30,8 +23,10 @@ class LED():
  #           self.turn_on()
 
     def switch(self):
+        '''Switch light off if on, else switch it on'''
 
-        if lid.Lid.STATUS == lid.Lid.OPENED:
+        lid = HardwareController.get_gpio_component(HardwareController.PIN.PUSH_BUTTON)
+        if lid.STATUS == lid.OPENED:
             return
 
         if self.status == LED.ON:

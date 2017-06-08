@@ -5,7 +5,7 @@ import threading
 
 class TemperatureSensor():
 
-    def __init__(self):
+    def __init__(self, pin):
         # threading.Thread.__init__(self)
         
         os.system('modprobe w1-gpio')
@@ -35,7 +35,7 @@ class TemperatureSensor():
 
             return temp_c
     
-    def get_temp_c(self):
+    def get_temperature(self):
         temp = "NaN"
         try:
             temp = round(self.read_temp(), 1)
@@ -52,7 +52,10 @@ class TemperatureSensor():
 
 class TemperatureSensorWindows():
 
-    def get_temp_c(self):
+    def __init__(self, pin):
+        self.pin = pin
+
+    def get_temperature(self):
         import random
         return round(random.choice([19.333, 20.444, 21.555, 22.666, 23.777, 24.111]), 1)
 

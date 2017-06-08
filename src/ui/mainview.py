@@ -14,13 +14,20 @@ class TemperatureDisplayThread(QThread):
         self.txt_temp_display = txt_temp_display
 
         self.SIG_CHK_SHOW_TEMP.connect(self.display_temp)
+
+
+        hwc = controller.HardwareController
+        # a reference to the get_temperture method from TemperatureSensor Modal
+        self.get_temperature = hwc.get_gpio_component(hwc.PIN.TEMPERATURE_SENSOR).get_temperature
+
     def display_temp(self, t):
+        t = str(t)
         print(t)
         self.txt_temp_display.setProperty("text", t + " C")
 
     def run(self):
         while True:
-            tem = controller.Temperature.get_temperature()
+            tem = self.get_temperature()
             self.SIG_CHK_SHOW_TEMP.emit(tem)
             time.sleep(5)
 
@@ -35,7 +42,9 @@ class MainWindow(QQuickView):
         self.text_temp = self.root.findChild(QQuickItem, "txtTemp")
 
         self.light_switch = self.root.findChild(QQuickItem, "swtLight")
-        self.light_switch.clicked.connect(controller.LightController.switch_yellow_led)
+
+        hwc = controller.HardwareController
+        self.light_switch.clicked.connect(hwc.get_gpio_component(hwc.PIN.YELLOW_LED).switch)
 
         self.btn_quit = self.root.findChild(QQuickItem, "btnQuit")
 
@@ -54,7 +63,8 @@ class MainWindow(QQuickView):
         self.water_update_timer.start()
 
     def display_current_water_status(self):
-        status = controller.WaterLevel.get_status()
+        hwc = controller.HardwareController
+        status = hwc.get_gpio_component(hwc.PIN.WATER_LEVEL_SENSOR).has_enough_water()
         msg = "Add water yo"
         if status:
             msg = "Water is good."

@@ -1,21 +1,16 @@
 """controller.py"""
-# from ui import MainWindow
-import RPi.GPIO as GPIO
 from ui import MainWindow
-from led import LED
-import pins as PINS
-import temperature
-import water
+# from led import LED
+# import temperature
+# import water
 
 class UIController:
     """Controller for UI"""
 
     MAIN_UI = None
-    # MAIN_UI_QML = None
     @staticmethod
     def init_ui():
         """Instantiate the UI"""
-        # UIController.MAIN_UI = MainWindow()
         print("UI inited")
         UIController.MAIN_UI = MainWindow()
 
@@ -25,51 +20,55 @@ class UIController:
         if UIController.MAIN_UI is None:
             UIController.init_ui()
 
-        # print(UIController.MAIN_UI, UIController.MAIN_UI_QML)
         return UIController.MAIN_UI
 
-class GPIOController:
-    pass
-    #@staticmethod
-    # def init_gpio_components():
-    #     Lid.PIN = PINS.PIN_PUSH_BUTTON
-    #     LED.add_led(PINS.PIN_YELLOW_LED, LED.ON)
-    #     LED.add_led(PINS.PIN_BLUE_LED)
+class HardwareController:
+    '''Hardware Controller'''
 
-    #     import os
-    #     if os.name == 'nt':
-    #         Temperature.SENSOR = temperature.TemperatureSensorWindows()
-    #     else:
-    #         Temperature.SENSOR = temperature.TemperatureSensor()
+    class PIN:
+        '''Pin enum from representing hardware's corresponding GPIO pin number'''
+        YELLOW_LED = 18
+        BLUE_LED = 17
+        PUSH_BUTTON = 23
+        WATER_LEVEL_SENSOR = 25
+        TEMPERATURE_SENSOR = 4
 
-
-    #     WaterLevel.SENSOR = water.WaterSensor(PINS.PIN_WATER_LEVEL_SENSOR)
-
-    #     GPIO.add_event_detect(Lid.PIN, GPIO.BOTH, callback=Lid.open_close)
-    #     GPIO.add_event_detect(WaterLevel.SENSOR.pin, GPIO.BOTH,
-    #                           callback=WaterLevel.SENSOR.water_level_detect, bouncetime=1)
-
-class Temperature:
-    """Controller for Temperature modal"""
-    SENSOR = None
+    GPIO_COMPONENTS = {}
 
     @staticmethod
-    def get_temperature():
-        """Update temperature display onto the UI"""
-        return str(Temperature.SENSOR.get_temp_c())
+    def add_gpio_component(component, pin, *argv, **kwargs):
+        if not isinstance(pin, str):
+            pin = str(pin)
 
-class WaterLevel:
-    SENSOR = None
+        HardwareController.GPIO_COMPONENTS[pin] = component(pin, *argv, **kwargs)
 
     @staticmethod
-    def get_status():
-        return WaterLevel.SENSOR.has_enough_water()
+    def get_gpio_component(pin):
+        if not isinstance(pin, str):
+            pin = str(pin)
+        return HardwareController.GPIO_COMPONENTS[pin]
 
-class LightController:
+# class Temperature:
+#     """Controller for Temperature modal"""
+#     SENSOR = None
+
+#     @staticmethod
+#     def get_temperature():
+#         """Update temperature display onto the UI"""
+#         return str(Temperature.SENSOR.get_temp_c())
+
+# class WaterLevel:
+#     SENSOR = None
+
+#     @staticmethod
+#     def get_status():
+#         return WaterLevel.SENSOR.has_enough_water()
+
+# class LightController:
  
-    """Controller for Light/LED modal"""
-    @staticmethod
-    def switch_yellow_led():
-        """Turn switch of the yellow LED"""
-        LED.LED_LIST[str(PINS.PIN_YELLOW_LED)].switch()
+#     """Controller for Light/LED modal"""
+#     @staticmethod
+#     def switch_yellow_led():
+#         """Turn switch of the yellow LED"""
+#         LED.LED_LIST[str(PINS.PIN_YELLOW_LED)].switch()
 

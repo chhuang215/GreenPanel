@@ -6,8 +6,7 @@ Lid module
 
 import RPi.GPIO as GPIO
 
-import led
-import pins as PINS
+import controller
 
 class Lid:
     """
@@ -17,26 +16,29 @@ class Lid:
     OPENED = 1
 
     STATUS = CLOSED
-    PIN = PINS.PIN_PUSH_BUTTON
+    PIN = controller.HardwareController.PIN.PUSH_BUTTON
 
-    @staticmethod
-    def open_close(pin=PIN):
+    def __init__(self, pin):
+        self.pin = pin
+
+
+    def open_close(self):
         """
         open_close method
         """
-        led_list = led.LED.LED_LIST
-        blue_led = led_list[str(PINS.PIN_BLUE_LED)]
-        yellow_led = led_list[str(PINS.PIN_YELLOW_LED)]
+        hwcontroller = controller.HardwareController
+        blue_led = hwcontroller.get_gpio_component(hwcontroller.PIN.BLUE_LED)
+        yellow_led = hwcontroller.get_gpio_component(hwcontroller.PIN.YELLOW_LED)
 
-        print("Lid GPIO input: " + str(GPIO.input(pin)))
+        print("Lid GPIO input: " + str(GPIO.input(self.pin)))
 
-        if GPIO.input(pin) == GPIO.HIGH:
+        if GPIO.input(self.pin) == GPIO.HIGH:
             print("LID closed")
             blue_led.resume()
             yellow_led.resume()
-            Lid.STATUS = Lid.CLOSED
+            self.STATUS = self.CLOSED
         else:
             print("LID is open")
             blue_led.turn_on_temporary()
             yellow_led.turn_off_temporary()
-            Lid.STATUS = Lid.OPENED
+            self.STATUS = self.OPENED
