@@ -1,8 +1,5 @@
 """controller.py"""
 from ui import MainWindow
-# from led import LED
-# import temperature
-# import water
 
 class UIController:
     """Controller for UI"""
