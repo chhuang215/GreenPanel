@@ -3,7 +3,7 @@ import QtQuick.Controls 1.2
 
 Item{
     id:"panelHome"
-    signal btnLightClicked()
+    objectName:"panelHome"
     property alias changeColor:helloText.color
     
     Column{
@@ -13,6 +13,10 @@ Item{
             // anchors.horizontalCenter: parent.horizontalCenter
             width:parent.width
             anchors.bottomMargin:10
+            Button{
+                text:"Setting"
+                anchors.verticalCenter: parent.verticalCenter
+            }
             Text{
                 width: parent.width
                 horizontalAlignment: Text.AlignHCenter
@@ -54,14 +58,12 @@ Item{
             spacing: 30
             
             Button {
-                id:"btnLightTimer"
+                id:"btnLight"
+                objectName:"btnLight"
                 width:226
                 height:130
                 text: "Set Light Timer"
-                // objectName: "swtLight"            
-                onClicked: {
-                    panelHome.btnLightClicked()
-                }
+
             }
 
             Button {

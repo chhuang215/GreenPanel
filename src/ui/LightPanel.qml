@@ -8,97 +8,90 @@ Item{
     property int buttonWidth: 100
 
     id:"panelLight"
+    objectName:"panelLight"
     visible: false
-    signal btnBackClicked()
     Column{
-        width: parent.width
-        spacing:40
-        Row{
-            // anchors.horizontalCenter: parent.horizontalCenter
+        Button {
+            text: "<-back"
+            objectName: "btnBack"
+        }
+
+
+        Grid {
+            id: grid
             width:parent.width
-            anchors.bottomMargin:10
-            Button {
-                text: "<-back"
-                objectName: "btnBack"
-                onClicked: panelLight.btnBackClicked()
-            }
-        }
-        Row {
-            x: 30
-            spacing: 30
-            Text {
-                
-                anchors.verticalCenter: parent.verticalCenter
-                objectName: "txtHourLabel"
-                text: "Hour:"
-                font.pointSize: 40; font.bold: true
+            rows: 2; columns: 3; spacing: 3            
+            Row {
+                x: 30
+                spacing: 30
+                Text {
+                    
+                    anchors.verticalCenter: parent.verticalCenter
+                    objectName: "txtHourLabel"
+                    text: "Hour:"
+                    font.pointSize: 40; font.bold: true
 
-            }
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                objectName: "txtHour"
-                text: "7"
-                font.pointSize: 40; font.bold: true
+                }
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    objectName: "txtHour"
+                    text: "7"
+                    font.pointSize: 40; font.bold: true
+                }
             }
             Button {
                 width:buttonWidth
                 height:buttonHeight
                 text: "+"
-                objectName: "btnWater"            
+           
             
             }
             Button {
                 width:buttonWidth
                 height:buttonHeight
                 text: "-"
-                objectName: "btnWater"            
-            
+                 
             }
-
-        }
-
-        Row {
-            x: 30
-            spacing: 30
-            
-            Text {
+            Row {
+                x: 30
+                spacing: 30
                 
-                anchors.verticalCenter: parent.verticalCenter
-                
-                objectName: "txtDurationLabel"
-                text: "Duration:"
+                Text {
+                    
+                    anchors.verticalCenter: parent.verticalCenter
+                    
+                    objectName: "txtDurationLabel"
+                    text: "Duration:"
 
-                font.pointSize: 40; font.bold: true
+                    font.pointSize: 40; font.bold: true
+                }
+
+                Text {
+                    
+                    anchors.verticalCenter: parent.verticalCenter
+                    
+                    objectName: "txtDuration"
+                    text: "17"
+
+                    font.pointSize: 40; font.bold: true
+
+                }
             }
-
-            Text {
-                
-                anchors.verticalCenter: parent.verticalCenter
-                
-                objectName: "txtDuration"
-                text: "17"
-
-                font.pointSize: 40; font.bold: true
-
-            }
-
             Button {
                 width:buttonWidth
                 height:buttonHeight
                 text: "+"
-                objectName: "btnWater"            
+                  
             
             }
-
             Button {
                 width:buttonWidth
                 height:buttonHeight
                 text: "-"
-                // objectName: "swtLight"            
-                
+                      
+            
             }
         }
     }
-
 }
 

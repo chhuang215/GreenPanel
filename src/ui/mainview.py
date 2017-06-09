@@ -34,33 +34,51 @@ class TemperatureDisplayThread(QThread):
 class MainWindow(QQuickView):
     def __init__(self):
         super().__init__()
-
+        hwc = controller.HardwareController
 #        self.setSource(QUrl('MainView.qml'))
         self.setSource(QUrl.fromLocalFile('ui/MainView.qml'))
 
+        # Get root
         self.root = self.rootObject()
-        self.text_temp = self.root.findChild(QQuickItem, "txtTemp")
 
-        self.light_switch = self.root.findChild(QQuickItem, "swtLight")
+        # Get panels
+        self.panel_home = self.root.findChild(QQuickItem, "panelHome")
+        self.panel_light = self.root.findChild(QQuickItem, "panelLight")
+        self.panel_light.setVisible(False)
+        # Get Home Panel's child elements
 
-        hwc = controller.HardwareController
+        self.text_temp = self.panel_home.findChild(QQuickItem, "txtTemp")
+        self.light_switch = self.panel_home.findChild(QQuickItem, "swtLight")
         self.light_switch.clicked.connect(hwc.get_gpio_component(hwc.PIN.YELLOW_LED).switch)
 
-        self.btn_quit = self.root.findChild(QQuickItem, "btnQuit")
+        self.btn_light = self.root.findChild(QQuickItem, "btnLight")
+            #when light button is clicked, nav to light panel
+        self.btn_light.clicked.connect(lambda: self.__panel_nav(self.panel_light)) 
 
+        # (Quit the app, for testing purpose)
+        self.btn_quit = self.root.findChild(QQuickItem, "btnQuit")
         self.btn_quit.clicked.connect(QCoreApplication.instance().quit)
 
         self.btn_water = self.root.findChild(QQuickItem, "btnWater")
+
+        # Get Light Panel's child elements
 
         # start temperature thread
         self.tsensor_thread = TemperatureDisplayThread(self.text_temp)
         self.tsensor_thread.start()
 
-        #start water sensor timer
+        #start water sensor timer to retreive current water level condition
         self.water_update_timer = QTimer()
         self.water_update_timer.setInterval(1000)
         self.water_update_timer.timeout.connect(self.display_current_water_status)
         self.water_update_timer.start()
+
+        self.current_visible_panel = self.panel_home
+
+    def __panel_nav(self, panel):
+        self.current_visible_panel.setVisible(False)
+        panel.setVisible(True)
+        self.current_visible_panel = panel
 
     def display_current_water_status(self):
         hwc = controller.HardwareController
