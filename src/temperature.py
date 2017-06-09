@@ -49,27 +49,3 @@ class TemperatureSensor():
             temp = round(random.choice([19.333, 20.444, 21.555, 22.666, 23.777, 24.111]), 1)
 
         return temp
-
-    # def run(self):
-    #     while True:
-    #         t = self.read_temp()
-    #         controller.Temperature.update_temperature(t)
-    #         time.sleep(2)
-
-class TemperatureSensorWindows():
-
-    def __init__(self, pin):
-        self.pin = pin
-
-    def get_temperature(self):
-        import random
-        return round(random.choice([19.333, 20.444, 21.555, 22.666, 23.777, 24.111]), 1)
-
-    # def run(self):
-    #     import random
-    #     while True:
-    #         # t = self.read_temp()
-    #         t = random.choice([19, 20, 21, 22, 23, 24])
-    #         controller.Temperature.update_temperature(t)
-    #         time.sleep(2)
-
