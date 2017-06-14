@@ -44,16 +44,21 @@ class MainWindow(QQuickView):
         # Get panels
         self.panel_home = self.root.findChild(QQuickItem, "panelHome")
         self.panel_light = self.root.findChild(QQuickItem, "panelLight")
+        self.panel_setting = self.root.findChild(QQuickItem, "panelSetting")
         self.panel_light.setVisible(False)
+        
         # Get Home Panel's child elements
-
         self.text_temp = self.panel_home.findChild(QQuickItem, "txtTemp")
         self.light_switch = self.panel_home.findChild(QQuickItem, "swtLight")
         self.light_switch.clicked.connect(hwc.get_gpio_component(hwc.PIN.YELLOW_LED).switch)
 
+        # When light button is clicked, nav to light panel
         self.btn_light = self.root.findChild(QQuickItem, "btnLight")
-            #when light button is clicked, nav to light panel
         self.btn_light.clicked.connect(lambda: self.__panel_nav(self.panel_light)) 
+
+        # When settings button is click, nav to settings panel
+        self.btn_setting = self.root.findChild(QQuickItem, "btnSetting")
+        self.btn_setting.clicked.connect(lambda: self.__panel_nav(self.panel_setting))
 
         # (Quit the app, for testing purpose)
         self.btn_quit = self.root.findChild(QQuickItem, "btnQuit")
