@@ -58,20 +58,36 @@ class LED():
             self.turn_off()
 
 class LightTimer():
-    def __init__(self, led, begin_hr=7, duration_hr=17):
+    
+    #Interval in seconds
+    INTERVAL = 60
 
+    def __init__(self, led, begin_hr=7, duration_hr=17):
+        self._timer = None
         self.led = led
         self.set_timer(begin_hr, duration_hr)
+        self.is_activated = False
 
     def check_timer(self):
-        pass
+        curr_dt = datetime.datetime.now()
+        hour = curr_dt.hour
+        if hour >= self.begin_hour or hour < self.end_hour:
+            self.led.turn_on()
+
+        elif hour < self.begin_hour and hour >= self.end_hour:
+            self.led.turn_off()
 
     def set_timer(self, begin, duration):
         self.begin_hour = begin
         self.end_hour = (begin + duration) % 24
+        self.duration = duration
 
     def activate(self):
-        pass
+        if not self.is_activated:
+            self._timer = threading.Timer(self.INTERVAL, self.check_timer)
+            self._timer.start()
+            self.is_activated = True
 
     def deactivate(self):
-        pass
+        self._timer.cancel()
+        self.is_activated = False
