@@ -14,6 +14,8 @@ Item{
             width:parent.width
             anchors.bottomMargin:10
             Button{
+                id:"btnSetting"
+                objectName:"btnSetting"
                 text:"Setting"
                 anchors.verticalCenter: parent.verticalCenter
             }
