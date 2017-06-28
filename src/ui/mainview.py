@@ -48,7 +48,7 @@ class MainWindow(QQuickView):
         # Get Home Panel's child elements
 
         self.text_temp = self.panel_home.findChild(QQuickItem, "txtTemp")
-        self.light_switch = self.panel_home.findChild(QQuickItem, "swtLight")
+        self.light_switch = self.panel_light.findChild(QQuickItem, "swtLight")
         self.light_switch.clicked.connect(hwc.get_gpio_component(hwc.PIN.YELLOW_LED).switch)
 
         self.btn_light = self.root.findChild(QQuickItem, "btnLight")

@@ -30,25 +30,19 @@ Item{
             x: 119
             spacing: 60
             
+             Button {
+                width:226
+                height:130
+                text: "water"
+                objectName: "btnWater"             
+            }
+
             Button {
                 width:226
                 height:130
-                text: "Light Switch"
-                objectName: "swtLight"            
-                checked: true
-            }
-
-            Text {
+                text: "nutrient"
+                // objectName: "swtLight"            
                 
-                anchors.verticalCenter: parent.verticalCenter
-                id: helloText
-                objectName: "txtTemp"
-                text: "-1"
-
-                font.pointSize: 40; font.bold: true
-                MouseArea { 
-                    anchors.fill: parent 
-                }
             }
 
         }
@@ -66,20 +60,23 @@ Item{
 
             }
 
-            Button {
-                width:226
-                height:130
-                text: "water"
-                objectName: "btnWater"            
-            
+            Text {
+                
+                anchors.verticalCenter: parent.verticalCenter
+                id: helloText
+                objectName: "txtTemp"
+                text: "-1"
+
+                font.pointSize: 40; font.bold: true
+                MouseArea { 
+                    anchors.fill: parent 
+                }
             }
 
-         
-
             Button {
                 width:226
                 height:130
-                text: "nutrient"
+                text: "Robot Guy"
                 // objectName: "swtLight"            
                 
             }

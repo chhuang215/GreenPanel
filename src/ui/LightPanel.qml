@@ -43,14 +43,14 @@ Item{
                 width:buttonWidth
                 height:buttonHeight
                 text: "+"
-           
+        
             
             }
             Button {
                 width:buttonWidth
                 height:buttonHeight
                 text: "-"
-                 
+                
             }
             Row {
                 x: 30
@@ -81,16 +81,23 @@ Item{
                 width:buttonWidth
                 height:buttonHeight
                 text: "+"
-                  
+                
             
             }
             Button {
                 width:buttonWidth
                 height:buttonHeight
                 text: "-"
-                      
+                    
             
             }
+        }
+        Button {
+            width:226
+            height:130
+            text: "Light Switch"
+            objectName: "swtLight"            
+            checked: true
         }
     }
 }
