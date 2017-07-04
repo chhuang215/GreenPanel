@@ -26,7 +26,7 @@ def main():
     ### initialize software modals of connected gpio hardwares ###
 
     # Lights
-    HardwareController.add_gpio_component(LED, PINS.YELLOW_LED, LED.ON)
+    HardwareController.add_gpio_component(LED, PINS.YELLOW_LED, LED.ON, timer=True)
     HardwareController.add_gpio_component(LED, PINS.BLUE_LED, LED.OFF)
 
     # Sensors
