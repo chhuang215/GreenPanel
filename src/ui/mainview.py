@@ -56,9 +56,14 @@ class MainWindow(QQuickView):
         self.btn_light = self.root.findChild(QQuickItem, "btnLight")
         self.btn_light.clicked.connect(lambda: self.__panel_nav(self.panel_light)) 
 
-        # When settings button is click, nav to settings panel
+        # When settings button is clicked, nav to settings panel
         self.btn_setting = self.root.findChild(QQuickItem, "btnSetting")
         self.btn_setting.clicked.connect(lambda: self.__panel_nav(self.panel_setting))
+
+        # When confirm button is clicked in settings, nav back to main panel
+        self.btn_setting_confirm = self.root.findChild(QQuickItem, "btnConfirm")
+        self.btn_setting_confirm.clicked.connect(lambda: self.__panel_nav(self.panel_home))
+        self.btn_setting_confirm.clicked.connect(self.settings_confirm)
 
         # (Quit the app, for testing purpose)
         self.btn_quit = self.root.findChild(QQuickItem, "btnQuit")
@@ -92,3 +97,16 @@ class MainWindow(QQuickView):
         if status:
             msg = "Water is good."
         self.btn_water.setProperty("text", msg)
+    
+    def settings_confirm(self):
+        self.language = self.root.findChild(QQuickItem, "chosenItemText")
+        language = str(self.language.property("text"))
+        print("Language is: " + language)
+        
+        self.time = self.root.findChild(QQuickItem, "timeField")
+        time = str(self.time.property("text"))
+        print("Time is: " + time)
+
+        self.date = self.root.findChild(QQuickItem, "dateField")
+        date = str(self.date.property("text"))
+        print("The date is: " + date)
