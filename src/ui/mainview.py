@@ -45,6 +45,7 @@ class MainWindow(QQuickView):
         self.panel_home = self.root.findChild(QQuickItem, "panelHome")
         self.panel_light = self.root.findChild(QQuickItem, "panelLight")
         self.panel_setting = self.root.findChild(QQuickItem, "panelSetting")
+        self.time_picker = self.root.findChild(QQuickItem, "timePicker")
         self.panel_light.setVisible(False)
         
         # Get Home Panel's child elements
@@ -64,6 +65,10 @@ class MainWindow(QQuickView):
         self.btn_setting_confirm = self.root.findChild(QQuickItem, "btnConfirm")
         self.btn_setting_confirm.clicked.connect(lambda: self.__panel_nav(self.panel_home))
         self.btn_setting_confirm.clicked.connect(self.settings_confirm)
+
+        # Time picker
+        self.btn_time_picker = self.root.findChild(QQuickItem, "btnSetTime")
+        self.btn_time_picker.clicked.connect(lambda: self.__panel_nav(self.time_picker))
 
         # (Quit the app, for testing purpose)
         self.btn_quit = self.root.findChild(QQuickItem, "btnQuit")

@@ -167,7 +167,7 @@ Item{
                 }
             }
 
-            Rectangle {
+            /*Rectangle {
                 x: 30
                 width: 300
                 height: 80
@@ -175,6 +175,18 @@ Item{
                 TextField {
                     objectName: "timeField"
                     placeholderText: qsTr("Hour: Minute")
+                }
+            }*/
+
+            Row{
+                x: 30
+                
+                Button {
+                    id:"btnSetTime"
+                    objectName:"btnSetTime"
+                    width:100
+                    height:50
+                    text: "Set Time"
                 }
             }
 
