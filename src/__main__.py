@@ -50,6 +50,12 @@ def main():
         ui_view.showFullScreen()
 
         ret = app.exec_()
+        ## CLEANUP on APP EXIT ##
+
+        # deactive timers
+        HardwareController.deactive_timers()
+
+        # Teminate
         sys.exit(ret)
 
     except KeyboardInterrupt:

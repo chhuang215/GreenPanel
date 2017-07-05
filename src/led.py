@@ -21,8 +21,11 @@ class LED():
 
         self.resume()
         self.timer = LightTimer(self)
-        if(timer):
-            self.timer.check_timer()
+        # if(timer):
+        #     self.timer.check_timer()
+        #     self.timer.activate()
+
+        if timer:
             self.timer.activate()
 
     def switch(self):
@@ -63,25 +66,20 @@ class LED():
 
 class LightTimer():
 
-    #Interval in seconds
-    INTERVAL = 60
-
     def __init__(self, led, begin_hr=7, duration_hr=17):
         self._timer = None
         self.led = led
         self.is_activated = False
-        self.is_scheduled = False
         
         self.set_timer(begin_hr, duration_hr)
    
-
     def set_timer(self, begin, duration):
 
         self.begin_hour = begin
         self.end_hour = (begin + duration) % 24
         self.duration = duration
 
-        if self.is_activated or self.is_scheduled:
+        if self.is_activated:
             self.deactivate()
             self.activate()
 
@@ -96,36 +94,29 @@ class LightTimer():
         elif hour < self.begin_hour and hour >= self.end_hour:
             self.led.turn_off()
 
-        if self.is_activated:
-            self._timer = threading.Timer(self.INTERVAL, self.check_timer)
-            self._timer.start()
+    def __check_timer_loop(self):
+        if not self.is_activated:
+            return
+
+        self.check_timer()
+        now = datetime.datetime.now()
+        print("LED TIMER loop", self.led.pin, now)
+        activate_time = now.replace(second=0, microsecond=0)
+        activate_time += datetime.timedelta(minutes=1)
+        timestamp = activate_time.timestamp() - now.timestamp()
+        print("NEXT check time", timestamp)
+        self._timer = threading.Timer(timestamp, self.__check_timer_loop)
+        self._timer.start()
 
     def activate(self):
-        print("FOR LED TIMER", self.led.pin, datetime.datetime.now())
+        print("LED TIMER", self.led.pin, datetime.datetime.now(), "ACTIVATED")
         if not self.is_activated:
-            ### Init timer interval to sync up to whole minute ###
-            if not self.is_scheduled:
-                now = datetime.datetime.now()
-                activate_time = now.replace(second=0, microsecond=0)
-                activate_time += datetime.timedelta(minutes=1)
-                timestamp = activate_time.timestamp() - now.timestamp()
-                print("NEXT LightTime", timestamp)
-                self._timer = threading.Timer(timestamp, self.activate)
-                self._timer.start()
-                self.is_scheduled = True
-                return
-
-            self.check_timer()
-            self._timer.cancel()
-            ######################################################
-
-            # Actual timer
-            self._timer = threading.Timer(self.INTERVAL, self.check_timer)
-            self._timer.start()
+            ### Activate timerv ###
             self.is_activated = True
-            self.is_scheduled = False
+            self.__check_timer_loop()
+            #######################
 
     def deactivate(self):
+        print("LED TIMER", self.led.pin, datetime.datetime.now(), "DEACTIVATED")
         self._timer.cancel()
         self.is_activated = False
-        self.is_scheduled = False

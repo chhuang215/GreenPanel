@@ -42,4 +42,8 @@ class HardwareController:
         if not isinstance(pin, str):
             pin = str(pin)
         return HardwareController.GPIO_COMPONENTS[pin]
+    
+    @staticmethod
+    def deactive_timers():
+        HardwareController.get_gpio_component(HardwareController.PIN.YELLOW_LED).timer.deactivate()
 

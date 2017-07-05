@@ -30,7 +30,7 @@ class Lid:
         yellow_led = hwcontroller.get_gpio_component(hwcontroller.PIN.YELLOW_LED)
 
         print("Lid GPIO input: " + str(GPIO.input(self.pin)))
-        
+
         if GPIO.input(self.pin) == GPIO.HIGH:
             print("LID closed")
             blue_led.resume()
