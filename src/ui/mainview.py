@@ -45,6 +45,8 @@ class MainWindow(QQuickView):
         self.panel_home = self.root.findChild(QQuickItem, "panelHome")
         self.panel_light = self.root.findChild(QQuickItem, "panelLight")
         self.panel_setting = self.root.findChild(QQuickItem, "panelSetting")
+        self.time_picker = self.root.findChild(QQuickItem, "timePicker")
+        #self.panel_light.setVisible(False)
 
         # Get Home Panel's child elements
         self.text_temp = self.panel_home.findChild(QQuickItem, "txtTemp")
@@ -63,6 +65,10 @@ class MainWindow(QQuickView):
         self.btn_setting_confirm = self.root.findChild(QQuickItem, "btnConfirm")
         self.btn_setting_confirm.clicked.connect(self.settings_confirm)
         self.btn_setting_confirm.clicked.connect(self.__panel_nav_back)
+
+        # Time picker
+        self.btn_time_picker = self.root.findChild(QQuickItem, "btnSetTime")
+        self.btn_time_picker.clicked.connect(lambda: self.__panel_nav(self.time_picker))
 
         # (Quit the app, for testing purpose)
         self.btn_quit = self.root.findChild(QQuickItem, "btnQuit")
@@ -113,12 +119,12 @@ class MainWindow(QQuickView):
         if status:
             msg = "Water is good."
         self.btn_water.setProperty("text", msg)
-    
+
     def settings_confirm(self):
         self.language = self.root.findChild(QQuickItem, "chosenItemText")
         language = str(self.language.property("text"))
         print("Language is: " + language)
-        
+
         self.time = self.root.findChild(QQuickItem, "timeField")
         time = str(self.time.property("text"))
         print("Time is: " + time)

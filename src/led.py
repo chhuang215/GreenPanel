@@ -21,9 +21,6 @@ class LED():
 
         self.resume()
         self.timer = LightTimer(self)
-        # if(timer):
-        #     self.timer.check_timer()
-        #     self.timer.activate()
 
         if timer:
             self.timer.activate()

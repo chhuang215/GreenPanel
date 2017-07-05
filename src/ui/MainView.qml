@@ -22,6 +22,11 @@ Rectangle {
         width:parent.width
     }
 
+    SetTime{
+        id: "timePicker"
+        width:parent.width
+    }
+
     Grid {
         id: grid
         x: 4; anchors.bottom: page.bottom; anchors.bottomMargin: 4
