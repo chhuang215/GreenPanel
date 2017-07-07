@@ -15,17 +15,15 @@ class Lid:
     CLOSED = 0
     OPENED = 1
 
-    STATUS = CLOSED
-    PIN = controller.HardwareController.PIN.PUSH_BUTTON
-
     def __init__(self, pin):
         self.pin = pin
+        self.status = Lid.CLOSED
 
-    def open_close(self, pin=PIN):
+    def open_close(self, pin=None):
         """
         open_close method
         """
-        hwcontroller = controller.HardwareController
+        hwcontroller = controller.GPIOController
         blue_led = hwcontroller.get_gpio_component(hwcontroller.PIN.BLUE_LED)
         yellow_led = hwcontroller.get_gpio_component(hwcontroller.PIN.YELLOW_LED)
 
@@ -35,9 +33,9 @@ class Lid:
             print("LID closed")
             blue_led.resume()
             yellow_led.resume()
-            self.STATUS = self.CLOSED
+            self.status = Lid.CLOSED
         else:
             print("LID is open")
             blue_led.turn_on_temporary()
             yellow_led.turn_off_temporary()
-            self.STATUS = self.OPENED
+            self.status = Lid.OPENED

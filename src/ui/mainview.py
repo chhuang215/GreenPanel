@@ -16,7 +16,7 @@ class TemperatureDisplayThread(QThread):
         self.SIG_CHK_SHOW_TEMP.connect(self.display_temp)
 
 
-        hwc = controller.HardwareController
+        hwc = controller.GPIOController
         # a reference to the get_temperture method from TemperatureSensor Modal
         self.get_temperature = hwc.get_gpio_component(hwc.PIN.TEMPERATURE_SENSOR).get_temperature
 
@@ -34,7 +34,7 @@ class TemperatureDisplayThread(QThread):
 class MainWindow(QQuickView):
     def __init__(self):
         super().__init__()
-        hwc = controller.HardwareController
+        hwc = controller.GPIOController
 #        self.setSource(QUrl('MainView.qml'))
         self.setSource(QUrl.fromLocalFile('ui/MainView.qml'))
         self.__nav_stack = []
@@ -76,8 +76,6 @@ class MainWindow(QQuickView):
 
         self.btn_water = self.root.findChild(QQuickItem, "btnWater")
 
-        # Get Light Panel's child elements
-
         # start temperature thread
         self.tsensor_thread = TemperatureDisplayThread(self.text_temp)
         self.tsensor_thread.start()
@@ -88,17 +86,16 @@ class MainWindow(QQuickView):
         self.water_update_timer.timeout.connect(self.display_current_water_status)
         self.water_update_timer.start()
 
+        all_back_buttons = self.root.findChildren(QQuickItem, "btnBack")
+        for btn in all_back_buttons:
+            btn.clicked.connect(self.__panel_nav_back)
+
         self.__panel_nav(self.panel_home)
+
 
     def __panel_nav(self, panel):
         if self.__nav_stack:
             self.__nav_stack[-1].setVisible(False)
-        #self.current_visible_panel.setVisible(False)
-        try:
-            self.btn_back = panel.findChild(QQuickItem, "btnBack")
-            self.btn_back.clicked.connect(self.__panel_nav_back)
-        except AttributeError:
-            print("no back button")
 
         self.__nav_stack.append(panel)
         panel.setVisible(True)
@@ -106,14 +103,13 @@ class MainWindow(QQuickView):
 
     def __panel_nav_back(self):
 
-        self.btn_back.disconnect()
         panel = self.__nav_stack.pop()
         panel.setVisible(False)
 
         self.__nav_stack[-1].setVisible(True)
 
     def display_current_water_status(self):
-        hwc = controller.HardwareController
+        hwc = controller.GPIOController
         status = hwc.get_gpio_component(hwc.PIN.WATER_LEVEL_SENSOR).has_enough_water()
         msg = "Add water yo"
         if status:

@@ -19,7 +19,7 @@ class UIController:
 
         return UIController.MAIN_UI
 
-class HardwareController:
+class GPIOController:
     '''Hardware Controller'''
 
     class PIN:
@@ -35,15 +35,15 @@ class HardwareController:
     @staticmethod
     def add_gpio_component(component, pin, *argv, **kwargs):
 
-        HardwareController.GPIO_COMPONENTS[str(pin)] = component(pin, *argv, **kwargs)
+        GPIOController.GPIO_COMPONENTS[str(pin)] = component(pin, *argv, **kwargs)
 
     @staticmethod
     def get_gpio_component(pin):
         if not isinstance(pin, str):
             pin = str(pin)
-        return HardwareController.GPIO_COMPONENTS[pin]
+        return GPIOController.GPIO_COMPONENTS[pin]
     
     @staticmethod
     def deactive_timers():
-        HardwareController.get_gpio_component(HardwareController.PIN.YELLOW_LED).timer.deactivate()
+        GPIOController.get_gpio_component(GPIOController.PIN.YELLOW_LED).timer.deactivate()
 

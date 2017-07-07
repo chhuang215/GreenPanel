@@ -5,7 +5,7 @@ LED modal
 import threading
 import datetime
 import RPi.GPIO as GPIO
-from controller import HardwareController
+from controller import GPIOController
 '''
     LED class
 '''
@@ -28,8 +28,8 @@ class LED():
     def switch(self):
         '''Switch light off if on, else switch it on'''
 
-        lid = HardwareController.get_gpio_component(HardwareController.PIN.PUSH_BUTTON)
-        if lid.STATUS == lid.OPENED:
+        lid = GPIOController.get_gpio_component(GPIOController.PIN.PUSH_BUTTON)
+        if lid.status == lid.OPENED:
             return
 
         if self.status == LED.ON:

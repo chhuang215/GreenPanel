@@ -23,7 +23,7 @@ import RPi.GPIO
 class TestLight(unittest.TestCase):
 
     def setUp(self):
-        pin = controller.HardwareController.PIN.YELLOW_LED
+        pin = controller.GPIOController.PIN.YELLOW_LED
         self.led = led.LED(pin, led.LED.OFF)
         
         self.lighttimer = led.LightTimer(self.led)

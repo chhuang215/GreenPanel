@@ -25,12 +25,12 @@ class TestLid(unittest.TestCase):
 
     def setUp(self):
         RPi.GPIO.input.return_value = RPi.GPIO.HIGH
-        hwc = controller.HardwareController
+        hwc = controller.GPIOController
         pins = hwc.PIN
         
         hwc.add_gpio_component(lid.Lid, pins.PUSH_BUTTON)
         self.lid = hwc.get_gpio_component(pins.PUSH_BUTTON)
-        self.assertEqual(self.lid.STATUS, self.lid.CLOSED)        
+        self.assertEqual(self.lid.status, self.lid.CLOSED)        
 
         hwc.add_gpio_component(led.LED, pins.YELLOW_LED, led.LED.ON)
         self.led_yellow = hwc.get_gpio_component(pins.YELLOW_LED)
@@ -53,7 +53,7 @@ class TestLid(unittest.TestCase):
         self.assertEqual(led_y_status, self.led_yellow.status)
         self.assertEqual(led_b_status, self.led_blue.status)
 
-        self.assertEqual(self.lid.STATUS, self.lid.OPENED)
+        self.assertEqual(self.lid.status, self.lid.OPENED)
 
         RPi.GPIO.output.assert_has_calls([call(self.led_blue.pin, RPi.GPIO.HIGH), call(self.led_yellow.pin, RPi.GPIO.LOW)])
         
@@ -62,7 +62,7 @@ class TestLid(unittest.TestCase):
         RPi.GPIO.input.return_value = RPi.GPIO.HIGH
         self.lid.open_close()
 
-        self.assertEqual(self.lid.STATUS, self.lid.CLOSED)
+        self.assertEqual(self.lid.status, self.lid.CLOSED)
         RPi.GPIO.output.assert_has_calls([call(self.led_blue.pin, RPi.GPIO.LOW), call(self.led_yellow.pin, RPi.GPIO.HIGH)])
        
 

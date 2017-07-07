@@ -44,7 +44,7 @@ class TemperatureSensor():
         try:
             temp = round(self.read_temp(), 1)
         except Exception:
-            print("Temperature Sensor Not Found, Mock the value instead")
+            print("Temperature Sensor Not Found, value mocked")
             import random
             temp = round(random.choice([19.333, 20.444, 21.555, 22.666, 23.777, 24.111]), 1)
 
