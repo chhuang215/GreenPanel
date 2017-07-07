@@ -27,7 +27,6 @@ class TestLight(unittest.TestCase):
     def setUp(self):
         pin = controller.GPIOController.PIN.YELLOW_LED
         self.led = led.LED(pin, led.LED.OFF)
-
         self.assertEqual(self.led.status, self.led.OFF)
         RPi.GPIO.output.assert_called_once_with(self.led.pin, RPi.GPIO.LOW)
 
@@ -51,10 +50,10 @@ class TestLight(unittest.TestCase):
         self.assertEqual(self.led.timer.begin_hour, b_hr)
         self.assertEqual(self.led.timer.end_hour, 5)
 
+
     @patch("led.datetime")
     def test_check_timer(self, mock_datetime):
         mock_datetime.datetime.now = Mock()
-
         ## Suppose to be ON
         mock_datetime.datetime.now.return_value = datetime.datetime(2017, 5, 5, hour=7)
         self.led.timer.check_timer()

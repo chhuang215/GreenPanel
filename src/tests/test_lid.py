@@ -68,3 +68,4 @@ class TestLid(unittest.TestCase):
 
     def tearDown(self):
         RPi.GPIO.reset_mock()
+        self.lid.status = self.lid.CLOSED
