@@ -28,10 +28,6 @@ class LED():
     def switch(self):
         '''Switch light off if on, else switch it on'''
 
-        lid = GPIOController.get_gpio_component(GPIOController.PIN.PUSH_BUTTON)
-        if lid.status == lid.OPENED:
-            return
-
         if self.status == LED.ON:
             print('Turned LED OFF')
 
@@ -43,11 +39,17 @@ class LED():
             self.turn_on()
 
     def turn_on(self):
-        GPIO.output(self.pin, GPIO.HIGH)
         self.status = LED.ON
+
+        lid = GPIOController.get_gpio_component(GPIOController.PIN.PUSH_BUTTON)
+        if lid.status == lid.OPENED:
+            return
+
+        GPIO.output(self.pin, GPIO.HIGH)
+        
     def turn_off(self):
-        GPIO.output(self.pin, GPIO.LOW)
         self.status = LED.OFF
+        GPIO.output(self.pin, GPIO.LOW)
 
     def turn_on_temporary(self):
         GPIO.output(self.pin, GPIO.HIGH)
@@ -67,10 +69,20 @@ class LightTimer():
         self._timer = None
         self.led = led
         self.is_activated = False
-        
+
         self.set_timer(begin_hr, duration_hr)
-   
+
     def set_timer(self, begin, duration):
+
+        if begin < 0:
+            begin = 0
+        if begin > 23:
+            begin = 23
+
+        if duration < 0:
+            duration = 0
+        if duration > 24:
+            duration = 24
 
         self.begin_hour = begin
         self.end_hour = (begin + duration) % 24
@@ -98,15 +110,15 @@ class LightTimer():
         self.check_timer()
         now = datetime.datetime.now()
         print("LED TIMER loop", self.led.pin, now)
-        activate_time = now.replace(second=0, microsecond=0)
-        activate_time += datetime.timedelta(minutes=1)
-        timestamp = activate_time.timestamp() - now.timestamp()
-        print("NEXT check time", timestamp)
-        self._timer = threading.Timer(timestamp, self.__check_timer_loop)
+        next_check_time = now.replace(minute=0, second=0, microsecond=0)
+        next_check_time += datetime.timedelta(hours=1)
+        interval = next_check_time - now
+        print("NEXT check time", next_check_time)
+        self._timer = threading.Timer(interval.total_seconds(), self.__check_timer_loop)
         self._timer.start()
 
     def activate(self):
-        print("LED TIMER", self.led.pin, datetime.datetime.now(), "ACTIVATED")
+        print("LED TIMER ACTIVATED", self.led.pin, datetime.datetime.now())
         if not self.is_activated:
             ### Activate timerv ###
             self.is_activated = True
@@ -114,6 +126,6 @@ class LightTimer():
             #######################
 
     def deactivate(self):
-        print("LED TIMER", self.led.pin, datetime.datetime.now(), "DEACTIVATED")
+        print("LED TIMER DEACTIVATED", self.led.pin, datetime.datetime.now())
         self._timer.cancel()
         self.is_activated = False
