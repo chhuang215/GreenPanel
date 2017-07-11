@@ -31,11 +31,13 @@ class Lid:
 
         if GPIO.input(self.pin) == GPIO.HIGH:
             print("LID closed")
+            self.status = Lid.CLOSED
             blue_led.resume()
             yellow_led.resume()
-            self.status = Lid.CLOSED
+  
         else:
             print("LID is open")
+            self.status = Lid.OPENED
             blue_led.turn_on_temporary()
             yellow_led.turn_off_temporary()
-            self.status = Lid.OPENED
+      

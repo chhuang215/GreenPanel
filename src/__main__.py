@@ -25,12 +25,15 @@ def main():
 
     ### initialize software modals of connected gpio hardwares ###
 
+
+    GPIOController.add_gpio_component(Lid, PINS.PUSH_BUTTON)
+
     # Lights
     GPIOController.add_gpio_component(LED, PINS.YELLOW_LED, LED.ON, timer=True)
     GPIOController.add_gpio_component(LED, PINS.BLUE_LED, LED.OFF)
 
     # Sensors
-    GPIOController.add_gpio_component(Lid, PINS.PUSH_BUTTON)
+    # GPIOController.add_gpio_component(Lid, PINS.PUSH_BUTTON)
     GPIOController.add_gpio_component(temperature.TemperatureSensor, PINS.TEMPERATURE_SENSOR)
     GPIOController.add_gpio_component(water.WaterSensor, PINS.WATER_LEVEL_SENSOR)
 
