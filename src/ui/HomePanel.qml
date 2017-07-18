@@ -25,7 +25,7 @@ Item{
                 width: parent.width - btnSetting.width - btnSetting.width
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                font.pointSize: 30
+                font.pointSize: 38
                 color:black
                 
             }
