@@ -19,14 +19,18 @@ Item{
                 text:"Setting"
                 anchors.verticalCenter: parent.verticalCenter
             }
+ 
             Text{
-                width: parent.width
+                objectName:"txtClock"
+                width: parent.width - btnSetting.width - btnSetting.width
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                text:"The time, setting, and stuff be here."
                 font.pointSize: 30
+                color:black
                 
             }
+
+
         }
         Row {
             x: 119

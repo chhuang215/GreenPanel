@@ -1,5 +1,6 @@
 import os
 import time
+import datetime
 import controller
 
 from PyQt5.QtCore import (QUrl, QThread, QCoreApplication, QTimer, pyqtSignal)
@@ -50,9 +51,10 @@ class MainWindow(QQuickView):
 
         # Get Home Panel's child elements
         self.text_temp = self.panel_home.findChild(QQuickItem, "txtTemp")
+        self.txt_clock = self.panel_home.findChild(QQuickItem, "txtClock")
         self.light_switch = self.panel_light.findChild(QQuickItem, "swtLight")
         self.light_switch.clicked.connect(hwc.get_gpio_component(hwc.PIN.YELLOW_LED).switch)
-
+        
         # When light button is clicked, nav to light panel
         self.btn_light = self.root.findChild(QQuickItem, "btnLight")
         self.btn_light.clicked.connect(lambda: self.__panel_nav(self.panel_light))
@@ -81,10 +83,11 @@ class MainWindow(QQuickView):
         self.tsensor_thread.start()
 
         #start water sensor timer to retreive current water level condition
-        self.water_update_timer = QTimer()
-        self.water_update_timer.setInterval(1000)
-        self.water_update_timer.timeout.connect(self.display_current_water_status)
-        self.water_update_timer.start()
+        self.water_clock_update_timer = QTimer()
+        self.water_clock_update_timer.setInterval(1000)
+        self.water_clock_update_timer.timeout.connect(self.display_water_status)
+        self.water_clock_update_timer.timeout.connect(self.display_update_clock)
+        self.water_clock_update_timer.start()
 
         all_back_buttons = self.root.findChildren(QQuickItem, "btnBack")
         for btn in all_back_buttons:
@@ -108,13 +111,17 @@ class MainWindow(QQuickView):
 
         self.__nav_stack[-1].setVisible(True)
 
-    def display_current_water_status(self):
+    def display_water_status(self):
         hwc = controller.GPIOController
         status = hwc.get_gpio_component(hwc.PIN.WATER_LEVEL_SENSOR).has_enough_water()
         msg = "Add water yo"
         if status:
             msg = "Water is good."
         self.btn_water.setProperty("text", msg)
+        
+    def display_update_clock(self):
+        t = datetime.datetime.now().strftime('%I:%M %p')
+        self.txt_clock.setProperty("text", t)
 
     def settings_confirm(self):
         self.language = self.root.findChild(QQuickItem, "chosenItemText")
