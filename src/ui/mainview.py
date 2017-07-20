@@ -19,7 +19,7 @@ class TemperatureDisplayThread(QThread):
 
         hwc = controller.GPIOController
         # a reference to the get_temperture method from TemperatureSensor Modal
-        self.get_temperature = hwc.get_gpio_component(hwc.PIN.TEMPERATURE_SENSOR).get_temperature
+        self.get_temperature = hwc.get_component(hwc.PIN.TEMPERATURE_SENSOR).get_temperature
 
     def display_temp(self, t):
         t = str(t)
@@ -53,7 +53,7 @@ class MainWindow(QQuickView):
         self.text_temp = self.panel_home.findChild(QQuickItem, "txtTemp")
         self.txt_clock = self.panel_home.findChild(QQuickItem, "txtClock")
         self.light_switch = self.panel_light.findChild(QQuickItem, "swtLight")
-        self.light_switch.clicked.connect(hwc.get_gpio_component(hwc.PIN.YELLOW_LED).switch)
+        self.light_switch.clicked.connect(hwc.get_component(hwc.PIN.YELLOW_LED).switch)
         
         # When light button is clicked, nav to light panel
         self.btn_light = self.root.findChild(QQuickItem, "btnLight")
@@ -113,7 +113,7 @@ class MainWindow(QQuickView):
 
     def display_water_status(self):
         hwc = controller.GPIOController
-        status = hwc.get_gpio_component(hwc.PIN.WATER_LEVEL_SENSOR).has_enough_water()
+        status = hwc.get_component(hwc.PIN.WATER_LEVEL_SENSOR).has_enough_water()
         msg = "Add water yo"
         if status:
             msg = "Water is good."

@@ -20,9 +20,10 @@ class LED():
         self.pin = gpio_pin
 
         self.resume()
-        self.timer = LightTimer(self)
+        self.timer = None
 
         if timer:
+            self.timer = LightTimer(self)
             self.timer.activate()
 
     def switch(self):
@@ -41,7 +42,7 @@ class LED():
     def turn_on(self):
         self.status = LED.ON
 
-        lid = GPIOController.get_gpio_component(GPIOController.PIN.PUSH_BUTTON)
+        lid = GPIOController.get_component(GPIOController.PIN.PUSH_BUTTON)
         if lid.status == lid.OPENED:
             return
 

@@ -27,18 +27,18 @@ Rectangle {
         width:parent.width
     }
 
-    Grid {
-        id: grid
-        x: 4; anchors.bottom: page.bottom; anchors.bottomMargin: 4
-        rows: 1; columns: 6; spacing: 3            
+    // Grid {
+    //     id: grid
+    //     x: 4; anchors.bottom: page.bottom; anchors.bottomMargin: 4
+    //     rows: 1; columns: 6; spacing: 3            
 
-        Cell { cellColor: "red"; onClicked: panelHome.changeColor = cellColor }
-        Cell { cellColor: "green"; onClicked: panelHome.changeColor = cellColor }
-        Cell { cellColor: "blue"; onClicked: panelHome.changeColor = cellColor }
-        Cell { cellColor: "yellow"; onClicked: panelHome.changeColor = cellColor }
-        Cell { cellColor: "steelblue"; onClicked: panelHome.changeColor = cellColor }
-        Cell { cellColor: "black"; onClicked: panelHome.changeColor = cellColor }
-    }
+    //     Cell { cellColor: "red"; onClicked: panelHome.changeColor = cellColor }
+    //     Cell { cellColor: "green"; onClicked: panelHome.changeColor = cellColor }
+    //     Cell { cellColor: "blue"; onClicked: panelHome.changeColor = cellColor }
+    //     Cell { cellColor: "yellow"; onClicked: panelHome.changeColor = cellColor }
+    //     Cell { cellColor: "steelblue"; onClicked: panelHome.changeColor = cellColor }
+    //     Cell { cellColor: "black"; onClicked: panelHome.changeColor = cellColor }
+    // }
 
     Button{
         anchors.bottom:page.bottom

@@ -12,33 +12,33 @@ import temperature
 from led import LED
 from lid import Lid
 
-PINS = GPIOController.PIN
+PIN = GPIOController.PIN
 
 def main():
     # Set up GPIO
     GPIO.setmode(GPIO.BCM)
     #GPIO.setwarnings(False)
-    GPIO.setup(PINS.YELLOW_LED, GPIO.OUT)
-    GPIO.setup(PINS.BLUE_LED, GPIO.OUT)
-    GPIO.setup(PINS.PUSH_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.setup(PINS.WATER_LEVEL_SENSOR, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    GPIO.setup(PIN.YELLOW_LED, GPIO.OUT)
+    GPIO.setup(PIN.BLUE_LED, GPIO.OUT)
+    GPIO.setup(PIN.PUSH_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(PIN.WATER_LEVEL_SENSOR, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
     ### initialize software modals of connected gpio hardwares ###
 
 
-    GPIOController.add_gpio_component(Lid, PINS.PUSH_BUTTON)
+    GPIOController.add_component(Lid, PIN.PUSH_BUTTON)
 
     # Lights
-    GPIOController.add_gpio_component(LED, PINS.YELLOW_LED, LED.ON, timer=True)
-    GPIOController.add_gpio_component(LED, PINS.BLUE_LED, LED.OFF)
+    GPIOController.add_component(LED, PIN.YELLOW_LED, LED.ON, timer=True)
+    GPIOController.add_component(LED, PIN.BLUE_LED, LED.OFF)
 
     # Sensors
-    # GPIOController.add_gpio_component(Lid, PINS.PUSH_BUTTON)
-    GPIOController.add_gpio_component(temperature.TemperatureSensor, PINS.TEMPERATURE_SENSOR)
-    GPIOController.add_gpio_component(water.WaterSensor, PINS.WATER_LEVEL_SENSOR)
+    # GPIOController.add_component(Lid, PIN.PUSH_BUTTON)
+    GPIOController.add_component(temperature.TemperatureSensor, PIN.TEMPERATURE_SENSOR)
+    GPIOController.add_component(water.WaterSensor, PIN.WATER_LEVEL_SENSOR)
 
     # Lid open/close event listen
-    lid = GPIOController.get_gpio_component(PINS.PUSH_BUTTON)
+    lid = GPIOController.get_component(PIN.PUSH_BUTTON)
     GPIO.add_event_detect(lid.pin, GPIO.BOTH, callback=lid.open_close)
 
     try:
@@ -56,7 +56,8 @@ def main():
         ## CLEANUP on APP EXIT ##
 
         # deactive timers
-        GPIOController.deactive_timers()
+        # GPIOController.deactive_timers()
+        GPIOController.get_component(PIN.YELLOW_LED).timer.deactivate()
 
         # Teminate
         sys.exit(ret)

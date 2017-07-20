@@ -1,4 +1,3 @@
-
 import RPi.GPIO as GPIO
 
 class WaterSensor:
@@ -12,6 +11,3 @@ class WaterSensor:
 
     def has_enough_water(self):
         return GPIO.input(self.pin) == GPIO.LOW
-
-class WaterPump:
-    pass

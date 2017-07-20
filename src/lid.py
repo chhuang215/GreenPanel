@@ -24,8 +24,8 @@ class Lid:
         open_close method
         """
         hwcontroller = controller.GPIOController
-        blue_led = hwcontroller.get_gpio_component(hwcontroller.PIN.BLUE_LED)
-        yellow_led = hwcontroller.get_gpio_component(hwcontroller.PIN.YELLOW_LED)
+        blue_led = hwcontroller.get_component(hwcontroller.PIN.BLUE_LED)
+        yellow_led = hwcontroller.get_component(hwcontroller.PIN.YELLOW_LED)
 
         print("Lid GPIO input: " + str(GPIO.input(self.pin)))
 
