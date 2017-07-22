@@ -112,8 +112,8 @@ class MainWindow(QQuickView):
         self.__nav_stack[-1].setVisible(True)
 
     def display_water_status(self):
-        hwc = controller.GPIOController
-        status = hwc.get_component(hwc.PIN.WATER_LEVEL_SENSOR).has_enough_water()
+        gpioctrler = controller.GPIOController
+        status = gpioctrler.get_component(gpioctrler.PIN.WATER_LEVEL_SENSOR).has_enough_water()
         msg = "Add water yo"
         if status:
             msg = "Water is good."
@@ -125,13 +125,13 @@ class MainWindow(QQuickView):
 
     def settings_confirm(self):
         self.language = self.root.findChild(QQuickItem, "chosenItemText")
-        language = str(self.language.property("text"))
-        print("Language is: " + language)
+        setting_language = str(self.language.property("text"))
+        print("Language is: " + setting_language)
 
         self.time = self.root.findChild(QQuickItem, "timeField")
-        time = str(self.time.property("text"))
-        print("Time is: " + time)
+        setting_time = str(self.time.property("text"))
+        print("Time is: " + setting_time)
 
         self.date = self.root.findChild(QQuickItem, "dateField")
-        date = str(self.date.property("text"))
-        print("The date is: " + date)
+        setting_date = str(self.date.property("text"))
+        print("The date is: " + setting_date)

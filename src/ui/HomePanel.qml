@@ -26,8 +26,6 @@ Item{
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 font.pointSize: 38
-                color:black
-                
             }
 
 
