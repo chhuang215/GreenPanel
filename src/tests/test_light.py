@@ -27,6 +27,7 @@ class TestLight(unittest.TestCase):
     def setUp(self):
         pin = controller.GPIOController.PIN.YELLOW_LED
         self.led = led.LED(pin, led.LED.OFF)
+        self.led.timer = led.LightTimer(self.led)
         self.assertEqual(self.led.status, self.led.OFF)
         RPi.GPIO.output.assert_called_once_with(self.led.pin, RPi.GPIO.LOW)
 
