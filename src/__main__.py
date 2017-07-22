@@ -9,6 +9,7 @@ from controller import GPIOController, UIController
 
 import water
 import temperature
+import pump
 from led import LED
 from lid import Lid
 
@@ -41,6 +42,8 @@ def main():
     lid = GPIOController.get_component(PIN.PUSH_BUTTON)
     GPIO.add_event_detect(lid.pin, GPIO.BOTH, callback=lid.open_close)
 
+    GPIOController.add_component(pump.WaterPump, PIN.WATER_PUMP)
+
     try:
         # start QT UI
         app = QApplication(sys.argv)
@@ -57,6 +60,7 @@ def main():
 
         # deactive timers
         # GPIOController.deactive_timers()
+        GPIOController.get_component(PIN.WATER_PUMP).timer.deactivate()
         GPIOController.get_component(PIN.YELLOW_LED).timer.deactivate()
 
         # Teminate
