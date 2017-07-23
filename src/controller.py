@@ -1,4 +1,5 @@
 """controller.py"""
+import collections
 from ui import MainWindow
 
 class UIController:
@@ -29,17 +30,25 @@ class GPIOController:
         PUSH_BUTTON = 23
         WATER_LEVEL_SENSOR = 25
         TEMPERATURE_SENSOR = 4
-        WATER_PUMP = -3
-        MOTOR1 = -1
-        MOTOR2 = -2
+        WATER_PUMP = -4
+        MOTOR = (-1, -2, -3)
 
     GPIO_COMPONENTS = {}
 
     @staticmethod
     def add_component(component, pin, *argv, **kwargs):
         '''add gpio component to component list'''
-        GPIOController.GPIO_COMPONENTS[str(pin)] = component(pin, *argv, **kwargs)
 
+        if not isinstance(pin, collections.Iterable):
+            pin = (pin,)
+
+        cmpont = component(*pin, *argv, **kwargs)
+
+        for p in pin:
+            GPIOController.GPIO_COMPONENTS[str(p)] = cmpont
+
+        print("\t %s %s added to component list" % (component.__name__, pin))
+ 
     @staticmethod
     def get_component(pin):
         if not isinstance(pin, str):

@@ -10,6 +10,7 @@ from controller import GPIOController, UIController
 import water
 import temperature
 import pump
+import motor
 from led import LED
 from lid import Lid
 
@@ -43,6 +44,7 @@ def main():
     GPIO.add_event_detect(lid.pin, GPIO.BOTH, callback=lid.open_close)
 
     GPIOController.add_component(pump.WaterPump, PIN.WATER_PUMP)
+    GPIOController.add_component(motor.Motor, PIN.MOTOR)
 
     try:
         # start QT UI

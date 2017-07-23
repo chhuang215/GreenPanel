@@ -6,16 +6,17 @@ class Motor:
     DIR_CW = RIGHT = 1
     DIR_CCW = LEFT = 2
 
-    def __init__(self, inp1, inp2):
+    def __init__(self, inp1, inp2, inppwm):
         self.inp1 = inp1
         self.inp2 = inp2
+        self.inppwm = inppwm
         self.rotating = False
 
     def rotate(self, direction=RIGHT):
         if(direction == Motor.RIGHT):
             GPIO.output(self.inp1, GPIO.HIGH)
             GPIO.output(self.inp2, GPIO.LOW)
-        else
+        else:
             GPIO.output(self.inp1, GPIO.LOW)
             GPIO.output(self.inp2, GPIO.HIGH)
 
