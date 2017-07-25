@@ -6,8 +6,16 @@ TimePicker {
     objectName:"timePicker"
     visible: false
     anchors.centerIn: parent
-    
-    /*backgroundImage: "image://theme/meegotouch-timepicker-light-1-landscape"
-    hourDotImage: "image://theme/meegotouch-timepicker-disc-hours-landscape"
-    minutesDotImage: "image://theme/meegotouch-timepicker-disc-minutes-landscape"*/
+
+    Row {
+        x: 450
+        y: 330
+        Button {
+                id:"btnTimeConfirm"
+                objectName:"btnTimeConfirm"
+                width:100
+                height:50
+                text: "Confirm"
+        }
+    }
 }

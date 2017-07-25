@@ -24,7 +24,6 @@ Rectangle {
 
     SetTime{
         id: "timePicker"
-        width:parent.width
     }
 
     // Grid {

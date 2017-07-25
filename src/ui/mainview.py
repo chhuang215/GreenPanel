@@ -72,6 +72,11 @@ class MainWindow(QQuickView):
         self.btn_time_picker = self.root.findChild(QQuickItem, "btnSetTime")
         self.btn_time_picker.clicked.connect(lambda: self.__panel_nav(self.time_picker))
 
+        # When confirm button is clicked in time picker
+        self.btn_time_confirm = self.root.findChild(QQuickItem, "btnTimeConfirm")
+        self.btn_time_confirm.clicked.connect(self.time_confirm)
+        self.btn_time_confirm.clicked.connect(self.__panel_nav_back)
+
         # (Quit the app, for testing purpose)
         self.btn_quit = self.root.findChild(QQuickItem, "btnQuit")
         self.btn_quit.clicked.connect(QCoreApplication.instance().quit)
@@ -135,3 +140,12 @@ class MainWindow(QQuickView):
         self.date = self.root.findChild(QQuickItem, "dateField")
         setting_date = str(self.date.property("text"))
         print("The date is: " + setting_date)
+    
+    def time_confirm(self):
+        self.hour = self.root.findChild(QQuickItem, "hourText")
+        hour = str(self.hour.property("text"))
+        print("Hour is: " + hour)
+
+        self.minute = self.root.findChild(QQuickItem, "minuteText")
+        minute = str(self.minute.property("text"))
+        print("minute is: " + minute)
