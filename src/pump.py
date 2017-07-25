@@ -36,6 +36,7 @@ class PumpTimer():
         minute = curr_dt.minute
         if minute % 15 >= 0 and minute % 15 < 5:
             wsensor = GPIOController.get_component(GPIOController.PIN.WATER_LEVEL_SENSOR)
+            print("ENOUGH WATER??", wsensor.has_enough_water())
             if wsensor.has_enough_water():
                 self.pump.turn_on()
                 print(" ! PUMP_ON")
