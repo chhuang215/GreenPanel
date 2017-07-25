@@ -30,8 +30,8 @@ class GPIOController:
         PUSH_BUTTON = 23
         WATER_LEVEL_SENSOR = 25
         TEMPERATURE_SENSOR = 4
-        WATER_PUMP = -4
-        MOTOR = (-1, -2, -3)
+        WATER_PUMP = 12
+        MOTOR = (16, 20, 21)
 
     GPIO_COMPONENTS = {}
 
