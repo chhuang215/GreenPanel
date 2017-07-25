@@ -1,5 +1,12 @@
+import datetime
+import threading
+
 import RPi.GPIO as GPIO
 import controller
+
+PWM_FREQ = 40
+PWM_DC = 27
+PWM_DC_FAST = 50
 
 class Motor:
 
@@ -9,10 +16,13 @@ class Motor:
     def __init__(self, inp1, inp2, inppwm):
         self.inp1 = inp1
         self.inp2 = inp2
-        self.inppwm = inppwm
+        self.pwm = GPIO.PWM(inppwm, PWM_FREQ)
         self.rotating = False
+        self.timer = MotorRotateTimer(self)
+        self.timer.activate()
 
-    def rotate(self, direction=RIGHT):
+    def rotate(self, direction=RIGHT, dutycycle=PWM_DC):
+        self.pwm.start(dutycycle)
         if(direction == Motor.RIGHT):
             GPIO.output(self.inp1, GPIO.HIGH)
             GPIO.output(self.inp2, GPIO.LOW)
@@ -21,9 +31,52 @@ class Motor:
             GPIO.output(self.inp2, GPIO.HIGH)
 
     def stop(self):
+        self.pwm.stop()
         GPIO.output(self.inp1, GPIO.LOW)
         GPIO.output(self.inp2, GPIO.LOW)
 
 class MotorRotateTimer:
-    def __init__(self):
-        pass
+    def __init__(self, motor):
+        self._timer = None
+        self.motor = motor
+        self.is_activated = False
+
+    def check_timer(self):
+
+        curr_dt = datetime.datetime.now()
+        print("!Check_Timer %s %s" % (self.motor.__class__.__name__, curr_dt), end='')
+        minute = curr_dt.minute
+        if minute % 30 >= 0 and minute % 30 < 15:
+            self.motor.rotate()
+            print(" ! MOTOR_ROTATING")
+        else:
+            self.motor.stop()
+            print(" ! MOTOR_STOPPED")
+
+    def __check_timer_loop(self):
+        if not self.is_activated:
+            return
+
+        self.check_timer()
+        now = datetime.datetime.now()
+        print("MOTOR TIMER loop", now)
+        next_check_time = now.replace(second=0, microsecond=0)
+        next_check_time += datetime.timedelta(minutes=1)
+        interval = next_check_time - now
+        print("MOTOR check time", next_check_time)
+        self._timer = threading.Timer(interval.total_seconds(), self.__check_timer_loop)
+        self._timer.start()
+
+    def activate(self):
+        print("MOTOR TIMER ACTIVATED", datetime.datetime.now())
+        if not self.is_activated:
+            ### Activate timerv ###
+            self.is_activated = True
+            self.__check_timer_loop()
+            #######################
+
+    def deactivate(self):
+        print("MOTOR TIMER DEACTIVATED", datetime.datetime.now())
+        self._timer.cancel()
+        self.is_activated = False
+

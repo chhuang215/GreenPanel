@@ -22,9 +22,11 @@ def main():
     #GPIO.setwarnings(False)
     GPIO.setup(PIN.YELLOW_LED, GPIO.OUT)
     GPIO.setup(PIN.BLUE_LED, GPIO.OUT)
+    GPIO.setup(PIN.MOTOR, GPIO.OUT)
+    GPIO.setup(PIN.WATER_PUMP, GPIO.OUT)
     GPIO.setup(PIN.PUSH_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(PIN.WATER_LEVEL_SENSOR, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    GPIO.setup(PIN.WATER_PUMP, GPIO.OUT)
+    
     
 
     ### initialize software modals of connected gpio hardwares ###
@@ -66,7 +68,7 @@ def main():
         # GPIOController.deactive_timers()
         GPIOController.get_component(PIN.WATER_PUMP).timer.deactivate()
         GPIOController.get_component(PIN.YELLOW_LED).timer.deactivate()
-
+        GPIOController.get_component(PIN.MOTOR[0]).timer.deactivate()
         # Teminate
         sys.exit(ret)
 
