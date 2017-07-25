@@ -90,8 +90,10 @@ Item {
     signal startInteraction
     signal stopInteraction
 
-    width: bg.sourceSize.width
-    height: bg.sourceSize.height
+    /*width: bg.sourceSize.width
+    height: bg.sourceSize.height*/
+    width: 450
+    height: 450
 
     onHoursChanged: {
         if (hours == 24)
@@ -105,7 +107,7 @@ Item {
 
     Image {
         id: bg
-        source: "theme/meegotouch-timepicker-light-1-landscape.png"
+        source: "theme/meegotouch-timepicker-light-1-portrait.png"
 
         anchors.fill: parent
 
@@ -114,7 +116,7 @@ Item {
 
         Image {
             id: hourDot
-            source: "theme/meegotouch-timepicker-disc-hours-landscape.png"
+            source: "theme/meegotouch-timepicker-disc-hours-portrait.png"
             anchors.fill: parent
             rotation: timePicker.hours * 30
             smooth: true
@@ -122,6 +124,7 @@ Item {
 
         Text {
             id: hourText
+            objectName: "hourText"
             property int hourRadius: parent.width * 0.055
             property int hourTrackRadius: parent.width * 0.16
 
@@ -137,7 +140,7 @@ Item {
 
         Image {
             id: minuteDot
-            source: "theme/meegotouch-timepicker-disc-minutes-landscape.png"
+            source: "theme/meegotouch-timepicker-disc-minutes-portrait.png"
             anchors.fill: parent
             rotation: timePicker.minutes * 6
             smooth: true
@@ -145,6 +148,7 @@ Item {
 
         Text {
             id: minuteText
+            objectName: "minuteText"
             property int minuteRadius: parent.width * 0.055
             property int minuteTrackRadius: parent.width * 0.38
 
@@ -186,20 +190,20 @@ Item {
             newAlpha = findAlpha(mouseX, mouseY)
 
             var doRumble = false
-            /*if (currentHandler > 0) {
+            if (currentHandler > 0) {
                 var newMins = getNewTime(timePicker.minutes, newAlpha, timePicker.minuteGradDelta, 1)
                 if (newMins !== timePicker.minutes) {
                     timePicker.minutes = newMins
-                    doRumble = true
+                    doRumble = false
                 }
             } else {
                 var newHours = getNewTime(timePicker.hours, newAlpha, timePicker.hourGradDelta, 2)
                 if (newHours !== timePicker.hours) {
                     timePicker.hours = newHours
-                    doRumble = true
+                    doRumble = false
                 }
 
-            }*/
+            }
             if (doRumble) {
                 console.log("TimePicker rumble start")
                 rumbleEffect.start()
