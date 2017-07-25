@@ -7,13 +7,14 @@ import controller
 GPIOController = controller.GPIOController
 
 class WaterPump:
-    def __init__(self, gpio_pin):
+    def __init__(self, gpio_pin, timer=True):
  
         self.pin = gpio_pin
 
         self.timer = PumpTimer(self)
 
-        self.timer.activate()
+        if timer: 
+            self.timer.activate()
     
     def turn_on(self):
         GPIO.output(self.pin, GPIO.HIGH)
@@ -31,14 +32,16 @@ class PumpTimer():
     def check_timer(self):
 
         curr_dt = datetime.datetime.now()
-        print("FOR pump", self.pump.pin, curr_dt)
+        print("!Check_Timer %s pin:%d %s" % (self.pump.__class__.__name__, self.pump.pin, curr_dt), end='')
         minute = curr_dt.minute
-        if minute % 15 >= 0 and minute % 15 <= 5:
+        if minute % 15 >= 0 and minute % 15 < 5:
             wsensor = GPIOController.get_component(GPIOController.PIN.WATER_LEVEL_SENSOR)
             if wsensor.has_enough_water():
                 self.pump.turn_on()
+                print(" ! PUMP_ON")
         else:
             self.pump.turn_off()
+            print(" ! PUMP_OFF")
 
     def __check_timer_loop(self):
         if not self.is_activated:
