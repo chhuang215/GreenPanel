@@ -5,7 +5,7 @@ import RPi.GPIO as GPIO
 import controller
 
 PWM_FREQ = 40
-PWM_DC = 27
+PWM_DC = 28
 PWM_DC_FAST = 50
 
 class Motor:
@@ -31,7 +31,7 @@ class Motor:
             GPIO.output(self.inp2, GPIO.HIGH)
 
     def stop(self):
-        self.pwm.stop()
+        #self.pwm.stop()
         GPIO.output(self.inp1, GPIO.LOW)
         GPIO.output(self.inp2, GPIO.LOW)
 

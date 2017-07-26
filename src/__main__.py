@@ -24,6 +24,7 @@ def main():
     GPIO.setup(PIN.BLUE_LED, GPIO.OUT)
     GPIO.setup(PIN.MOTOR, GPIO.OUT)
     GPIO.setup(PIN.WATER_PUMP, GPIO.OUT)
+
     GPIO.setup(PIN.PUSH_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(PIN.WATER_LEVEL_SENSOR, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     
@@ -64,11 +65,13 @@ def main():
         ret = app.exec_()
         ## CLEANUP on APP EXIT ##
 
-        # deactive timers
-        # GPIOController.deactive_timers()
+        # cleanup and deactive timers
+       
         GPIOController.get_component(PIN.WATER_PUMP).timer.deactivate()
         GPIOController.get_component(PIN.YELLOW_LED).timer.deactivate()
-        GPIOController.get_component(PIN.MOTOR[0]).timer.deactivate()
+        mo = GPIOController.get_component(PIN.MOTOR[0])
+        mo.timer.deactivate()
+        mo.pwm.stop()
         # Teminate
         sys.exit(ret)
 

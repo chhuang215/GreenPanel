@@ -25,13 +25,13 @@ class GPIOController:
 
     class PIN:
         '''Pin enum from representing hardware's corresponding GPIO pin number'''
-        YELLOW_LED = 18
+        YELLOW_LED = 27
         BLUE_LED = 17
         PUSH_BUTTON = 23
         WATER_LEVEL_SENSOR = 25
         TEMPERATURE_SENSOR = 4
         WATER_PUMP = 12
-        MOTOR = (16, 20, 21)
+        MOTOR = (16, 20, 18)
 
     GPIO_COMPONENTS = {}
 
