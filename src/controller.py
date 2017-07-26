@@ -51,6 +51,10 @@ class GPIOController:
  
     @staticmethod
     def get_component(pin):
+
+        if isinstance(pin, collections.Iterable):
+            pin = pin[0]
+
         if not isinstance(pin, str):
             pin = str(pin)
         return GPIOController.GPIO_COMPONENTS[pin]

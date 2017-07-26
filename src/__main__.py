@@ -69,7 +69,7 @@ def main():
        
         GPIOController.get_component(PIN.WATER_PUMP).timer.deactivate()
         GPIOController.get_component(PIN.YELLOW_LED).timer.deactivate()
-        mo = GPIOController.get_component(PIN.MOTOR[0])
+        mo = GPIOController.get_component(PIN.MOTOR)
         mo.timer.deactivate()
         mo.pwm.stop()
         # Teminate

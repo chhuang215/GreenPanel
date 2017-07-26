@@ -52,9 +52,14 @@ class PumpTimer():
 
         self.check_timer()
         now = datetime.datetime.now()
+
         print("PUMP TIMER loop", self.pump.pin, now)
-        next_check_time = now.replace(second=0, microsecond=0)
-        next_check_time += datetime.timedelta(minutes=1)
+        next_check_time = now.replace(microsecond=0)
+        next_check_time += datetime.timedelta(seconds=1)
+        if now.minute % 15 < 0 or now.minute % 15 >= 5:
+            next_check_time = now.replace(second=0, microsecond=0)
+            tt = 15 - (now.minute % 15)
+            next_check_time += datetime.timedelta(minutes=tt)
         interval = next_check_time - now
         print("PUMP check time", next_check_time)
         self._timer = threading.Timer(interval.total_seconds(), self.__check_timer_loop)
