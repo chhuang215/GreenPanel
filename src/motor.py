@@ -32,7 +32,7 @@ class Motor:
             GPIO.output(self.inp2, GPIO.HIGH)
 
     def stop(self):
-        self.pwm.stop()
+        #self.pwm.stop()
         GPIO.output(self.inp1, GPIO.LOW)
         GPIO.output(self.inp2, GPIO.LOW)
 
@@ -80,4 +80,3 @@ class MotorRotateTimer:
         print("MOTOR TIMER DEACTIVATED", datetime.datetime.now())
         self._timer.cancel()
         self.is_activated = False
-
