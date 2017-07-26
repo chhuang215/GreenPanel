@@ -24,7 +24,7 @@ class TestMotor(unittest.TestCase):
 
     def setUp(self):
         gc = controller.GPIOController
-        self.motor = motor.Motor(*gc.PIN.MOTOR)
+        self.motor = motor.Motor(*gc.PIN.MOTOR, timer=False)
         
     def test_rotate_right(self):
         self.motor.rotate()
