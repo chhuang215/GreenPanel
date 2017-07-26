@@ -13,13 +13,14 @@ class Motor:
     DIR_CW = RIGHT = 1
     DIR_CCW = LEFT = 2
 
-    def __init__(self, inp1, inp2, inppwm):
+    def __init__(self, inp1, inp2, inppwm, timer=True):
         self.inp1 = inp1
         self.inp2 = inp2
         self.pwm = GPIO.PWM(inppwm, PWM_FREQ)
         self.rotating = False
         self.timer = MotorRotateTimer(self)
-        self.timer.activate()
+        if timer:
+            self.timer.activate()
 
     def rotate(self, direction=RIGHT, dutycycle=PWM_DC):
         self.pwm.start(dutycycle)
@@ -79,4 +80,3 @@ class MotorRotateTimer:
         print("MOTOR TIMER DEACTIVATED", datetime.datetime.now())
         self._timer.cancel()
         self.is_activated = False
-
