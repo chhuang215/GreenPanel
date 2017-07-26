@@ -19,7 +19,8 @@ class Motor:
         self.pwm = GPIO.PWM(inppwm, PWM_FREQ)
         self.rotating = False
         self.timer = MotorRotateTimer(self)
-        if timer:
+        self.timer_enabled = timer
+        if self.timer_enabled:
             self.timer.activate()
 
     def rotate(self, direction=RIGHT, dutycycle=PWM_DC):
@@ -70,6 +71,8 @@ class MotorRotateTimer:
         self._timer.start()
 
     def activate(self):
+        if not self.motor.timer_enabled:
+            return
         print("MOTOR TIMER ACTIVATED", datetime.datetime.now())
         if not self.is_activated:
             ### Activate timerv ###
@@ -78,6 +81,8 @@ class MotorRotateTimer:
             #######################
 
     def deactivate(self):
+        if not self.motor.timer_enabled:
+            return
         print("MOTOR TIMER DEACTIVATED", datetime.datetime.now())
         self._timer.cancel()
         self.is_activated = False

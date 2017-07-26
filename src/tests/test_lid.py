@@ -18,6 +18,7 @@ except KeyError:
 
 import led
 import lid
+import motor
 import controller
 import RPi.GPIO
 
@@ -39,6 +40,8 @@ class TestLid(unittest.TestCase):
         hwc.add_component(led.LED, pins.BLUE_LED, led.LED.OFF)
         self.led_blue = hwc.get_component(pins.BLUE_LED)
         RPi.GPIO.output.assert_called_with(self.led_blue.pin, RPi.GPIO.LOW)
+
+        hwc.add_component(motor.Motor, pins.MOTOR, timer=False)
         # RPi.GPIO.output.assert_has_calls([call(self.led_yellow.pin, RPi.GPIO.HIGH), call(self.led_blue.pin, RPi.GPIO.LOW)])
 
     def test_trigger_open_lid(self):
