@@ -63,7 +63,7 @@ class MotorRotateTimer:
         now = datetime.datetime.now()
         print("MOTOR TIMER loop", now)
         next_check_time = now.replace(second=0, microsecond=0)
-        tt = 30 - (now.minute % 30)
+        tt = 15 - (now.minute % 15)
         next_check_time += datetime.timedelta(minutes=tt)
         interval = next_check_time - now
         print("MOTOR check time", next_check_time)
