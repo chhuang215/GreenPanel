@@ -203,7 +203,7 @@ Item{
                 }
             }
 
-            Rectangle {
+            /*Rectangle {
                 x: 30
                 width: 300
                 height: 80
@@ -211,6 +211,18 @@ Item{
                 TextField {
                     objectName: "dateField"
                     placeholderText: qsTr("mm/dd/yyyy")
+                }
+            }*/
+
+            Row{
+                x: 30
+                
+                Button {
+                    id:"btnSetDate"
+                    objectName:"btnSetDate"
+                    width:100
+                    height:50
+                    text: "Set Date"
                 }
             }
 

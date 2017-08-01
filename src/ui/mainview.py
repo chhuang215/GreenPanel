@@ -47,6 +47,7 @@ class MainWindow(QQuickView):
         self.panel_light = self.root.findChild(QQuickItem, "panelLight")
         self.panel_setting = self.root.findChild(QQuickItem, "panelSetting")
         self.time_picker = self.root.findChild(QQuickItem, "timePicker")
+        self.date_picker = self.root.findChild(QQuickItem, "datePicker")
         #self.panel_light.setVisible(False)
 
         # Get Home Panel's child elements
@@ -76,6 +77,15 @@ class MainWindow(QQuickView):
         self.btn_time_confirm = self.root.findChild(QQuickItem, "btnTimeConfirm")
         self.btn_time_confirm.clicked.connect(self.time_confirm)
         self.btn_time_confirm.clicked.connect(self.__panel_nav_back)
+
+        # Date picker
+        self.btn_date_picker = self.root.findChild(QQuickItem, "btnSetDate")
+        self.btn_date_picker.clicked.connect(lambda: self.__panel_nav(self.date_picker))
+        
+        # When confirm button is clicked in date picker
+        self.btn_date_confirm = self.root.findChild(QQuickItem, "btnDateConfirm")
+        self.btn_date_confirm.clicked.connect(self.date_confirm)
+        self.btn_date_confirm.clicked.connect(self.__panel_nav_back)
 
         # (Quit the app, for testing purpose)
         self.btn_quit = self.root.findChild(QQuickItem, "btnQuit")
@@ -132,14 +142,6 @@ class MainWindow(QQuickView):
         self.language = self.root.findChild(QQuickItem, "chosenItemText")
         setting_language = str(self.language.property("text"))
         print("Language is: " + setting_language)
-
-        self.time = self.root.findChild(QQuickItem, "timeField")
-        setting_time = str(self.time.property("text"))
-        print("Time is: " + setting_time)
-
-        self.date = self.root.findChild(QQuickItem, "dateField")
-        setting_date = str(self.date.property("text"))
-        print("The date is: " + setting_date)
     
     def time_confirm(self):
         self.hour = self.root.findChild(QQuickItem, "hourText")
@@ -149,3 +151,7 @@ class MainWindow(QQuickView):
         self.minute = self.root.findChild(QQuickItem, "minuteText")
         minute = str(self.minute.property("text"))
         print("minute is: " + minute)
+
+    def date_confirm(self):
+        print("123")
+        self.date = self.root.findChild(QQuickItem, "selectedDate")
