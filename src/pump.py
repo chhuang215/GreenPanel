@@ -32,7 +32,7 @@ class PumpTimer():
     def check_timer(self):
 
         curr_dt = datetime.datetime.now()
-        print("!Check_Timer %s pin:%d %s" % (self.pump.__class__.__name__, self.pump.pin, curr_dt), end='')
+        print("!Check_Timer %s pin:%d %s" % (self.pump.__class__.__name__, self.pump.pin, curr_dt), end="")
         minute = curr_dt.minute
         if minute % 15 >= 0 and minute % 15 < 5:
             wsensor = GPIOController.get_component(GPIOController.PIN.WATER_LEVEL_SENSOR)
@@ -42,6 +42,7 @@ class PumpTimer():
                 print(" ! PUMP_ON")
             else:
                 self.pump.turn_off()
+                print("! PUMP_OFF_NO_WATER")
         else:
             self.pump.turn_off()
             print(" ! PUMP_OFF")

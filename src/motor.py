@@ -20,11 +20,12 @@ class Motor:
         self.rotating = False
         self.timer = MotorRotateTimer(self)
         self.timer_enabled = timer
+        self.pwm.start(0)
         if self.timer_enabled:
             self.timer.activate()
 
     def rotate(self, direction=RIGHT, dutycycle=PWM_DC):
-        self.pwm.start(dutycycle)
+        self.pwm.ChangeDutyCycle(dutycycle)
         if(direction == Motor.RIGHT):
             GPIO.output(self.inp1, GPIO.HIGH)
             GPIO.output(self.inp2, GPIO.LOW)
@@ -33,7 +34,7 @@ class Motor:
             GPIO.output(self.inp2, GPIO.HIGH)
 
     def stop(self):
-        #self.pwm.stop()
+        self.pwm.ChangeDutyCycle(0)
         GPIO.output(self.inp1, GPIO.LOW)
         GPIO.output(self.inp2, GPIO.LOW)
 
