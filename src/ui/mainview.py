@@ -53,8 +53,18 @@ class MainWindow(QQuickView):
         # Get Home Panel's child elements
         self.text_temp = self.panel_home.findChild(QQuickItem, "txtTemp")
         self.txt_clock = self.panel_home.findChild(QQuickItem, "txtClock")
+        self.btn_rotate_left = self.panel_home.findChild(QQuickItem, "btnRotateLeft")
+        self.btn_rotate_right = self.panel_home.findChild(QQuickItem, "btnRotateRight")
         self.light_switch = self.panel_light.findChild(QQuickItem, "swtLight")
+
+        # Set event listeners for home panel's elements
+        motr = hwc.get_component(hwc.PIN.MOTOR)
+        self.btn_rotate_left.ispressed.connect(lambda: motr.rotate(motr.LEFT, motr.PWM_DC_FAST))
+        self.btn_rotate_left.isreleased.connect(motr.stop)
+        self.btn_rotate_right.ispressed.connect(lambda: motr.rotate(motr.RIGHT, motr.PWM_DC_FAST))
+        self.btn_rotate_right.isreleased.connect(motr.stop)
         self.light_switch.clicked.connect(hwc.get_component(hwc.PIN.YELLOW_LED).switch)
+        
         
         # When light button is clicked, nav to light panel
         self.btn_light = self.root.findChild(QQuickItem, "btnLight")

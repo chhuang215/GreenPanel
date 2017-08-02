@@ -4,11 +4,13 @@ import threading
 import RPi.GPIO as GPIO
 import controller
 
-PWM_FREQ = 40
-PWM_DC = 28
-PWM_DC_FAST = 50
+
 
 class Motor:
+
+    PWM_FREQ = 40
+    PWM_DC = 28
+    PWM_DC_FAST = 50
 
     DIR_CW = RIGHT = 1
     DIR_CCW = LEFT = 2
@@ -16,7 +18,7 @@ class Motor:
     def __init__(self, inp1, inp2, inppwm, timer=True):
         self.inp1 = inp1
         self.inp2 = inp2
-        self.pwm = GPIO.PWM(inppwm, PWM_FREQ)
+        self.pwm = GPIO.PWM(inppwm, self.PWM_FREQ)
         self.rotating = False
         self.timer = MotorRotateTimer(self)
         self.timer_enabled = timer
