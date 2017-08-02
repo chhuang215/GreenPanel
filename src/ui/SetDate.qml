@@ -8,6 +8,13 @@ Calendar{
     weekNumbersVisible: true
     anchors.centerIn: parent
 
+    Button {
+        x: 250
+        y: 0
+        text: "<-Back"
+        objectName: "btnBack"
+    }
+
     Row {
         x: 250
         y: 200
