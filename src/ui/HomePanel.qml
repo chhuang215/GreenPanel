@@ -19,10 +19,40 @@ Item{
                 text:"Setting"
                 anchors.verticalCenter: parent.verticalCenter
             }
- 
+            Button{
+                signal ispressed()
+                signal isreleased()
+                id:"btnRotateLeft"
+                objectName:"btnRotateLeft"
+                text:"<-"
+                anchors.verticalCenter: parent.verticalCenter
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: parent.clicked()
+                    onPressed: parent.ispressed()
+                    onReleased: parent.isreleased()
+                }
+            }
+
+            Button{
+                signal ispressed()
+                signal isreleased()
+                id:"btnRotateRight"
+                objectName:"btnRotateRight"
+                text:"->"
+                anchors.verticalCenter: parent.verticalCenter
+                
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: parent.clicked()
+                    onPressed: parent.ispressed()
+                    onReleased: parent.isreleased()
+                }
+            }
+
             Text{
                 objectName:"txtClock"
-                width: parent.width - btnSetting.width - btnSetting.width
+                width: parent.width - btnSetting.width - btnSetting.width 
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 font.pointSize: 38
