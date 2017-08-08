@@ -55,6 +55,14 @@ class MainWindow(QQuickView):
         self.txt_clock = self.panel_home.findChild(QQuickItem, "txtClock")
         self.btn_rotate_left = self.panel_home.findChild(QQuickItem, "btnRotateLeft")
         self.btn_rotate_right = self.panel_home.findChild(QQuickItem, "btnRotateRight")
+        
+        # Get Light Panel's child elements
+        led = hwc.get_component(hwc.PIN.YELLOW_LED)
+        self.text_light_hr = self.panel_light.findChild(QQuickItem, "txtHour")
+        self.text_light_hr.setProperty("text", led.timer.begin_hour)
+        self.text_dur_hr = self.panel_light.findChild(QQuickItem, "txtDuration")
+        self.text_dur_hr.setProperty("text", led.timer.duration)
+        
         self.light_switch = self.panel_light.findChild(QQuickItem, "swtLight")
 
         # Set event listeners for home panel's elements
@@ -63,15 +71,17 @@ class MainWindow(QQuickView):
         self.btn_rotate_left.isreleased.connect(motr.stop)
         self.btn_rotate_right.ispressed.connect(lambda: motr.rotate(motr.RIGHT, motr.PWM_DC_FAST))
         self.btn_rotate_right.isreleased.connect(motr.stop)
-        self.light_switch.clicked.connect(hwc.get_component(hwc.PIN.YELLOW_LED).switch)
-        
+
+        # Set event listeners for light panel's elements
+        self.panel_light.lightTimerChanged.connect(led.timer.set_timer)
+        self.light_switch.clicked.connect(led.switch)
         
         # When light button is clicked, nav to light panel
-        self.btn_light = self.root.findChild(QQuickItem, "btnLight")
+        self.btn_light = self.panel_home.findChild(QQuickItem, "btnLight")
         self.btn_light.clicked.connect(lambda: self.__panel_nav(self.panel_light))
 
         # When settings button is clicked, nav to settings panel
-        self.btn_setting = self.root.findChild(QQuickItem, "btnSetting")
+        self.btn_setting = self.panel_home.findChild(QQuickItem, "btnSetting")
         self.btn_setting.clicked.connect(lambda: self.__panel_nav(self.panel_setting))
 
         # When confirm button is clicked in settings, nav back to main panel
@@ -101,7 +111,7 @@ class MainWindow(QQuickView):
         self.btn_quit = self.root.findChild(QQuickItem, "btnQuit")
         self.btn_quit.clicked.connect(QCoreApplication.instance().quit)
 
-        self.btn_water = self.root.findChild(QQuickItem, "btnWater")
+        self.btn_water = self.panel_home.findChild(QQuickItem, "btnWater")
 
         # start temperature thread
         self.tsensor_thread = TemperatureDisplayThread(self.text_temp)
@@ -127,7 +137,6 @@ class MainWindow(QQuickView):
 
         self.__nav_stack.append(panel)
         panel.setVisible(True)
-        # self.current_visible_panel = panel
 
     def __panel_nav_back(self):
 

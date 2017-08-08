@@ -74,6 +74,8 @@ class LightTimer():
         self.set_timer(begin_hr, duration_hr)
 
     def set_timer(self, begin, duration):
+        begin = int(begin)
+        duration = int(duration)
 
         if begin < 0:
             begin = 0
