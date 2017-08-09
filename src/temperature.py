@@ -18,14 +18,17 @@ class TemperatureSensor():
             self.__device_file = device_folder + '/w1_slave'            
 
     def read_temp_raw(self):
-        if self.__device_file == None:
-            raise Exception("Not running on Pi")
+
         f = open(self.__device_file , 'r')
         lines = f.readlines()
         f.close()
         return lines
 
     def read_temp(self):
+
+        if self.__device_file is None:
+            raise Exception("Not running on Pi")
+
         lines = self.read_temp_raw()
         while lines[0].strip()[-3:] != 'YES':
             time.sleep(0.2)
@@ -38,18 +41,20 @@ class TemperatureSensor():
             temp_f = temp_c * (9 / 5) + 32
             return temp_c, temp_f
 
-    def get_temperature(self, unit="C"):
+    def get_temperature(self):
         '''returns current temperature'''
-        temp = "NaN"
+        temp_c = "NaN"
+        temp_f = "NaN"
+
         try:
             temp_c, temp_f = self.read_temp()
-            if unit == "C":
-                temp = round(temp_c, 1)
-            else:
-                temp = round(temp_f, 1)
+            temp_c = round(temp_c, 1)
+            temp_f = round(temp_f, 1)
         except Exception:
             print("Temperature Sensor Not Found, value mocked")
             import random
-            temp = round(random.choice([19.333, 20.444, 21.555, 22.666, 23.777, 24.111]), 1)
+            temp_c = round(random.choice([19.333, 20.444, 21.555, 22.666, 23.777, 24.111]), 1)
+         
+            temp_f = round(temp_c * (9/5) + 32,1)
 
-        return temp
+        return temp_c, temp_f

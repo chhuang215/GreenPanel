@@ -9,27 +9,28 @@ from PyQt5.QtQuick import QQuickView, QQuickItem
 from PyQt5.QtQml import QQmlApplicationEngine, QQmlProperty, QQmlComponent 
 
 class TemperatureDisplayThread(QThread):
-    SIG_CHK_SHOW_TEMP = pyqtSignal(object)
-    def __init__(self, txt_temp_display):
+    SIG_CHK_SHOW_TEMP = pyqtSignal(object, object)
+    def __init__(self, txt_temp_c, txt_temp_f):
         super().__init__()
-        self.txt_temp_display = txt_temp_display
-
+        self.txt_temp_c = txt_temp_c
+        self.txt_temp_f = txt_temp_f
+        
         self.SIG_CHK_SHOW_TEMP.connect(self.display_temp)
-
 
         hwc = controller.GPIOController
         # a reference to the get_temperture method from TemperatureSensor Modal
         self.get_temperature = hwc.get_component(hwc.PIN.TEMPERATURE_SENSOR).get_temperature
 
-    def display_temp(self, t):
-        t = str(t)
-        print(t)
-        self.txt_temp_display.setProperty("text", t + " C")
+    def display_temp(self, tc, tf):
+        tc = str(tc)
+        tf = str(tf)
+        self.txt_temp_c.setProperty("text", tc + " C")
+        self.txt_temp_f.setProperty("text", tf + " F")
 
     def run(self):
         while True:
-            tem = self.get_temperature()
-            self.SIG_CHK_SHOW_TEMP.emit(tem)
+            tc, tf = self.get_temperature()
+            self.SIG_CHK_SHOW_TEMP.emit(tc, tf)
             time.sleep(5)
 
 class MainWindow(QQuickView):
@@ -39,6 +40,9 @@ class MainWindow(QQuickView):
 #        self.setSource(QUrl('MainView.qml'))
         self.setSource(QUrl.fromLocalFile('ui/MainView.qml'))
         self.__nav_stack = []
+
+       
+
         # Get root
         self.root = self.rootObject()
 
@@ -52,7 +56,8 @@ class MainWindow(QQuickView):
         #self.panel_light.setVisible(False)
 
         # Get Home Panel's child elements
-        self.text_temp = self.panel_home.findChild(QQuickItem, "txtTemp")
+        self.text_temp_c = self.panel_home.findChild(QQuickItem, "txtTempC")
+        self.text_temp_f = self.panel_home.findChild(QQuickItem, "txtTempF")
         self.txt_clock = self.panel_home.findChild(QQuickItem, "txtClock")
         self.btn_rotate_left = self.panel_home.findChild(QQuickItem, "btnRotateLeft")
         self.btn_rotate_right = self.panel_home.findChild(QQuickItem, "btnRotateRight")
@@ -84,10 +89,6 @@ class MainWindow(QQuickView):
         # When settings button is clicked, nav to settings panel
         self.btn_setting = self.panel_home.findChild(QQuickItem, "btnSetting")
         self.btn_setting.clicked.connect(lambda: self.__panel_nav(self.panel_setting))
-
-        # When light button is clicked, nav to light panel
-        self.text_temperature = self.panel_home.findChild(QQuickItem, "txtTemp")
-        self.text_temperature.clicked.connect(lambda: print("YOOOO!"))
 
         # When confirm button is clicked in settings, nav back to main panel
         self.btn_setting_confirm = self.root.findChild(QQuickItem, "btnConfirm")
@@ -122,8 +123,9 @@ class MainWindow(QQuickView):
 
         self.btn_water = self.panel_home.findChild(QQuickItem, "btnWater")
 
+        # Instantiate temperature sensor thread
+        self.tsensor_thread = TemperatureDisplayThread(self.text_temp_c, self.text_temp_f)
         # start temperature thread
-        self.tsensor_thread = TemperatureDisplayThread(self.text_temp)
         self.tsensor_thread.start()
 
         #start water sensor timer to retreive current water level condition
