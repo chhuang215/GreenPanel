@@ -35,14 +35,18 @@ class TemperatureSensor():
         if equals_pos != -1:
             temp_string = lines[1][equals_pos + 2:]
             temp_c = float(temp_string) / 1000.0
+            temp_f = temp_c * (9 / 5) + 32
+            return temp_c, temp_f
 
-            return temp_c
-
-    def get_temperature(self):
+    def get_temperature(self, unit="C"):
         '''returns current temperature'''
         temp = "NaN"
         try:
-            temp = round(self.read_temp(), 1)
+            temp_c, temp_f = self.read_temp()
+            if unit == "C":
+                temp = round(temp_c, 1)
+            else:
+                temp = round(temp_f, 1)
         except Exception:
             print("Temperature Sensor Not Found, value mocked")
             import random

@@ -84,6 +84,10 @@ class MainWindow(QQuickView):
         self.btn_setting = self.panel_home.findChild(QQuickItem, "btnSetting")
         self.btn_setting.clicked.connect(lambda: self.__panel_nav(self.panel_setting))
 
+        # When light button is clicked, nav to light panel
+        self.text_temperature = self.panel_home.findChild(QQuickItem, "txtTemp")
+        self.text_temperature.clicked.connect(lambda: print("YOOOO!"))
+
         # When confirm button is clicked in settings, nav back to main panel
         self.btn_setting_confirm = self.root.findChild(QQuickItem, "btnConfirm")
         self.btn_setting_confirm.clicked.connect(self.settings_confirm)

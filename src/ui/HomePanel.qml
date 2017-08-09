@@ -4,7 +4,7 @@ import QtQuick.Controls 1.2
 Item{
     id:"panelHome"
     objectName:"panelHome"
-    property alias changeColor:helloText.color
+    // property alias changeColor:helloText.color
     
     Column{
         width: parent.width
@@ -95,15 +95,16 @@ Item{
             }
 
             Text {
-                
+                signal clicked()
                 anchors.verticalCenter: parent.verticalCenter
-                id: helloText
+                id: "txtTemp"
                 objectName: "txtTemp"
                 text: "-1"
 
                 font.pointSize: 40; font.bold: true
                 MouseArea { 
                     anchors.fill: parent 
+                    onClicked: parent.clicked()
                 }
             }
 
