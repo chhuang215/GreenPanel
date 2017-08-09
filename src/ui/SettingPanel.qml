@@ -8,7 +8,7 @@ Item{
     visible: false
     Column{
         Button {
-            text: "<-back"
+            text: "<-Back"
             objectName: "btnBack"
         }
 

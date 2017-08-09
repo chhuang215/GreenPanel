@@ -7,6 +7,11 @@ TimePicker {
     visible: false
     anchors.centerIn: parent
 
+    Button {
+        text: "<-Back"
+        objectName: "btnBack"
+    }
+
     Row {
         x: 450
         y: 330

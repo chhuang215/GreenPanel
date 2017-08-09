@@ -48,6 +48,7 @@ class MainWindow(QQuickView):
         self.panel_setting = self.root.findChild(QQuickItem, "panelSetting")
         self.time_picker = self.root.findChild(QQuickItem, "timePicker")
         self.date_picker = self.root.findChild(QQuickItem, "datePicker")
+        self.panel_robot = self.root.findChild(QQuickItem, "panelRobot")
         #self.panel_light.setVisible(False)
 
         # Get Home Panel's child elements
@@ -111,6 +112,10 @@ class MainWindow(QQuickView):
         self.btn_date_confirm.clicked.connect(self.date_confirm)
         self.btn_date_confirm.clicked.connect(self.__panel_nav_back)
 
+        # When robot butten is clicked, navigate to robot panel
+        self.btn_robot = self.root.findChild(QQuickItem, "btnRobot")
+        self.btn_robot.clicked.connect(lambda: self.__panel_nav(self.panel_robot))
+
         # (Quit the app, for testing purpose)
         self.btn_quit = self.root.findChild(QQuickItem, "btnQuit")
         self.btn_quit.clicked.connect(QCoreApplication.instance().quit)
@@ -128,6 +133,7 @@ class MainWindow(QQuickView):
         self.water_clock_update_timer.timeout.connect(self.display_update_clock)
         self.water_clock_update_timer.start()
 
+        # Global back buttons
         all_back_buttons = self.root.findChildren(QQuickItem, "btnBack")
         for btn in all_back_buttons:
             btn.clicked.connect(self.__panel_nav_back)
@@ -177,4 +183,8 @@ class MainWindow(QQuickView):
 
     def date_confirm(self):
         print("123")
-        self.date = self.root.findChild(QQuickItem, "selectedDate")
+        self.date = self.root.findChild(QQuickItem, "datePicker")
+        year = str(self.date.property("selectedDate").year())
+        month = str(self.date.property("selectedDate").month())
+        day = str(self.date.property("selectedDate").day())
+        print("Day:" + day + " Month:" + month + " Year:" + year)

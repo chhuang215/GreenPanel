@@ -111,9 +111,9 @@ Item{
             Button {
                 width:226
                 height:130
-                text: "Robot Guy"
-                // objectName: "swtLight"            
-                
+                id:"btnRobot"
+                objectName:"btnRobot"
+                text: "Robot Guy" 
             }
 
         }
