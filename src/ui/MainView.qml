@@ -1,12 +1,14 @@
-import QtQuick 2.3
-import QtQuick.Controls 1.2
+import QtQuick 2.7
+import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 
 
 Rectangle {
+
     id: page
     width: 800; height: 480
-    color: "lightgray"
-    
+    // color: "lightgray"
+
     HomePanel{
         id: "panelHome"
         width: parent.width
