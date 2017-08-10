@@ -9,6 +9,7 @@ Rectangle {
     width: 800; height: 480
     // color: "lightgray"
 
+
     HomePanel{
         id: "panelHome"
         width: parent.width

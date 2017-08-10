@@ -7,7 +7,7 @@ Item{
     id:"panelHome"
     objectName:"panelHome"
     // property alias changeColor:helloText.color
-    
+
     Column{
         width: parent.width
         
