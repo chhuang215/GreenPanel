@@ -27,33 +27,31 @@ def main():
 
     GPIO.setup(PIN.PUSH_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(PIN.WATER_LEVEL_SENSOR, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    
-    
 
     ### initialize software modals of connected gpio hardwares ###
-
-
-    GPIOController.add_component(Lid, PIN.PUSH_BUTTON)
+    lid = GPIOController.add_component(Lid, PIN.PUSH_BUTTON)
 
     # Lights
-    GPIOController.add_component(LED, PIN.YELLOW_LED, LED.ON, timer=True)
+    main_light = GPIOController.add_component(LED, PIN.YELLOW_LED, LED.ON, timer=True)
     GPIOController.add_component(LED, PIN.BLUE_LED, LED.OFF)
 
     # Sensors
-    # GPIOController.add_component(Lid, PIN.PUSH_BUTTON)
     GPIOController.add_component(temperature.TemperatureSensor, PIN.TEMPERATURE_SENSOR)
     GPIOController.add_component(water.WaterSensor, PIN.WATER_LEVEL_SENSOR)
 
-    # Lid open/close event listen
-    lid = GPIOController.get_component(PIN.PUSH_BUTTON)
-    GPIO.add_event_detect(lid.pin, GPIO.BOTH, callback=lid.open_close)
+    # Pump
+    wpump = GPIOController.add_component(pump.WaterPump, PIN.WATER_PUMP)
 
-    GPIOController.add_component(pump.WaterPump, PIN.WATER_PUMP)
-    GPIOController.add_component(motor.Motor, PIN.MOTOR)
+    # Motor
+    motr = GPIOController.add_component(motor.Motor, PIN.MOTOR)
+
+    # Lid open/close event listen
+    GPIO.add_event_detect(lid.pin, GPIO.BOTH, callback=lid.open_close)
 
     try:
         # start QT UI
-        app = QApplication(sys.argv)
+        sargv = sys.argv + ['--style', 'material']
+        app = QApplication(sargv)
 
         # manually detect lid open close event from the start
         lid.open_close()
@@ -67,18 +65,22 @@ def main():
 
         # cleanup and deactive timers
        
-        GPIOController.get_component(PIN.WATER_PUMP).timer.deactivate()
-        GPIOController.get_component(PIN.YELLOW_LED).timer.deactivate()
-        mo = GPIOController.get_component(PIN.MOTOR)
-        mo.timer.deactivate()
-        mo.pwm.stop()
+        # GPIOController.get_component(PIN.WATER_PUMP).timer.deactivate()
+        # GPIOController.get_component(PIN.YELLOW_LED).timer.deactivate()
+        # mo = GPIOController.get_component(PIN.MOTOR)
+        wpump.timer.deactivate()
+        main_light.timer.deactivate()
+        motr.timer.deactivate()
+        motr.pwm.stop()
         # Teminate
         sys.exit(ret)
 
     except KeyboardInterrupt:
         GPIO.cleanup()       # clean up GPIO on CTRL+C exit
+        
     finally:
         GPIO.cleanup()
+        sys.exit()
 
 if __name__ == '__main__':
     main()

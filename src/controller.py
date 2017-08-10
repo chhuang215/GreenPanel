@@ -48,6 +48,8 @@ class GPIOController:
             GPIOController.GPIO_COMPONENTS[str(p)] = cmpont
 
         print("\t %s %s added to component list" % (component.__name__, pin))
+
+        return cmpont
  
     @staticmethod
     def get_component(pin):

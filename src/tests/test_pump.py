@@ -47,7 +47,7 @@ class TestWaterPump(unittest.TestCase):
 
         ## Suppose to be ON
         for hr in range(0, 24, 8):
-            for mi in [0, 4, 15, 19, 30, 34, 45, 49]:
+            for mi in [0, 4]:
                 mock_datetime.datetime.now.return_value = datetime.datetime(2017, 5, 5, hour=hr, minute=mi)
                 self.pump.timer.check_timer()
                 RPi.GPIO.output.assert_called_with(self.pump.pin, RPi.GPIO.HIGH)

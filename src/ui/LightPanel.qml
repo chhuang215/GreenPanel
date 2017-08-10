@@ -1,12 +1,11 @@
-import QtQuick 2.3
-import QtQuick.Controls 1.2
-import QtQuick.Controls.Styles 1.2
+import QtQuick 2.7
+import QtQuick.Controls 2.0
 
 Item{
-
+    
     property int buttonHeight: 100
     property int buttonWidth: 100
-
+    signal lightTimerChanged(var hr, var dur)
     id:"panelLight"
     objectName:"panelLight"
     visible: false
@@ -34,22 +33,35 @@ Item{
                 }
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
+                    id: "txtHour"
                     objectName: "txtHour"
                     text: "7"
                     font.pointSize: 40; font.bold: true
                 }
             }
             Button {
+                // signal qmlSignal(var anObject)
+                objectName:"btnIncHour"
                 width:buttonWidth
                 height:buttonHeight
                 text: "+"
-        
-            
+                onClicked: {
+                    
+                    txtHour.text = (txtHour.text*1 + 1) % 24;
+                    panelLight.lightTimerChanged(txtHour.text, txtDuration.text)
+                }   
             }
             Button {
+                objectName:"btnDecHour"
                 width:buttonWidth
                 height:buttonHeight
                 text: "-"
+                
+                onClicked: {
+                    
+                    txtHour.text = (txtHour.text*1 - 1) % 24   
+                    panelLight.lightTimerChanged(txtHour.text, txtDuration.text)
+                }
                 
             }
             Row {
@@ -69,7 +81,7 @@ Item{
                 Text {
                     
                     anchors.verticalCenter: parent.verticalCenter
-                    
+                    id: "txtDuration"
                     objectName: "txtDuration"
                     text: "17"
 
@@ -78,17 +90,31 @@ Item{
                 }
             }
             Button {
+                objectName:"btnIncDuration"
                 width:buttonWidth
                 height:buttonHeight
                 text: "+"
-                
-            
+                onClicked: {
+                    if (txtDuration.text < 23){
+                        txtDuration.text = txtDuration.text*1 + 1     
+                        panelLight.lightTimerChanged(txtHour.text, txtDuration.text)
+                    }
+                    
+                }
             }
             Button {
+                objectName:"btnDecDuration"
                 width:buttonWidth
                 height:buttonHeight
                 text: "-"
+                
+                onClicked: {
+                    if (txtDuration.text > 1){
+                        txtDuration.text = txtDuration.text*1 - 1     
+                        panelLight.lightTimerChanged(txtHour.text, txtDuration.text)
+                    }
                     
+                }   
             
             }
         }

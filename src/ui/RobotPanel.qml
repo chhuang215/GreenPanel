@@ -1,5 +1,5 @@
-import QtQuick 2.3
-import QtQuick.Controls 1.2
+import QtQuick 2.7
+import QtQuick.Controls 2.0
 
 Item{
     id: "panelRobot"
@@ -114,40 +114,78 @@ Item{
             ctx.stroke()
         }
     }
-    
-    Canvas {
-        id: socket1
-        x: 280
-        y: 160
-        width: 100; height: 100
-        onPaint: {
-            var ctx = getContext("2d");
-            ctx.reset();
 
-            var centreX = width / 2;
-            var centreY = height / 2;
+    Popup {
+        id: popup
+        x: 100
+        y: 100
+        width: 200
+        height: 300
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+    }
 
-            ctx.beginPath();
-            ctx.fillStyle = "white";
-            ctx.moveTo(centreX, centreY);
-            ctx.arc(centreX, centreY, width / 4, 0, Math.PI * 0.5, false);
-            ctx.lineTo(centreX, centreY);
-            ctx.fill();
+    RoundMouseArea {
+        id: roundMouseArea
+        x: 305
+        y: 180
+        width: 50
+        height: 50
 
-            ctx.beginPath();
-            ctx.fillStyle = "white";
-            ctx.moveTo(centreX, centreY);
-            ctx.arc(centreX, centreY, width / 4, Math.PI * 0.5, Math.PI * 2, false);
-            ctx.lineTo(centreX, centreY);
-            ctx.fill();
+        onClicked: popup.open()
+
+        Rectangle {
+            color: roundMouseArea.pressed ? "red" : (roundMouseArea.containsMouse ? "blue" : "white")
+            border.color: "black"
+            border.width: 1
+            radius: width / 2
+            anchors.fill: parent
+            Text {
+                anchors.centerIn: parent
+                text: "1"
+                font.pointSize: 12
+            }
         }
     }
-    
-    /*RoundButton {
-        x: 300
-        y: 300
-        text: "1" // Unicode Character 'CHECK MARK'
-        onClicked: textArea.readOnly = true
+
+    RoundMouseArea2 {
+        id: roundMouseArea2
+        x: 305
+        y: 250
+        width: 50
+        height: 50
+
+        onClicked: print("2 is clicked")
+
+        Rectangle {
+            color: roundMouseArea2.pressed ? "red" : (roundMouseArea2.containsMouse ? "blue" : "white")
+            border.color: "black"
+            border.width: 1
+            radius: width / 2
+            anchors.fill: parent
+            Text {
+                anchors.centerIn: parent
+                text: "2"
+                font.pointSize: 12
+            }
+        }
+    }
+
+    /*Rectangle {
+        x: 280
+        y: 160
+        width: 50
+        height: 50
+        color: "white"
+        border.color: "black"
+        border.width: 1
+        radius: width*0.5
+        Text {
+            x: 500
+            y: 500
+            text: "1"
+        }
     }*/
 
 }
