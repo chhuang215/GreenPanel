@@ -100,10 +100,17 @@ class LightTimer():
         curr_dt = datetime.datetime.now()
         print("!Check_Timer %s" % self.led.__class__.__name__, "pin:%d" % self.led.pin, curr_dt)
         hour = curr_dt.hour
-        if hour >= self.begin_hour or hour < self.end_hour:
+        if (
+                (self.begin_hour < self.end_hour and
+                 hour >= self.begin_hour and hour < self.end_hour) or
+                (self.begin_hour >= self.end_hour and
+                 (hour >= self.begin_hour or hour < self.end_hour))
+        ):
+            print("ON")
             self.led.turn_on()
 
-        elif hour < self.begin_hour and hour >= self.end_hour:
+        else:
+            print("OFF")
             self.led.turn_off()
 
     def __check_timer_loop(self):

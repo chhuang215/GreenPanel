@@ -3,17 +3,17 @@ import time
 import datetime
 import controller
 
-from PyQt5.QtCore import (QUrl, QThread, QCoreApplication, QTimer, pyqtSignal)
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtCore import (Qt, QUrl, QThread, QCoreApplication, QVariant,
+                          QTimer, QMetaObject, Q_ARG, pyqtSignal)
+# from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQuick import QQuickView, QQuickItem
 from PyQt5.QtQml import QQmlApplicationEngine, QQmlProperty, QQmlComponent 
 
 class TemperatureDisplayThread(QThread):
     SIG_CHK_SHOW_TEMP = pyqtSignal(object, object)
-    def __init__(self, txt_temp_c, txt_temp_f):
+    def __init__(self, panel_home):
         super().__init__()
-        self.txt_temp_c = txt_temp_c
-        self.txt_temp_f = txt_temp_f
+        self.panel_home = panel_home
         
         self.SIG_CHK_SHOW_TEMP.connect(self.display_temp)
 
@@ -24,8 +24,8 @@ class TemperatureDisplayThread(QThread):
     def display_temp(self, tc, tf):
         tc = str(tc)
         tf = str(tf)
-        self.txt_temp_c.setProperty("text", tc + " C")
-        self.txt_temp_f.setProperty("text", tf + " F")
+        QMetaObject.invokeMethod(self.panel_home, "updateTemperature", 
+                                 Qt.QueuedConnection, Q_ARG(QVariant, tc), Q_ARG(QVariant, tf))
 
     def run(self):
         while True:
@@ -41,8 +41,6 @@ class MainWindow(QQuickView):
         self.setSource(QUrl.fromLocalFile('ui/MainView.qml'))
         self.__nav_stack = []
 
-       
-
         # Get root
         self.root = self.rootObject()
 
@@ -56,32 +54,30 @@ class MainWindow(QQuickView):
         #self.panel_light.setVisible(False)
 
         # Get Home Panel's child elements
-        self.text_temp_c = self.panel_home.findChild(QQuickItem, "txtTempC")
-        self.text_temp_f = self.panel_home.findChild(QQuickItem, "txtTempF")
         self.txt_clock = self.panel_home.findChild(QQuickItem, "txtClock")
         self.btn_rotate_left = self.panel_home.findChild(QQuickItem, "btnRotateLeft")
         self.btn_rotate_right = self.panel_home.findChild(QQuickItem, "btnRotateRight")
-        
+
         # Get Light Panel's child elements
         led = hwc.get_component(hwc.PIN.YELLOW_LED)
         self.text_light_hr = self.panel_light.findChild(QQuickItem, "txtHour")
         self.text_light_hr.setProperty("text", led.timer.begin_hour)
         self.text_dur_hr = self.panel_light.findChild(QQuickItem, "txtDuration")
         self.text_dur_hr.setProperty("text", led.timer.duration)
-        
+
         self.light_switch = self.panel_light.findChild(QQuickItem, "swtLight")
 
         # Set event listeners for home panel's elements
         motr = hwc.get_component(hwc.PIN.MOTOR)
-        self.btn_rotate_left.ispressed.connect(lambda: motr.rotate(motr.LEFT, motr.PWM_DC_FAST))
-        self.btn_rotate_left.isreleased.connect(motr.stop)
-        self.btn_rotate_right.ispressed.connect(lambda: motr.rotate(motr.RIGHT, motr.PWM_DC_FAST))
-        self.btn_rotate_right.isreleased.connect(motr.stop)
+        self.btn_rotate_left.pressed.connect(lambda: motr.rotate(motr.LEFT, motr.PWM_DC_FAST))
+        self.btn_rotate_left.released.connect(motr.stop)
+        self.btn_rotate_right.pressed.connect(lambda: motr.rotate(motr.RIGHT, motr.PWM_DC_FAST))
+        self.btn_rotate_right.released.connect(motr.stop)
 
         # Set event listeners for light panel's elements
         self.panel_light.lightTimerChanged.connect(led.timer.set_timer)
         self.light_switch.clicked.connect(led.switch)
-        
+
         # When light button is clicked, nav to light panel
         self.btn_light = self.panel_home.findChild(QQuickItem, "btnLight")
         self.btn_light.clicked.connect(lambda: self.__panel_nav(self.panel_light))
@@ -124,9 +120,13 @@ class MainWindow(QQuickView):
         self.btn_water = self.panel_home.findChild(QQuickItem, "btnWater")
 
         # Instantiate temperature sensor thread
-        self.tsensor_thread = TemperatureDisplayThread(self.text_temp_c, self.text_temp_f)
+        self.tsensor_thread = TemperatureDisplayThread(self.panel_home)
+
         # start temperature thread
         self.tsensor_thread.start()
+
+        # Display clock right away
+        self.display_update_clock()
 
         #start water sensor timer to retreive current water level condition
         self.water_clock_update_timer = QTimer()

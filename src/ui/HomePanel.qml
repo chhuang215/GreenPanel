@@ -8,6 +8,11 @@ Item{
     objectName:"panelHome"
     // property alias changeColor:helloText.color
 
+    function updateTemperature(c, f){
+        txtTempC.text = c;
+        txtTempF.text = f;
+    }
+
     Column{
         width: parent.width
         
@@ -24,34 +29,19 @@ Item{
                 anchors.verticalCenter: parent.verticalCenter
             }
             Button{
-                signal ispressed()
-                signal isreleased()
                 id:"btnRotateLeft"
                 objectName:"btnRotateLeft"
                 text:"<-"
                 anchors.verticalCenter: parent.verticalCenter
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: parent.clicked()
-                    onPressed: parent.ispressed()
-                    onReleased: parent.isreleased()
-                }
             }
 
             Button{
-                signal ispressed()
-                signal isreleased()
+
                 id:"btnRotateRight"
                 objectName:"btnRotateRight"
                 text:"->"
                 anchors.verticalCenter: parent.verticalCenter
-                
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: parent.clicked()
-                    onPressed: parent.ispressed()
-                    onReleased: parent.isreleased()
-                }
+
             }
 
             Text{
@@ -62,8 +52,6 @@ Item{
                 verticalAlignment: Text.AlignVCenter
                 font.pointSize: 38
             }
-
-
         }
         Row {
             x: 119
@@ -100,7 +88,6 @@ Item{
             }
 
             Rectangle{
-                signal clicked()
                 objectName: "tempDisplay"
                 width: 226
                 height: 130
@@ -134,19 +121,16 @@ Item{
                     onClicked: {
                         txtTempC.visible = !txtTempC.visible
                         txtTempF.visible = !txtTempF.visible
-                        parent.clicked()
                     }
                 }
             }
-
-            
 
             Button {
                 width:226
                 height:130
                 id:"btnRobot"
                 objectName:"btnRobot"
-                text: "Robot Guy" 
+                text: qsTr("Robot Guy")    
             }
 
         }
