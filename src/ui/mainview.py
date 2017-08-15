@@ -53,12 +53,15 @@ class MainWindow(QQuickView):
         self.time_picker = self.root.findChild(QQuickItem, "timePicker")
         self.date_picker = self.root.findChild(QQuickItem, "datePicker")
         self.panel_robot = self.root.findChild(QQuickItem, "panelRobot")
-        #self.panel_light.setVisible(False)
+        
+        self.panel_robot_add = self.root.findChild(QQuickItem, "panelRobotAdd")
+        
 
         # Get Home Panel's child elements
         self.txt_clock = self.panel_home.findChild(QQuickItem, "txtClock")
         self.btn_rotate_left = self.panel_home.findChild(QQuickItem, "btnRotateLeft")
         self.btn_rotate_right = self.panel_home.findChild(QQuickItem, "btnRotateRight")
+        self.btn_water = self.panel_home.findChild(QQuickItem, "btnWater")
 
         # Get Light Panel's child elements
         led = GPIOCtrler.get_component(PIN.YELLOW_LED)
@@ -66,17 +69,19 @@ class MainWindow(QQuickView):
         self.text_light_hr.setProperty("text", led.timer.begin_hour)
         self.text_dur_hr = self.panel_light.findChild(QQuickItem, "txtDuration")
         self.text_dur_hr.setProperty("text", led.timer.duration)
-
         self.light_switch = self.panel_light.findChild(QQuickItem, "swtLight")
 
-        # Set event listeners for home panel's elements
+        # Get Robot Panel's child elements
+        self.btn_add_plant = self.panel_robot.findChild(QQuickItem, "btnAddPlant")
+
+        ## Set event listeners for home panel's elements
         motr = GPIOCtrler.get_component(PIN.MOTOR)
         self.btn_rotate_left.pressed.connect(lambda: motr.rotate(motr.LEFT, motr.PWM_DC_FAST))
         self.btn_rotate_left.released.connect(motr.stop)
         self.btn_rotate_right.pressed.connect(lambda: motr.rotate(motr.RIGHT, motr.PWM_DC_FAST))
         self.btn_rotate_right.released.connect(motr.stop)
 
-        # Set event listeners for light panel's elements
+        ## Set event listeners for light panel's elements
         self.panel_light.lightTimerChanged.connect(led.timer.set_timer)
         self.light_switch.clicked.connect(led.switch)
 
@@ -115,11 +120,13 @@ class MainWindow(QQuickView):
         self.btn_robot = self.root.findChild(QQuickItem, "btnRobot")
         self.btn_robot.clicked.connect(lambda: self.__panel_nav(self.panel_robot))
 
+        self.btn_add_plant.clicked.connect(lambda: self.__panel_nav(self.panel_robot_add))
+
         # (Quit the app, for testing purpose)
         self.btn_quit = self.root.findChild(QQuickItem, "btnQuit")
         self.btn_quit.clicked.connect(QCoreApplication.instance().quit)
 
-        self.btn_water = self.panel_home.findChild(QQuickItem, "btnWater")
+        
 
         # Instantiate temperature sensor thread
         self.tsensor_thread = TemperatureDisplayThread(self.panel_home)

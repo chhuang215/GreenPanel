@@ -9,6 +9,10 @@ Rectangle {
     width: 800; height: 480
     // color: "lightgray"
 
+    Button {
+        text: "<-Back"
+        objectName: "btnBack"
+    }
 
     HomePanel{
         id: "panelHome"
@@ -35,6 +39,11 @@ Rectangle {
 
     RobotPanel{
         id: "panelRobot"
+        width:parent.width
+    }
+
+    RobotPanelAdd{
+        id: "panelRobotAdd"
         width:parent.width
     }
 
