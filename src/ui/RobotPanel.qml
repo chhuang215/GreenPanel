@@ -138,27 +138,264 @@ Item{
     }
 
     Popup {
-        id: popup
-        x: 100
-        y: 100
-        width: 200
-        height: 300
+        id: popup1
+        x: 80
+        y: 60
+        width: 640
+        height: 360
         modal: true
         focus: true
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+        Rectangle {
+            x: 20
+            y: 10
+            height: 20
+            Text {
+                id: plantNameTxt1
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Plant A1"
+                font.pointSize: 18; font.bold: true
+            }
+        }
+
+        Image{
+            x: 20
+            y: 50
+            width: 100
+            height: 100
+            source: "images/placeholder.png"
+        }
+
+        Grid {
+            id: grid1
+            x: 250
+            y: 10
+            width: 300
+            height: 180
+            rows: 3; columns: 2; spacing: 10
+
+            Rectangle {
+                width: 220
+                height: 40
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "Date Planted: "
+                    font.pointSize: 14; font.bold: true
+                }
+            }
+
+            Rectangle {
+                width: 100
+                height: 40
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "dd/mm/yy"
+                    font.pointSize: 12; font.bold: false
+                }
+            }
+
+            Rectangle {
+                width: 220
+                height: 40
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "Planted Duration: "
+                    font.pointSize: 14; font.bold: true
+                }
+            }
+
+            Rectangle {
+                width: 100
+                height: 40
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "00Days"
+                    font.pointSize: 12; font.bold: false
+                }
+            }
+
+            Rectangle {
+                width: 220
+                height: 40
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "Ready Date: "
+                    font.pointSize: 14; font.bold: true
+                }
+            }
+
+            Rectangle {
+                width: 100
+                height: 40
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "dd/mm/yy"
+                    font.pointSize: 12; font.bold: false
+                }
+            }
+        }
+
+        Rectangle{
+            x: 20
+            y: 180
+            width: 100
+            height: 20
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Plant Description: "
+                font.pointSize: 16; font.bold: true
+            }
+        }
+
+        Rectangle{
+            x: 20
+            y: 210
+            width: 600
+            height: 130
+            Text {
+                text: "Empty Text"
+                font.pointSize: 10; font.bold: false
+            }
+        }
+
     }
 
-    RoundMouseArea {
-        id: roundMouseArea
+    Popup {
+        id: popup2
+        x: 80
+        y: 60
+        width: 640
+        height: 360
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+        Rectangle {
+            x: 20
+            y: 10
+            height: 20
+            Text {
+                id: plantNameTxt2
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Plant A2"
+                font.pointSize: 18; font.bold: true
+            }
+        }
+
+        Image{
+            x: 20
+            y: 50
+            width: 100
+            height: 100
+            source: "images/placeholder.png"
+        }
+
+        Grid {
+            id: grid2
+            x: 250
+            y: 10
+            width: 300
+            height: 180
+            rows: 3; columns: 2; spacing: 10
+
+            Rectangle {
+                width: 220
+                height: 40
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "Date Planted: "
+                    font.pointSize: 14; font.bold: true
+                }
+            }
+
+            Rectangle {
+                width: 100
+                height: 40
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "dd/mm/yy"
+                    font.pointSize: 12; font.bold: false
+                }
+            }
+
+            Rectangle {
+                width: 220
+                height: 40
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "Planted Duration: "
+                    font.pointSize: 14; font.bold: true
+                }
+            }
+
+            Rectangle {
+                width: 100
+                height: 40
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "00Days"
+                    font.pointSize: 12; font.bold: false
+                }
+            }
+
+            Rectangle {
+                width: 220
+                height: 40
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "Ready Date: "
+                    font.pointSize: 14; font.bold: true
+                }
+            }
+
+            Rectangle {
+                width: 100
+                height: 40
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "dd/mm/yy"
+                    font.pointSize: 12; font.bold: false
+                }
+            }
+        }
+
+        Rectangle{
+            x: 20
+            y: 180
+            width: 100
+            height: 20
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Plant Description: "
+                font.pointSize: 16; font.bold: true
+            }
+        }
+
+        Rectangle{
+            x: 20
+            y: 210
+            width: 600
+            height: 130
+            Text {
+                text: "Empty Text"
+                font.pointSize: 10; font.bold: false
+            }
+        }
+
+    }
+
+    RoundMouseArea1 {
+        id: roundMouseArea1
         x: 305
         y: 180
         width: 50
         height: 50
 
-        onClicked: popup.open()
+        onClicked: popup1.open()
 
         Rectangle {
-            color: roundMouseArea.pressed ? "red" : (roundMouseArea.containsMouse ? "blue" : "white")
+            color: "white"
             border.color: "black"
             border.width: 1
             radius: width / 2
@@ -178,10 +415,10 @@ Item{
         width: 50
         height: 50
 
-        onClicked: print("2 is clicked")
+        onClicked: popup2.open()
 
         Rectangle {
-            color: roundMouseArea2.pressed ? "red" : (roundMouseArea2.containsMouse ? "blue" : "white")
+            color: "white"
             border.color: "black"
             border.width: 1
             radius: width / 2
