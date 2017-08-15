@@ -4,10 +4,10 @@ import QtQuick.Controls 1.2
 Item {
     id: roundMouseArea2
 
-    property alias mouseX: mouseArea.mouseX
-    property alias mouseY: mouseArea.mouseY
+    property alias mouseX: mouseArea2.mouseX
+    property alias mouseY: mouseArea2.mouseY
 
-    property bool containsMouse: {
+    property bool containsMouse2: {
         var x1 = width / 2;
         var y1 = height / 2;
         var x2 = mouseX;
@@ -18,15 +18,15 @@ Item {
         return isWithinOurRadius;
     }
 
-    readonly property bool pressed: containsMouse && mouseArea.pressed
+    readonly property bool pressed: containsMouse2 && mouseArea2.pressed
 
     signal clicked
 
     MouseArea {
-        id: mouseArea
+        id: mouseArea2
         anchors.fill: parent
         hoverEnabled: true
         acceptedButtons: Qt.LeftButton | Qt.RightButton
-        onClicked: if (roundMouseArea.containsMouse) roundMouseArea.clicked()
+        onClicked: if (roundMouseArea2.containsMouse2) roundMouseArea2.clicked()
     }
 }
