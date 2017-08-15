@@ -29,14 +29,18 @@ def main():
     GPIO.setup(PIN.WATER_LEVEL_SENSOR, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
     ### initialize software modals of connected gpio hardwares ###
+
+    # Lid
     lid = GPIOController.add_component(Lid, PIN.PUSH_BUTTON)
 
     # Lights
     main_light = GPIOController.add_component(LED, PIN.YELLOW_LED, LED.ON, timer=True)
     GPIOController.add_component(LED, PIN.BLUE_LED, LED.OFF)
 
-    # Sensors
+    # Temperature Sensor
     GPIOController.add_component(temperature.TemperatureSensor, PIN.TEMPERATURE_SENSOR)
+
+    # Water Sensor
     GPIOController.add_component(water.WaterSensor, PIN.WATER_LEVEL_SENSOR)
 
     # Pump

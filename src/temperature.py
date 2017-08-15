@@ -43,8 +43,7 @@ class TemperatureSensor():
 
     def get_temperature(self):
         '''returns current temperature'''
-        temp_c = "NaN"
-        temp_f = "NaN"
+        temp_c = temp_f = "NaN"
 
         try:
             temp_c, temp_f = self.read_temp()

@@ -7,7 +7,11 @@ from PyQt5.QtCore import (Qt, QUrl, QThread, QCoreApplication, QVariant,
                           QTimer, QMetaObject, Q_ARG, pyqtSignal)
 # from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQuick import QQuickView, QQuickItem
+
 from PyQt5.QtQml import QQmlApplicationEngine, QQmlProperty, QQmlComponent 
+
+GPIOCtrler = controller.GPIOController
+PIN = GPIOCtrler.PIN
 
 class TemperatureDisplayThread(QThread):
     SIG_CHK_SHOW_TEMP = pyqtSignal(object, object)
@@ -16,14 +20,12 @@ class TemperatureDisplayThread(QThread):
         self.panel_home = panel_home
         
         self.SIG_CHK_SHOW_TEMP.connect(self.display_temp)
-
-        hwc = controller.GPIOController
         # a reference to the get_temperture method from TemperatureSensor Modal
-        self.get_temperature = hwc.get_component(hwc.PIN.TEMPERATURE_SENSOR).get_temperature
+        self.get_temperature = GPIOCtrler.get_component(PIN.TEMPERATURE_SENSOR).get_temperature
 
     def display_temp(self, tc, tf):
-        tc = str(tc)
-        tf = str(tf)
+        # tc = str(tc)
+        # tf = str(tf)
         QMetaObject.invokeMethod(self.panel_home, "updateTemperature", 
                                  Qt.QueuedConnection, Q_ARG(QVariant, tc), Q_ARG(QVariant, tf))
 
@@ -36,7 +38,7 @@ class TemperatureDisplayThread(QThread):
 class MainWindow(QQuickView):
     def __init__(self):
         super().__init__()
-        hwc = controller.GPIOController
+
 #        self.setSource(QUrl('MainView.qml'))
         self.setSource(QUrl.fromLocalFile('ui/MainView.qml'))
         self.__nav_stack = []
@@ -59,7 +61,7 @@ class MainWindow(QQuickView):
         self.btn_rotate_right = self.panel_home.findChild(QQuickItem, "btnRotateRight")
 
         # Get Light Panel's child elements
-        led = hwc.get_component(hwc.PIN.YELLOW_LED)
+        led = GPIOCtrler.get_component(PIN.YELLOW_LED)
         self.text_light_hr = self.panel_light.findChild(QQuickItem, "txtHour")
         self.text_light_hr.setProperty("text", led.timer.begin_hour)
         self.text_dur_hr = self.panel_light.findChild(QQuickItem, "txtDuration")
@@ -68,7 +70,7 @@ class MainWindow(QQuickView):
         self.light_switch = self.panel_light.findChild(QQuickItem, "swtLight")
 
         # Set event listeners for home panel's elements
-        motr = hwc.get_component(hwc.PIN.MOTOR)
+        motr = GPIOCtrler.get_component(PIN.MOTOR)
         self.btn_rotate_left.pressed.connect(lambda: motr.rotate(motr.LEFT, motr.PWM_DC_FAST))
         self.btn_rotate_left.released.connect(motr.stop)
         self.btn_rotate_right.pressed.connect(lambda: motr.rotate(motr.RIGHT, motr.PWM_DC_FAST))
@@ -158,8 +160,7 @@ class MainWindow(QQuickView):
         self.__nav_stack[-1].setVisible(True)
 
     def display_water_status(self):
-        gpioctrler = controller.GPIOController
-        status = gpioctrler.get_component(gpioctrler.PIN.WATER_LEVEL_SENSOR).has_enough_water()
+        status = GPIOCtrler.get_component(PIN.WATER_LEVEL_SENSOR).has_enough_water()
         msg = "Add water yo"
         if status:
             msg = "Water is good."

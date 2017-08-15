@@ -1,6 +1,6 @@
 """controller.py"""
 import collections
-from ui import MainWindow
+# from ui import MainWindow
 
 class UIController:
     """Controller for UI"""
@@ -8,9 +8,10 @@ class UIController:
     MAIN_UI = None
     @staticmethod
     def init_ui():
+        import ui
         """Instantiate the UI"""
         print("UI inited")
-        UIController.MAIN_UI = MainWindow()
+        UIController.MAIN_UI = ui.MainWindow()
 
     @staticmethod
     def get_ui():
