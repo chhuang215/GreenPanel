@@ -49,6 +49,7 @@ class MainWindow(QQuickView):
         # Get panels
         self.panel_home = self.root.findChild(QQuickItem, "panelHome")
         self.panel_light = self.root.findChild(QQuickItem, "panelLight")
+        self.panel_water = self.root.findChild(QQuickItem, "panelWater")
         self.panel_setting = self.root.findChild(QQuickItem, "panelSetting")
         self.time_picker = self.root.findChild(QQuickItem, "timePicker")
         self.date_picker = self.root.findChild(QQuickItem, "datePicker")
@@ -88,6 +89,9 @@ class MainWindow(QQuickView):
         # When light button is clicked, nav to light panel
         self.btn_light = self.panel_home.findChild(QQuickItem, "btnLight")
         self.btn_light.clicked.connect(lambda: self.__panel_nav(self.panel_light))
+
+        # When water button is clicked, nav to water panel
+        self.btn_water.clicked.connect(lambda: self.__panel_nav(self.panel_water))
 
         # When settings button is clicked, nav to settings panel
         self.btn_setting = self.panel_home.findChild(QQuickItem, "btnSetting")
@@ -172,6 +176,8 @@ class MainWindow(QQuickView):
         if status:
             msg = "Water is good."
         self.btn_water.setProperty("text", msg)
+        QMetaObject.invokeMethod(self.panel_water, "changeWaterStatusText", 
+                                 Qt.QueuedConnection, Q_ARG(QVariant, msg))
         
     def display_update_clock(self):
         t = datetime.datetime.now().strftime('%I:%M %p')

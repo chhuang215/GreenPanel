@@ -24,6 +24,12 @@ Rectangle {
         width:parent.width
     }
 
+    WaterPanel{
+        id: "panelWater"
+        width: parent.width
+        height: parent.height
+    }
+
     SettingPanel{
         id: "panelSetting"
         width:parent.width

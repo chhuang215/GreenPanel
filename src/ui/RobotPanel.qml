@@ -2,15 +2,25 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 
 Item{
+
+    property var slots : {"A": [-1, -1, -1], "B": [-1, -1],
+                        "C": [-1, -1, -1], "D": [-1, -1],
+                        "E": [-1, -1, -1], "F": [-1, -1],
+                        "G": [-1, -1, -1], "H": [-1, -1],
+                        }
+
+    property var currLeft : 'A'
+    property var currRight : 'B'
+
     id: "panelRobot"
     objectName: "panelRobot"
     visible: false
-    Column{
-        Button {
-            text: "<-Back"
-            objectName: "btnBack"
-        }
-    }
+    // Column{
+    //     Button {
+    //         text: "<-Back"
+    //         objectName: "btnBack"
+    //     }
+    // }
 
     Button {
         x: 700
@@ -31,6 +41,12 @@ Item{
         y: 25
         text: ">"
         objectName: "btnForward"
+        onClicked : {
+            currLeft = String.fromCharCode(((currLeft.charCodeAt(0) - 65 + 2) % 8 ) + 65)
+            labelA.text = currLeft
+            currRight = String.fromCharCode(((currRight.charCodeAt(0) - 65 + 2) % 8 ) + 65)
+            labelB.text = currRight
+        }
     }
 
     Button {
@@ -38,6 +54,12 @@ Item{
         y: 25
         text: "<"
         objectName: "btnBackward"
+        onClicked : {
+            currLeft = String.fromCharCode(((currLeft.charCodeAt(0) - 65 - 2) % 8 ) + 65)
+            labelA.text = currLeft
+            currRight = String.fromCharCode(((currRight.charCodeAt(0) - 65 - 2) % 8 ) + 65)
+            labelB.text = currRight
+        }
     }
 
     Text {
