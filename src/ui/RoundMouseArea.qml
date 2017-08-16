@@ -14,6 +14,7 @@ Item {
     property int slotNum : -1
     property int status : -1
     property bool disabled : false
+    property bool selected : false
 
     property bool containsMouse: {
         var x1 = width / 2;
@@ -40,7 +41,16 @@ Item {
 
     Rectangle {
         id: slot
-        color: status == -1 ? "white" : status == 0 ? "green" : "red"
+        color: {
+            
+            if(disabled) return "grey"
+
+            if(selected) return "blue"
+
+            if(status == -1) return "white"
+            else if (status == 1) return "green"
+            else if (status == 0) return "red"
+        }
         border.color: "black"
         border.width: 1
         radius: width / 2

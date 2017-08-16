@@ -53,10 +53,10 @@ class MainWindow(QQuickView):
         self.panel_setting = self.root.findChild(QQuickItem, "panelSetting")
         self.time_picker = self.root.findChild(QQuickItem, "timePicker")
         self.date_picker = self.root.findChild(QQuickItem, "datePicker")
+        
         self.panel_robot = self.root.findChild(QQuickItem, "panelRobot")
-        
         self.panel_robot_add = self.root.findChild(QQuickItem, "panelRobotAdd")
-        
+        self.panel_robot_add_select = self.root.findChild(QQuickItem, "panelRobotAddSelect")
 
         #### Home Panel's child elements ####
         self.txt_clock = self.panel_home.findChild(QQuickItem, "txtClock")
@@ -77,7 +77,7 @@ class MainWindow(QQuickView):
 
         # Robot Panel's child elements
         self.btn_add_plant = self.panel_robot.findChild(QQuickItem, "btnAddPlant")
-
+   
         ## Set event listeners for home panel's elements
         motr = GPIOCtrler.get_component(PIN.MOTOR)
         self.btn_rotate_left.pressed.connect(lambda: motr.rotate(motr.LEFT, motr.PWM_DC_FAST))
@@ -122,11 +122,15 @@ class MainWindow(QQuickView):
         self.btn_date_confirm.clicked.connect(self.date_confirm)
         self.btn_date_confirm.clicked.connect(self.__panel_nav_back)
 
+        ### Event listener for robot ###
         # When robot butten is clicked, navigate to robot panel
         self.btn_robot.clicked.connect(lambda: self.__panel_nav(self.panel_robot))
 
+    
         self.btn_add_plant.clicked.connect(lambda: self.__panel_nav(self.panel_robot_add))
-
+        
+        self.panel_robot_add.plantSelected.connect(lambda: self.__panel_nav(self.panel_robot_add_select))
+        
         # (Quit the app, for testing purpose)
         self.btn_quit = self.root.findChild(QQuickItem, "btnQuit")
         self.btn_quit.clicked.connect(QCoreApplication.instance().quit)
