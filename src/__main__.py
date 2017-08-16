@@ -65,26 +65,17 @@ def main():
         ui_view.showFullScreen()
 
         ret = app.exec_()
-        ## CLEANUP on APP EXIT ##
 
+        # Teminate
+        sys.exit(ret)
+
+    finally:
         # cleanup and deactive timers
-       
-        # GPIOController.get_component(PIN.WATER_PUMP).timer.deactivate()
-        # GPIOController.get_component(PIN.YELLOW_LED).timer.deactivate()
-        # mo = GPIOController.get_component(PIN.MOTOR)
         wpump.timer.deactivate()
         main_light.timer.deactivate()
         motr.timer.deactivate()
         motr.pwm.stop()
-        # Teminate
-        sys.exit(ret)
-
-    except KeyboardInterrupt:
-        GPIO.cleanup()       # clean up GPIO on CTRL+C exit
-        
-    finally:
         GPIO.cleanup()
-        sys.exit()
 
 if __name__ == '__main__':
     main()
