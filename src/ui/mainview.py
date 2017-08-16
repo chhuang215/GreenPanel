@@ -58,13 +58,16 @@ class MainWindow(QQuickView):
         self.panel_robot_add = self.root.findChild(QQuickItem, "panelRobotAdd")
         
 
-        # Get Home Panel's child elements
+        #### Home Panel's child elements ####
         self.txt_clock = self.panel_home.findChild(QQuickItem, "txtClock")
         self.btn_rotate_left = self.panel_home.findChild(QQuickItem, "btnRotateLeft")
         self.btn_rotate_right = self.panel_home.findChild(QQuickItem, "btnRotateRight")
+        self.btn_light = self.panel_home.findChild(QQuickItem, "btnLight")
         self.btn_water = self.panel_home.findChild(QQuickItem, "btnWater")
+        self.btn_setting = self.panel_home.findChild(QQuickItem, "btnSetting")
+        self.btn_robot = self.root.findChild(QQuickItem, "btnRobot")
 
-        # Get Light Panel's child elements
+        #### Light Panel's child elements ####
         led = GPIOCtrler.get_component(PIN.YELLOW_LED)
         self.text_light_hr = self.panel_light.findChild(QQuickItem, "txtHour")
         self.text_light_hr.setProperty("text", led.timer.begin_hour)
@@ -72,7 +75,7 @@ class MainWindow(QQuickView):
         self.text_dur_hr.setProperty("text", led.timer.duration)
         self.light_switch = self.panel_light.findChild(QQuickItem, "swtLight")
 
-        # Get Robot Panel's child elements
+        # Robot Panel's child elements
         self.btn_add_plant = self.panel_robot.findChild(QQuickItem, "btnAddPlant")
 
         ## Set event listeners for home panel's elements
@@ -87,14 +90,13 @@ class MainWindow(QQuickView):
         self.light_switch.clicked.connect(led.switch)
 
         # When light button is clicked, nav to light panel
-        self.btn_light = self.panel_home.findChild(QQuickItem, "btnLight")
         self.btn_light.clicked.connect(lambda: self.__panel_nav(self.panel_light))
 
         # When water button is clicked, nav to water panel
         self.btn_water.clicked.connect(lambda: self.__panel_nav(self.panel_water))
 
         # When settings button is clicked, nav to settings panel
-        self.btn_setting = self.panel_home.findChild(QQuickItem, "btnSetting")
+        
         self.btn_setting.clicked.connect(lambda: self.__panel_nav(self.panel_setting))
 
         # When confirm button is clicked in settings, nav back to main panel
@@ -121,7 +123,6 @@ class MainWindow(QQuickView):
         self.btn_date_confirm.clicked.connect(self.__panel_nav_back)
 
         # When robot butten is clicked, navigate to robot panel
-        self.btn_robot = self.root.findChild(QQuickItem, "btnRobot")
         self.btn_robot.clicked.connect(lambda: self.__panel_nav(self.panel_robot))
 
         self.btn_add_plant.clicked.connect(lambda: self.__panel_nav(self.panel_robot_add))

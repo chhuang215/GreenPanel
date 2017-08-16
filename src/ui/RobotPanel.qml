@@ -3,7 +3,7 @@ import QtQuick.Controls 2.0
 
 Item{
 
-    property var slots : {"A": [-1, -1, -1], "B": [-1, -1],
+    property var slots : {"A": [-1, 1, 0], "B": [-1, 0],
                         "C": [-1, -1, -1], "D": [-1, -1],
                         "E": [-1, -1, -1], "F": [-1, -1],
                         "G": [-1, -1, -1], "H": [-1, -1],
@@ -15,12 +15,6 @@ Item{
     id: "panelRobot"
     objectName: "panelRobot"
     visible: false
-    // Column{
-    //     Button {
-    //         text: "<-Back"
-    //         objectName: "btnBack"
-    //     }
-    // }
 
     Button {
         x: 700
@@ -42,10 +36,9 @@ Item{
         text: ">"
         objectName: "btnForward"
         onClicked : {
-            currLeft = String.fromCharCode(((currLeft.charCodeAt(0) - 65 + 2) % 8 ) + 65)
-            labelA.text = currLeft
-            currRight = String.fromCharCode(((currRight.charCodeAt(0) - 65 + 2) % 8 ) + 65)
-            labelB.text = currRight
+            var a = (currLeft.charCodeAt(0) - 65 + 2) % 8
+            currLeft = String.fromCharCode(a + 65)
+            currRight = String.fromCharCode(((a + 1) % 8 ) + 65)
         }
     }
 
@@ -55,18 +48,18 @@ Item{
         text: "<"
         objectName: "btnBackward"
         onClicked : {
-            currLeft = String.fromCharCode(((currLeft.charCodeAt(0) - 65 - 2) % 8 ) + 65)
-            labelA.text = currLeft
-            currRight = String.fromCharCode(((currRight.charCodeAt(0) - 65 - 2) % 8 ) + 65)
-            labelB.text = currRight
+            var a = currLeft.charCodeAt(0) - 65 - 2
+            if (a < 0) a = 8 + a 
+            currLeft = String.fromCharCode(a + 65)
+            currRight = String.fromCharCode(((a + 1) % 8 ) + 65)
         }
     }
 
     Text {
-        id: labelA
+        // id: labelA
         x: 300
         y: 80
-        text: "A"
+        text: currLeft
         font.family: "Ariel"
         font.bold: true
         font.pointSize: 36
@@ -107,10 +100,10 @@ Item{
     }
 
     Text {
-        id: labelB
+        // id: labelB
         x: 440
         y: 80
-        text: "B"
+        text: currRight
         font.family: "Ariel"
         font.bold: true
         font.pointSize: 36
@@ -138,7 +131,7 @@ Item{
     }
 
     Popup {
-        id: popup1
+        id: popup
         x: 80
         y: 60
         width: 640
@@ -147,6 +140,12 @@ Item{
         focus: true
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 
+        property int days: 0
+        property var plantName: ""
+        property var description: ""
+        property var imgSource: "images/placeholder.png"
+
+
         Rectangle {
             x: 20
             y: 10
@@ -154,17 +153,18 @@ Item{
             Text {
                 id: plantNameTxt1
                 anchors.verticalCenter: parent.verticalCenter
-                text: "Plant A1"
                 font.pointSize: 18; font.bold: true
+                text:popup.plantName
             }
         }
 
         Image{
+            id: img
             x: 20
             y: 50
             width: 100
             height: 100
-            source: "images/placeholder.png"
+            source: popup.imgSource
         }
 
         Grid {
@@ -210,7 +210,7 @@ Item{
                 height: 40
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "00Days"
+                    text: popup.days + "Days"
                     font.pointSize: 12; font.bold: false
                 }
             }
@@ -229,6 +229,7 @@ Item{
                 width: 100
                 height: 40
                 Text {
+                    id: txtReady
                     anchors.verticalCenter: parent.verticalCenter
                     text: "dd/mm/yy"
                     font.pointSize: 12; font.bold: false
@@ -254,182 +255,249 @@ Item{
             width: 600
             height: 130
             Text {
-                text: "Empty Text"
+                id: txtDescription
+                text: popup.description
                 font.pointSize: 10; font.bold: false
             }
         }
 
     }
 
-    Popup {
-        id: popup2
-        x: 80
-        y: 60
-        width: 640
-        height: 360
-        modal: true
-        focus: true
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-
-        Rectangle {
-            x: 20
-            y: 10
-            height: 20
-            Text {
-                id: plantNameTxt2
-                anchors.verticalCenter: parent.verticalCenter
-                text: "Plant A2"
-                font.pointSize: 18; font.bold: true
-            }
-        }
-
-        Image{
-            x: 20
-            y: 50
-            width: 100
-            height: 100
-            source: "images/placeholder.png"
-        }
-
-        Grid {
-            id: grid2
-            x: 250
-            y: 10
-            width: 300
-            height: 180
-            rows: 3; columns: 2; spacing: 10
-
-            Rectangle {
-                width: 220
-                height: 40
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "Date Planted: "
-                    font.pointSize: 14; font.bold: true
-                }
-            }
-
-            Rectangle {
-                width: 100
-                height: 40
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "dd/mm/yy"
-                    font.pointSize: 12; font.bold: false
-                }
-            }
-
-            Rectangle {
-                width: 220
-                height: 40
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "Planted Duration: "
-                    font.pointSize: 14; font.bold: true
-                }
-            }
-
-            Rectangle {
-                width: 100
-                height: 40
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "00Days"
-                    font.pointSize: 12; font.bold: false
-                }
-            }
-
-            Rectangle {
-                width: 220
-                height: 40
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "Ready Date: "
-                    font.pointSize: 14; font.bold: true
-                }
-            }
-
-            Rectangle {
-                width: 100
-                height: 40
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "dd/mm/yy"
-                    font.pointSize: 12; font.bold: false
-                }
-            }
-        }
-
-        Rectangle{
-            x: 20
-            y: 180
-            width: 100
-            height: 20
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: "Plant Description: "
-                font.pointSize: 16; font.bold: true
-            }
-        }
-
-        Rectangle{
-            x: 20
-            y: 210
-            width: 600
-            height: 130
-            Text {
-                text: "Empty Text"
-                font.pointSize: 10; font.bold: false
-            }
-        }
-
-    }
-
-    RoundMouseArea1 {
+    RoundMouseArea {
         id: roundMouseArea1
+
+        slotNum: 0
+        status: slots[currLeft][slotNum]
+
         x: 305
         y: 180
-        width: 50
-        height: 50
-
-        onClicked: popup1.open()
-
-        Rectangle {
-            color: "white"
-            border.color: "black"
-            border.width: 1
-            radius: width / 2
-            anchors.fill: parent
-            Text {
-                anchors.centerIn: parent
-                text: "1"
-                font.pointSize: 12
-            }
+        
+        onClicked: {
+            var plant = currLeft + (slotNum + 1)
+            popup.plantName = plant
+            popup.description = "Description for " + plant
+            popup.open()
         }
     }
 
-    RoundMouseArea2 {
+    RoundMouseArea {
         id: roundMouseArea2
+
+        slotNum: 1
+        status: slots[currLeft][slotNum]
+
         x: 305
         y: 250
-        width: 50
-        height: 50
 
-        onClicked: popup2.open()
-
-        Rectangle {
-            color: "white"
-            border.color: "black"
-            border.width: 1
-            radius: width / 2
-            anchors.fill: parent
-            Text {
-                anchors.centerIn: parent
-                text: "2"
-                font.pointSize: 12
-            }
+        onClicked: {
+            var plant = currLeft + (slotNum + 1)
+            popup.plantName = plant
+            popup.description = "Description for " + plant
+            popup.open()
         }
     }
+
+    RoundMouseArea {
+        // id: roundMouseArea2
+
+        slotNum: 2
+        status: slots[currLeft][slotNum]
+
+        x: 305
+        y: 320
+
+        onClicked: {
+            var plant = currLeft + (slotNum + 1)
+            popup.plantName = plant
+            popup.description = "Description for " + plant
+            popup.open()
+        }
+    }
+
+    RoundMouseArea {
+        // id: roundMouseArea2
+
+        slotNum: 0
+        status: slots[currRight][slotNum]
+
+        x: 430
+        y: 210
+
+        onClicked: {
+            var plant = currRight + (slotNum + 1)
+            popup.plantName = plant
+            popup.description = "Description for " + plant
+            popup.open()
+        }
+    }
+
+    RoundMouseArea {
+        // id: roundMouseArea2
+
+        slotNum: 1
+        status: slots[currRight][slotNum]
+
+        x: 430
+        y: 280
+
+        onClicked: {
+            var plant = currRight + (slotNum + 1)
+            popup.plantName = plant
+            popup.description = "Description for " + plant
+            popup.open()
+        }
+    }
+
+
+      // Popup {
+    //     id: popup2
+    //     x: 80
+    //     y: 60
+    //     width: 640
+    //     height: 360
+    //     modal: true
+    //     focus: true
+    //     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+    //     Rectangle {
+    //         x: 20
+    //         y: 10
+    //         height: 20
+    //         Text {
+    //             id: plantNameTxt2
+    //             anchors.verticalCenter: parent.verticalCenter
+    //             text: "Plant A2"
+    //             font.pointSize: 18; font.bold: true
+    //         }
+    //     }
+
+    //     Image{
+    //         x: 20
+    //         y: 50
+    //         width: 100
+    //         height: 100
+    //         source: "images/placeholder.png"
+    //     }
+
+    //     Grid {
+    //         id: grid2
+    //         x: 250
+    //         y: 10
+    //         width: 300
+    //         height: 180
+    //         rows: 3; columns: 2; spacing: 10
+
+    //         Rectangle {
+    //             width: 220
+    //             height: 40
+    //             Text {
+    //                 anchors.verticalCenter: parent.verticalCenter
+    //                 text: "Date Planted: "
+    //                 font.pointSize: 14; font.bold: true
+    //             }
+    //         }
+
+    //         Rectangle {
+    //             width: 100
+    //             height: 40
+    //             Text {
+    //                 anchors.verticalCenter: parent.verticalCenter
+    //                 text: "dd/mm/yy"
+    //                 font.pointSize: 12; font.bold: false
+    //             }
+    //         }
+
+    //         Rectangle {
+    //             width: 220
+    //             height: 40
+    //             Text {
+    //                 anchors.verticalCenter: parent.verticalCenter
+    //                 text: "Planted Duration: "
+    //                 font.pointSize: 14; font.bold: true
+    //             }
+    //         }
+
+    //         Rectangle {
+    //             width: 100
+    //             height: 40
+    //             Text {
+    //                 anchors.verticalCenter: parent.verticalCenter
+    //                 text: "00Days"
+    //                 font.pointSize: 12; font.bold: false
+    //             }
+    //         }
+
+    //         Rectangle {
+    //             width: 220
+    //             height: 40
+    //             Text {
+    //                 anchors.verticalCenter: parent.verticalCenter
+    //                 text: "Ready Date: "
+    //                 font.pointSize: 14; font.bold: true
+    //             }
+    //         }
+
+    //         Rectangle {
+    //             width: 100
+    //             height: 40
+    //             Text {
+    //                 anchors.verticalCenter: parent.verticalCenter
+    //                 text: "dd/mm/yy"
+    //                 font.pointSize: 12; font.bold: false
+    //             }
+    //         }
+    //     }
+
+    //     Rectangle{
+    //         x: 20
+    //         y: 180
+    //         width: 100
+    //         height: 20
+    //         Text {
+    //             anchors.verticalCenter: parent.verticalCenter
+    //             text: "Plant Description: "
+    //             font.pointSize: 16; font.bold: true
+    //         }
+    //     }
+
+    //     Rectangle{
+    //         x: 20
+    //         y: 210
+    //         width: 600
+    //         height: 130
+    //         Text {
+    //             text: "Empty Text"
+    //             font.pointSize: 10; font.bold: false
+    //         }
+    //     }
+
+    // }
+
+
+    // RoundMouseArea2 {
+    //     id: roundMouseArea2
+    //     x: 305
+    //     y: 250
+    //     width: 50
+    //     height: 50
+
+    //     onClicked: {
+    //         popup1.open()
+    //     }
+
+    //     Rectangle {
+    //         color: "white"
+    //         border.color: "black"
+    //         border.width: 1
+    //         radius: width / 2
+    //         anchors.fill: parent
+    //         Text {
+    //             anchors.centerIn: parent
+    //             text: "2"
+    //             font.pointSize: 12
+    //         }
+    //     }
+    // }
 
     /*Rectangle {
         x: 280
