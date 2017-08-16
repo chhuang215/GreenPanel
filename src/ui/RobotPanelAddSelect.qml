@@ -16,7 +16,7 @@ Item{
     property var currRight : slotsBase.currRight
     
     // The UI slot base
-    PrettySlotsBase{
+    RobotSlots{
         id: slotsBase
     }
     

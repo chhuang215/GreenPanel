@@ -31,7 +31,7 @@ Item{
 
     
     // The UI slot base
-    PrettySlotsBase{
+    RobotSlots{
         id: slotsBase
     }
 

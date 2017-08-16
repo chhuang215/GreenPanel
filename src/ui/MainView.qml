@@ -30,6 +30,7 @@ Rectangle {
         height: parent.height
     }
 
+    /* SETTING */
     SettingPanel{
         id: "panelSetting"
         width:parent.width
@@ -43,6 +44,9 @@ Rectangle {
         id: "datePicker"
     }
 
+    /* end SETTING */
+
+    /* ROBOT */
     RobotPanel{
         id: "panelRobot"
         width:parent.width

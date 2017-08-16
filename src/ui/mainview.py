@@ -58,6 +58,7 @@ class MainWindow(QQuickView):
         self.panel_robot_add = self.root.findChild(QQuickItem, "panelRobotAdd")
         self.panel_robot_add_select = self.root.findChild(QQuickItem, "panelRobotAddSelect")
 
+
         #### Home Panel's child elements ####
         self.txt_clock = self.panel_home.findChild(QQuickItem, "txtClock")
         self.btn_rotate_left = self.panel_home.findChild(QQuickItem, "btnRotateLeft")
@@ -96,7 +97,6 @@ class MainWindow(QQuickView):
         self.btn_water.clicked.connect(lambda: self.__panel_nav(self.panel_water))
 
         # When settings button is clicked, nav to settings panel
-        
         self.btn_setting.clicked.connect(lambda: self.__panel_nav(self.panel_setting))
 
         # When confirm button is clicked in settings, nav back to main panel
@@ -126,7 +126,6 @@ class MainWindow(QQuickView):
         # When robot butten is clicked, navigate to robot panel
         self.btn_robot.clicked.connect(lambda: self.__panel_nav(self.panel_robot))
 
-    
         self.btn_add_plant.clicked.connect(lambda: self.__panel_nav(self.panel_robot_add))
         
         self.panel_robot_add.plantSelected.connect(lambda: self.__panel_nav(self.panel_robot_add_select))
@@ -135,7 +134,6 @@ class MainWindow(QQuickView):
         self.btn_quit = self.root.findChild(QQuickItem, "btnQuit")
         self.btn_quit.clicked.connect(QCoreApplication.instance().quit)
 
-        
 
         # Instantiate temperature sensor thread
         self.tsensor_thread = TemperatureDisplayThread(self.panel_home)
