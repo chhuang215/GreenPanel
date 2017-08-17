@@ -1,9 +1,12 @@
 import os
+import json
 import time
 import datetime
 import controller
 
-from PyQt5.QtCore import (Qt, QUrl, QThread, QCoreApplication, QVariant,
+import slots
+
+from PyQt5.QtCore import (Qt, QUrl, QThread, QCoreApplication, QVariant, QJsonValue,
                           QTimer, QMetaObject, Q_ARG, pyqtSignal)
 # from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQuick import QQuickView, QQuickItem
@@ -57,7 +60,6 @@ class MainWindow(QQuickView):
         self.panel_robot = self.root.findChild(QQuickItem, "panelRobot")
         self.panel_robot_add = self.root.findChild(QQuickItem, "panelRobotAdd")
         self.panel_robot_add_select = self.root.findChild(QQuickItem, "panelRobotAddSelect")
-
 
         #### Home Panel's child elements ####
         self.txt_clock = self.panel_home.findChild(QQuickItem, "txtClock")
@@ -125,6 +127,7 @@ class MainWindow(QQuickView):
         ### Event listener for robot ###
         # When robot butten is clicked, navigate to robot panel
         self.btn_robot.clicked.connect(lambda: self.__panel_nav(self.panel_robot))
+        self.btn_robot.clicked.connect(self.refresh_slots_status)
 
         self.btn_add_plant.clicked.connect(lambda: self.__panel_nav(self.panel_robot_add))
         
@@ -173,6 +176,11 @@ class MainWindow(QQuickView):
 
         self.__nav_stack[-1].setVisible(True)
 
+    def refresh_slots_status(self):
+        sjson = slots.getSlotsJson()
+        self.panel_robot.setProperty("slots",sjson)
+        self.panel_robot_add_select.setProperty("slots", sjson)
+
     def display_water_status(self):
         status = GPIOCtrler.get_component(PIN.WATER_LEVEL_SENSOR).has_enough_water()
         msg = "Add water yo"
@@ -183,8 +191,7 @@ class MainWindow(QQuickView):
                                  Qt.QueuedConnection, Q_ARG(QVariant, msg))
         
     def display_update_clock(self):
-        t = datetime.datetime.now().strftime('%I:%M %p')
-        self.txt_clock.setProperty("text", t)
+        self.txt_clock.setProperty("text", datetime.datetime.now().strftime('%I:%M %p'))
 
     def settings_confirm(self):
         self.language = self.root.findChild(QQuickItem, "chosenItemText")

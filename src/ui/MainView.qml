@@ -60,6 +60,7 @@ Rectangle {
     RobotPanelAddSelect{
         id: "panelRobotAddSelect"
         width:parent.width
+        slots: panelRobot.slots
     }
 
     // Grid {

@@ -6,10 +6,10 @@ Item{
     objectName: "panelRobot"
     visible: false
 
-    property var slots : {"A": [-1, 1, 0], "B": [-1, 0],
-                        "C": [-1, -1, -1], "D": [-1, -1],
-                        "E": [-1, -1, -1], "F": [-1, -1],
-                        "G": [-1, -1, -1], "H": [-1, -1],
+    property var slots : {"A": [{"status": -1}, {"status": -1}, {"status": -1}], "B": [{"status": -1}, {"status": -1}],
+                        "C": [{"status": -1}, {"status": -1}, {"status": -1}], "D": [{"status": -1}, {"status": -1}],
+                        "E": [{"status": -1}, {"status": -1}, {"status": -1}], "F": [{"status": -1}, {"status": -1}],
+                        "G": [{"status": -1}, {"status": -1}, {"status": -1}], "H": [{"status": -1}, {"status": -1}]
                         }
 
     property var currLeft : slotsBase.currLeft
@@ -29,7 +29,7 @@ Item{
         objectName: "btnRemovePlant"
     }
 
-    
+
     // The UI slot base
     RobotSlots{
         id: slotsBase
@@ -174,7 +174,7 @@ Item{
         id: roundMouseArea1
 
         slotNum: 0
-        status: slots[currLeft][slotNum]
+        status: slots[currLeft][slotNum]["status"]
 
         x: 305
         y: 180
@@ -191,7 +191,7 @@ Item{
         id: roundMouseArea2
 
         slotNum: 1
-        status: slots[currLeft][slotNum]
+        status: slots[currLeft][slotNum]["status"]
 
         x: 305
         y: 250
@@ -208,7 +208,7 @@ Item{
         // id: roundMouseArea2
 
         slotNum: 2
-        status: slots[currLeft][slotNum]
+        status: slots[currLeft][slotNum]["status"]
 
         x: 305
         y: 320
@@ -227,7 +227,7 @@ Item{
         // id: roundMouseArea2
 
         slotNum: 0
-        status: slots[currRight][slotNum]
+        status: slots[currRight][slotNum]["status"]
 
         x: 430
         y: 210
@@ -244,7 +244,7 @@ Item{
         // id: roundMouseArea2
 
         slotNum: 1
-        status: slots[currRight][slotNum]
+        status: slots[currRight][slotNum]["status"]
 
         x: 430
         y: 280

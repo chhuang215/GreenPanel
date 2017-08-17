@@ -6,6 +6,16 @@ Item{
     property var currLeft: 'A'
     property var currRight: 'B'
 
+  
+
+    Rectangle{
+        width:parent.width
+        height:parent.height
+        color: "red"
+        border.width : 5
+        border.color : "black"
+    }
+
     Button {
         x: 400
         y: 25
@@ -96,13 +106,15 @@ Item{
             ctx.strokeStyle = "green"
             ctx.fillStyle = "limegreen"
             ctx.beginPath()
-            ctx.moveTo(3,50)
-            ctx.lineTo(153,50)
-            ctx.lineTo(103,300)
-            ctx.lineTo(3,300)
+            ctx.moveTo(0,50)
+            ctx.lineTo(150,50)
+            ctx.lineTo(100,300)
+            ctx.lineTo(0,300)
             ctx.closePath()
             ctx.fill()
             ctx.stroke()
         }
     }
+
+  
 }

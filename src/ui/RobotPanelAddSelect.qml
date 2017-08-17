@@ -6,11 +6,7 @@ Item{
     objectName: "panelRobotAddSelect"
     visible: false
 
-    property var slots : {"A": [-1, 1, 0], "B": [-1, 0],
-                        "C": [-1, -1, -1], "D": [-1, -1],
-                        "E": [-1, -1, -1], "F": [-1, -1],
-                        "G": [-1, -1, -1], "H": [-1, -1],
-                        }
+    property var slots : {}
 
     property var currLeft : slotsBase.currLeft
     property var currRight : slotsBase.currRight
@@ -23,7 +19,7 @@ Item{
     /* SLOTS on the LEFT */
     RoundMouseArea {
         slotNum: 0
-        status: slots[currLeft][slotNum]
+        status: slots[currLeft][slotNum].status
         selected: status == 2
         disabled: !selected && status != -1 
         x: 305
@@ -40,7 +36,7 @@ Item{
 
     RoundMouseArea {
         slotNum: 1
-        status: slots[currLeft][slotNum]
+        status: slots[currLeft][slotNum].status
         selected: status == 2
         disabled: !selected && status != -1 
         x: 305
@@ -57,7 +53,7 @@ Item{
 
     RoundMouseArea {
         slotNum: 2
-        status: slots[currLeft][slotNum]
+        status: slots[currLeft][slotNum].status
         selected: status == 2
         disabled: !selected && status != -1 
         x: 305
@@ -76,7 +72,7 @@ Item{
     /* SLOTS on the RIGHT */
     RoundMouseArea {
         slotNum: 0
-        status: slots[currRight][slotNum]
+        status: slots[currRight][slotNum].status
         selected: status == 2
         disabled: !selected && status != -1 
         x: 430
@@ -95,7 +91,7 @@ Item{
         // id: roundMouseArea2
 
         slotNum: 1
-        status: slots[currRight][slotNum]
+        status: slots[currRight][slotNum].status
         selected: status == 2
         disabled: !selected && status != -1 
         x: 430
@@ -110,4 +106,13 @@ Item{
         }
     }
     /* end SLOTS on the RIGHT */
+
+    Button{
+        width:150
+        height:150
+        
+        anchors.right: parent.right
+        text: "confirm"
+    }
+
 }
