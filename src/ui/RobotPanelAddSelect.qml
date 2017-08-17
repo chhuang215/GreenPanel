@@ -21,95 +21,56 @@ Item{
         id: slotsBase
     }
     
+    Component{
+        id: slotHole
+        RoundMouseArea {
+            id: rma
+            property var slotPane : {}
+            status: slots[slotPane][slotNum].status
+            disabled: !selected && status != -1 
+            
+            onClicked: {
+                if(!disabled){
+                    
+                    slots[slotPane][slotNum].status = !selected ? 2 : -1 
+                    slotsSelected[slotPane][slotNum] ^= 1 
+                    
+                    panelRobotAddSelect.slotsChanged() 
+                    panelRobotAddSelect.slotsSelectedChanged()
+                }
+            }
+        }
+    }
+
     /* SLOTS on the LEFT */
-    RoundMouseArea {
-        slotNum: 0
-        status: slots[currLeft][slotNum].status
-        disabled: !selected && status != -1 
-        x: 305
-        y: 180
-        
-        onClicked: {
-            if(!disabled){
-                
-                slots[currLeft][slotNum].status = !selected ? 2 : -1 
-                slotsSelected[currLeft][slotNum] ^= 1 
-                status = Qt.binding(function() { return slots[currLeft][slotNum].status })
-            }
-        }
-    }
-
-    RoundMouseArea {
-        slotNum: 1
-        status: slots[currLeft][slotNum].status
-        disabled: !selected && status != -1 
-        x: 305
-        y: 250
-
-        onClicked: {
-            if(!disabled){
-                
-                slots[currLeft][slotNum].status = !selected ? 2 : -1 
-                slotsSelected[currLeft][slotNum] ^= 1 
-                status = Qt.binding(function() { return slots[currLeft][slotNum].status })
-            }
-        }
-    }
-
-    RoundMouseArea {
-        slotNum: 2
-        status: slots[currLeft][slotNum].status
-        disabled: !selected && status != -1 
-        x: 305
-        y: 320
-
-        onClicked: {
-            if(!disabled){
-                
-                slots[currLeft][slotNum].status = !selected ? 2 : -1 
-                slotsSelected[currLeft][slotNum] ^= 1 
-                status = Qt.binding(function() { return slots[currLeft][slotNum].status })
+    Repeater {
+        model: slots[currLeft].length
+        Loader { 
+            sourceComponent: slotHole
+            x: 305
+            y: (slots[currLeft].length == 3 ? 180 : 210) + 70 * index
+            onLoaded:{
+                item.slotNum = index
+                item.slotPane = Qt.binding(function() { return currLeft} )
             }
         }
     }
     /* end SLOTS on the LEFT */
 
     /* SLOTS on the RIGHT */
-    RoundMouseArea {
-        slotNum: 0
-        status: slots[currRight][slotNum].status
-        disabled: !selected && status != -1 
-        x: 430
-        y: 210
-
-        onClicked: {
-            if(!disabled){
-                
-                slots[currRight][slotNum].status = !selected ? 2 : -1 
-                slotsSelected[currRight][slotNum] ^= 1 
-                status = Qt.binding(function() {return slots[currRight][slotNum].status })
+    Repeater {
+        model: slots[currRight].length
+        Loader { 
+            sourceComponent: slotHole
+            x:430
+            y:(slots[currRight].length == 3 ? 180 : 210) + 70 * index
+            onLoaded:{
+                item.slotNum = index
+                item.slotPane = Qt.binding(function() { return currRight} )
             }
         }
     }
 
-    RoundMouseArea {
-        // id: roundMouseArea2
-
-        slotNum: 1
-        status: slots[currRight][slotNum].status
-        disabled: !selected && status != -1 
-        x: 430
-        y: 280
-
-        onClicked: {
-            if(!disabled){
-                
-                slots[currRight][slotNum].status = !selected ? 2 : -1
-                slotsSelected[currRight][slotNum] ^= 1 
-                status = Qt.binding(function() { return slots[currRight][slotNum].status })
-            }
-        }
-    }
     /* end SLOTS on the RIGHT */
 
     Button{

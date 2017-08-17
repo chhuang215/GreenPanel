@@ -30,14 +30,14 @@ Item{
         objectName: "btnRemovePlant"
     }
 
-    Button {
-        x: 700
-        y: 200
-        text: "SEE JSON"
-        onClicked:{
-            console.log(JSON.stringify(slots,  null, '\t') )
-        }
-    }
+    // Button {
+    //     x: 700
+    //     y: 200
+    //     text: "SEE JSON"
+    //     onClicked:{
+    //         console.log(JSON.stringify(slots,  null, '\t') )
+    //     }
+    // }
 
 
     // The UI slot base

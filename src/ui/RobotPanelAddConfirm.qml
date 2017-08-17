@@ -12,11 +12,36 @@ Item{
                                 "E": [0,0,0], "F": [0,0],
                                 "G": [0,0,0], "H": [0,0]
                                 }
+    onSlotsSelectedChanged:{
+        console.log("YOYOYOYOYO!")
+    }
+    
+    Grid{
+        id:grid
+        anchors.centerIn: parent
+        columns:3
+        rows: 4
 
+        Repeater{
+            model: parent.rows
+            Text{
+                text:plantType
+            }
+            Text{
+                text:"stuff"
+            }
+            Button{
+                text:"X"
+            }
+        }
+    }
 
     Button{
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin:20
+        // anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.rightMargin: 70
+        anchors.bottomMargin: 15
         text:"CONFIRM"
         onClicked:{
             parent.addConfirm(plantType, slotsSelected)

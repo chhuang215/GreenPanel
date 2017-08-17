@@ -19,26 +19,25 @@ Rectangle {
 
     HomePanel{
         id: "panelHome"
-        width: parent.width
+        anchors.fill: parent
         onRotateMotor: parent.rotateMotor(d)
         onStopMotor: parent.stopMotor()
     }
 
     LightPanel{
         id: "panelLight"
-        width:parent.width
+        anchors.fill: parent
     }
 
     WaterPanel{
         id: "panelWater"
-        width: parent.width
-        height: parent.height
+        anchors.fill: parent
     }
 
     /* SETTING */
     SettingPanel{
         id: "panelSetting"
-        width:parent.width
+        anchors.fill: parent
     }
 
     SetTime{
@@ -54,12 +53,12 @@ Rectangle {
     /* ROBOT */
     RobotPanel{
         id: "panelRobot"
-        width:parent.width
+        anchors.fill: parent
     }
 
     RobotPanelAdd{
         id: "panelRobotAdd"
-        width:parent.width
+        anchors.fill: parent
         
         // param: (int type)
         onPlantSelected:{
@@ -69,13 +68,14 @@ Rectangle {
 
     RobotPanelAddSelect{
         id: "panelRobotAddSelect"
-        width:parent.width
+        anchors.fill: parent
+        // width:parent.width
         slots: panelRobot.slots
     }
 
     RobotPanelAddConfirm{
         id: "panelRobotAddConfirm"
-        width:parent.width
+        anchors.fill: parent
         slotsSelected: panelRobotAddSelect.slotsSelected
     }
 
