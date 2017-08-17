@@ -5,7 +5,7 @@ Item{
     id: "panelRobot"
     objectName: "panelRobot"
     visible: false
-
+    signal addButtonClicked
     property var slots : {"A": [{"status": -1}, {"status": -1}, {"status": -1}], "B": [{"status": -1}, {"status": -1}],
                         "C": [{"status": -1}, {"status": -1}, {"status": -1}], "D": [{"status": -1}, {"status": -1}],
                         "E": [{"status": -1}, {"status": -1}, {"status": -1}], "F": [{"status": -1}, {"status": -1}],
@@ -20,6 +20,7 @@ Item{
         y: 100
         text: "Add Plant"
         objectName: "btnAddPlant"
+        onClicked: parent.addButtonClicked()
     }
 
     Button {

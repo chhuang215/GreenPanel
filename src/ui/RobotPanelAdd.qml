@@ -5,7 +5,7 @@ Item{
     id: "panelRobotAdd"
     objectName: "panelRobotAdd"
     visible: false
-    signal plantSelected
+    signal plantSelected(int type)
     // Button {
     //     text: "<-Back"
     //     objectName: "btnBack"
@@ -31,12 +31,11 @@ Item{
                 height:160
                 Button{
                     // id:"btnP"+index
-                    objectName: "btnSelectedPlant"
                     anchors.horizontalCenter : parent.horizontalCenter
                     width: 150
                     height: 150
                     text: "Plant " + index 
-                    onClicked: panelRobotAdd.plantSelected()
+                    onClicked: panelRobotAdd.plantSelected(index)
                 }
                 Text{
                     anchors.horizontalCenter : parent.horizontalCenter

@@ -5,8 +5,11 @@ import QtQuick.Controls.Material 2.0
 
 Rectangle {
 
-    id: page
+    id: main
     width: 800; height: 480
+    signal quit
+    signal rotateMotor(int dir)
+    signal stopMotor
     // color: "lightgray"
 
     Button {
@@ -17,6 +20,8 @@ Rectangle {
     HomePanel{
         id: "panelHome"
         width: parent.width
+        onRotateMotor: parent.rotateMotor(d)
+        onStopMotor: parent.stopMotor()
     }
 
     LightPanel{
@@ -55,12 +60,23 @@ Rectangle {
     RobotPanelAdd{
         id: "panelRobotAdd"
         width:parent.width
+        
+        // param: (int type)
+        onPlantSelected:{
+            panelRobotAddConfirm.plantType = type
+        }
     }
 
     RobotPanelAddSelect{
         id: "panelRobotAddSelect"
         width:parent.width
         slots: panelRobot.slots
+    }
+
+    RobotPanelAddConfirm{
+        id: "panelRobotAddConfirm"
+        width:parent.width
+        slotsSelected: panelRobotAddSelect.slotsSelected
     }
 
     // Grid {
@@ -77,12 +93,15 @@ Rectangle {
     // }
 
     Button{
-        anchors.bottom:page.bottom
-        anchors.right:page.right
+        anchors.bottom:parent.bottom
+        anchors.right:parent.right
         anchors.rightMargin: 10
         anchors.bottomMargin: 10
         text:"quit"
         objectName:"btnQuit"
+        onClicked:{
+            parent.quit()
+        }
     }
 
 }

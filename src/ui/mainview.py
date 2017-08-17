@@ -5,6 +5,7 @@ import datetime
 import controller
 
 import slots
+import plants
 
 from PyQt5.QtCore import (Qt, QUrl, QThread, QCoreApplication, QVariant, QJsonValue,
                           QTimer, QMetaObject, Q_ARG, pyqtSignal)
@@ -27,8 +28,6 @@ class TemperatureDisplayThread(QThread):
         self.get_temperature = GPIOCtrler.get_component(PIN.TEMPERATURE_SENSOR).get_temperature
 
     def display_temp(self, tc, tf):
-        # tc = str(tc)
-        # tf = str(tf)
         QMetaObject.invokeMethod(self.panel_home, "updateTemperature", 
                                  Qt.QueuedConnection, Q_ARG(QVariant, tc), Q_ARG(QVariant, tf))
 
@@ -48,6 +47,10 @@ class MainWindow(QQuickView):
 
         # Get root
         self.root = self.rootObject()
+        motr = GPIOCtrler.get_component(PIN.MOTOR)                
+        self.root.rotateMotor.connect(lambda direction: motr.rotate(direction, motr.PWM_DC_FAST))
+        self.root.stopMotor.connect(motr.stop)
+        self.root.quit.connect(QCoreApplication.instance().quit)
 
         # Get panels
         self.panel_home = self.root.findChild(QQuickItem, "panelHome")
@@ -60,11 +63,10 @@ class MainWindow(QQuickView):
         self.panel_robot = self.root.findChild(QQuickItem, "panelRobot")
         self.panel_robot_add = self.root.findChild(QQuickItem, "panelRobotAdd")
         self.panel_robot_add_select = self.root.findChild(QQuickItem, "panelRobotAddSelect")
+        self.panel_robot_add_confirm = self.root.findChild(QQuickItem, "panelRobotAddConfirm")
 
         #### Home Panel's child elements ####
         self.txt_clock = self.panel_home.findChild(QQuickItem, "txtClock")
-        self.btn_rotate_left = self.panel_home.findChild(QQuickItem, "btnRotateLeft")
-        self.btn_rotate_right = self.panel_home.findChild(QQuickItem, "btnRotateRight")
         self.btn_light = self.panel_home.findChild(QQuickItem, "btnLight")
         self.btn_water = self.panel_home.findChild(QQuickItem, "btnWater")
         self.btn_setting = self.panel_home.findChild(QQuickItem, "btnSetting")
@@ -77,16 +79,6 @@ class MainWindow(QQuickView):
         self.text_dur_hr = self.panel_light.findChild(QQuickItem, "txtDuration")
         self.text_dur_hr.setProperty("text", led.timer.duration)
         self.light_switch = self.panel_light.findChild(QQuickItem, "swtLight")
-
-        # Robot Panel's child elements
-        self.btn_add_plant = self.panel_robot.findChild(QQuickItem, "btnAddPlant")
-   
-        ## Set event listeners for home panel's elements
-        motr = GPIOCtrler.get_component(PIN.MOTOR)
-        self.btn_rotate_left.pressed.connect(lambda: motr.rotate(motr.LEFT, motr.PWM_DC_FAST))
-        self.btn_rotate_left.released.connect(motr.stop)
-        self.btn_rotate_right.pressed.connect(lambda: motr.rotate(motr.RIGHT, motr.PWM_DC_FAST))
-        self.btn_rotate_right.released.connect(motr.stop)
 
         ## Set event listeners for light panel's elements
         self.panel_light.lightTimerChanged.connect(led.timer.set_timer)
@@ -129,14 +121,11 @@ class MainWindow(QQuickView):
         self.btn_robot.clicked.connect(lambda: self.__panel_nav(self.panel_robot))
         self.btn_robot.clicked.connect(self.refresh_slots_status)
 
-        self.btn_add_plant.clicked.connect(lambda: self.__panel_nav(self.panel_robot_add))
-        
+        # Robot Plant Add
+        self.panel_robot.addButtonClicked.connect(lambda: self.__panel_nav(self.panel_robot_add))
         self.panel_robot_add.plantSelected.connect(lambda: self.__panel_nav(self.panel_robot_add_select))
-        
-        # (Quit the app, for testing purpose)
-        self.btn_quit = self.root.findChild(QQuickItem, "btnQuit")
-        self.btn_quit.clicked.connect(QCoreApplication.instance().quit)
-
+        self.panel_robot_add_select.slotsSelectedDone.connect(lambda: self.__panel_nav(self.panel_robot_add_confirm))
+        self.panel_robot_add_confirm.addConfirm.connect(self.add_plant_confirm)
 
         # Instantiate temperature sensor thread
         self.tsensor_thread = TemperatureDisplayThread(self.panel_home)
@@ -169,17 +158,32 @@ class MainWindow(QQuickView):
         self.__nav_stack.append(panel)
         panel.setVisible(True)
 
-    def __panel_nav_back(self):
-
-        panel = self.__nav_stack.pop()
-        panel.setVisible(False)
-
+    def __panel_nav_back(self, layers=1):
+        
+        for _ in range(0, layers):
+            if len(self.__nav_stack) > 1:
+                panel = self.__nav_stack.pop()
+                panel.setVisible(False)
+        
         self.__nav_stack[-1].setVisible(True)
 
     def refresh_slots_status(self):
         sjson = slots.getSlotsJson()
         self.panel_robot.setProperty("slots",sjson)
         self.panel_robot_add_select.setProperty("slots", sjson)
+
+    def add_plant_confirm(self, ptype, s):
+        
+        selected_slots = s.toVariant()
+
+        for pane, lst in selected_slots.items():
+            for i in range(0, len(lst)):
+                if lst[i]:
+                    n = "PlantType:" + str(ptype) + " @" + pane + str(i)
+                    slots.SLOTS[pane][i].insert_plant(plants.Plant(name=n))
+        
+        self.refresh_slots_status()
+        self.__panel_nav_back(layers=3)
 
     def display_water_status(self):
         status = GPIOCtrler.get_component(PIN.WATER_LEVEL_SENSOR).has_enough_water()
@@ -208,7 +212,6 @@ class MainWindow(QQuickView):
         print("minute is: " + minute)
 
     def date_confirm(self):
-        print("123")
         self.date = self.root.findChild(QQuickItem, "datePicker")
         year = str(self.date.property("selectedDate").year())
         month = str(self.date.property("selectedDate").month())

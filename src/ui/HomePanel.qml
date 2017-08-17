@@ -7,7 +7,8 @@ Item{
     id:"panelHome"
     objectName:"panelHome"
     // property alias changeColor:helloText.color
-
+    signal rotateMotor(int d)
+    signal stopMotor
     function updateTemperature(c, f){
         txtTempC.text = c;
         txtTempF.text = f;
@@ -33,14 +34,17 @@ Item{
                 objectName:"btnRotateLeft"
                 text:"<-"
                 anchors.verticalCenter: parent.verticalCenter
+                onPressed: panelHome.rotateMotor(2)
+                onReleased: panelHome.stopMotor()
             }
 
             Button{
-
                 id:"btnRotateRight"
                 objectName:"btnRotateRight"
                 text:"->"
                 anchors.verticalCenter: parent.verticalCenter
+                onPressed: panelHome.rotateMotor(1)
+                onReleased: panelHome.stopMotor()
 
             }
 
