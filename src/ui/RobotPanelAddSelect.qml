@@ -20,7 +20,6 @@ Item{
     RoundMouseArea {
         slotNum: 0
         status: slots[currLeft][slotNum].status
-        selected: status == 2
         disabled: !selected && status != -1 
         x: 305
         y: 180
@@ -37,7 +36,6 @@ Item{
     RoundMouseArea {
         slotNum: 1
         status: slots[currLeft][slotNum].status
-        selected: status == 2
         disabled: !selected && status != -1 
         x: 305
         y: 250
@@ -54,7 +52,6 @@ Item{
     RoundMouseArea {
         slotNum: 2
         status: slots[currLeft][slotNum].status
-        selected: status == 2
         disabled: !selected && status != -1 
         x: 305
         y: 320
@@ -73,7 +70,6 @@ Item{
     RoundMouseArea {
         slotNum: 0
         status: slots[currRight][slotNum].status
-        selected: status == 2
         disabled: !selected && status != -1 
         x: 430
         y: 210
@@ -92,7 +88,6 @@ Item{
 
         slotNum: 1
         status: slots[currRight][slotNum].status
-        selected: status == 2
         disabled: !selected && status != -1 
         x: 430
         y: 280
@@ -112,7 +107,7 @@ Item{
         height:150
         
         anchors.right: parent.right
-        text: "confirm"
+        text: "DONE"
     }
 
 }

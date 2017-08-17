@@ -14,7 +14,7 @@ Item {
     property int slotNum : -1
     property int status : -1
     property bool disabled : false
-    property bool selected : false
+    property bool selected : status == 2
 
     property bool containsMouse: {
         var x1 = width / 2;

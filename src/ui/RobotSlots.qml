@@ -6,7 +6,6 @@ Item{
     property var currLeft: 'A'
     property var currRight: 'B'
 
-  
 
     Rectangle{
         width:parent.width

@@ -29,6 +29,15 @@ Item{
         objectName: "btnRemovePlant"
     }
 
+    Button {
+        x: 700
+        y: 200
+        text: "SEE JSON"
+        onClicked:{
+            console.log(JSON.stringify(slots,  null, '\t') )
+        }
+    }
+
 
     // The UI slot base
     RobotSlots{
@@ -50,7 +59,16 @@ Item{
         property var plantName: ""
         property var description: ""
         property var imgSource: "images/placeholder.png"
-
+        property var datePlanted: "dd/mm/yy"
+        property var dateReady: "dd/mm/yy"
+        
+        onClosed: {
+            days = 0
+            plantName = ""
+            description = ""
+            datePlanted = "dd/mm/yy"
+            dateReady = "dd/mm/yy"
+        }
 
         Rectangle {
             x: 20
@@ -96,7 +114,7 @@ Item{
                 height: 40
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "dd/mm/yy"
+                    text: popup.datePlanted
                     font.pointSize: 12; font.bold: false
                 }
             }
@@ -116,7 +134,7 @@ Item{
                 height: 40
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: popup.days + "Days"
+                    text: popup.days + " Days"
                     font.pointSize: 12; font.bold: false
                 }
             }
@@ -137,7 +155,7 @@ Item{
                 Text {
                     id: txtReady
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "dd/mm/yy"
+                    text: popup.dateReady
                     font.pointSize: 12; font.bold: false
                 }
             }
@@ -180,9 +198,16 @@ Item{
         y: 180
         
         onClicked: {
-            var plant = currLeft + (slotNum + 1)
-            popup.plantName = plant
-            popup.description = "Description for " + plant
+            var s = slots[currLeft][slotNum]
+            var plant = s.plant
+
+            if(plant) {
+                popup.plantName = plant.name
+                popup.datePlanted = s.date_planted
+                popup.dateReady = s.date_ready
+                popup.days = s.days
+                popup.description = "Description for " + plant.name
+            }
             popup.open()
         }
     }
@@ -197,9 +222,16 @@ Item{
         y: 250
 
         onClicked: {
-            var plant = currLeft + (slotNum + 1)
-            popup.plantName = plant
-            popup.description = "Description for " + plant
+            var s = slots[currLeft][slotNum]
+            var plant = s.plant
+
+            if(plant) {
+                popup.plantName = plant.name
+                popup.datePlanted = s.date_planted
+                popup.dateReady = s.date_ready
+                popup.days = s.days
+                popup.description = "Description for " + plant.name
+            }
             popup.open()
         }
     }
@@ -214,9 +246,16 @@ Item{
         y: 320
 
         onClicked: {
-            var plant = currLeft + (slotNum + 1)
-            popup.plantName = plant
-            popup.description = "Description for " + plant
+            var s = slots[currLeft][slotNum]
+            var plant = s.plant
+
+            if(plant) {
+                popup.plantName = plant.name
+                popup.datePlanted = s.date_planted
+                popup.dateReady = s.date_ready
+                popup.days = s.days
+                popup.description = "Description for " + plant.name
+            }
             popup.open()
         }
     }
@@ -233,9 +272,16 @@ Item{
         y: 210
 
         onClicked: {
-            var plant = currRight + (slotNum + 1)
-            popup.plantName = plant
-            popup.description = "Description for " + plant
+            var s = slots[currRight][slotNum]
+            var plant = s.plant
+
+            if(plant) {
+                popup.plantName = plant.name
+                popup.datePlanted = s.date_planted
+                popup.dateReady = s.date_ready
+                popup.days = s.days
+                popup.description = "Description for " + plant.name
+            }
             popup.open()
         }
     }
@@ -250,9 +296,17 @@ Item{
         y: 280
 
         onClicked: {
-            var plant = currRight + (slotNum + 1)
-            popup.plantName = plant
-            popup.description = "Description for " + plant
+            var s = slots[currRight][slotNum]
+            var plant = s.plant
+
+            if(plant) {
+                popup.plantName = plant.name
+                popup.datePlanted = s.date_planted
+                popup.dateReady = s.date_ready
+                popup.days = s.days
+                popup.description = "Description for " + plant.name
+            }
+
             popup.open()
         }
     }
