@@ -13,8 +13,6 @@ Rectangle {
     signal navBack
     // color: "lightgray"
 
-    
-
     Row{
         id: "topBar"
         anchors.horizontalCenter: parent.horizontalCenter
@@ -88,10 +86,12 @@ Rectangle {
 
     SetTime{
         id: "timePicker"
+        anchors.fill: parent
     }
 
     SetDate{
         id: "datePicker"
+        anchors.fill: parent
     }
 
     /* end SETTING */
