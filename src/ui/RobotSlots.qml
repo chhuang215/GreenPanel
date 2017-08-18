@@ -6,17 +6,20 @@ Item{
     property var currLeft: 'A'
     property var currRight: 'B'
 
-
-    Rectangle{
-        width:parent.width
-        height:parent.height
-        color: "red"
-        border.width : 5
-        border.color : "black"
-    }
+    property int slotPanelWidth: 155
+    property int slotPanelHeight: 305
+    // Rectangle{
+    //     width:parent.width
+    //     height:parent.height
+    //     color: "red"
+    //     border.width : 5
+    //     border.color : "black"
+    // }
 
     Button {
-        x: 400
+        anchors.left:panelB.left
+        anchors.leftMargin:20
+        // x: 400
         y: 25
         text: ">"
         objectName: "btnForward"
@@ -28,7 +31,9 @@ Item{
     }
 
     Button {
-        x: 300
+        anchors.right:panelA.right
+        anchors.rightMargin:20
+        // x: 300
         y: 25
         text: "<"
         objectName: "btnBackward"
@@ -42,8 +47,8 @@ Item{
 
     Text {
         // id: labelA
-        x: 300
-        y: 80
+        anchors.bottom: panelA.top
+        anchors.horizontalCenter: panelA.horizontalCenter    
         text: currLeft
         font.family: "Ariel"
         font.bold: true
@@ -52,10 +57,11 @@ Item{
 
     Canvas {
         id: panelA
-        x: 245
-        y: 100
+        // anchors.verticalCenter:parent.verticalCenter
+        x: 243
+        y: 130
         // canvas size
-        width: 200; height: 400
+        width: slotPanelWidth; height: slotPanelHeight
         // handler to override for drawing
         onPaint: {
             // get context to draw with
@@ -68,13 +74,13 @@ Item{
             // begin a new path to draw
             ctx.beginPath()
             // top-left start point
-            ctx.moveTo(0,50)
+            ctx.moveTo(ctx.lineWidth, ctx.lineWidth)
             // upper line
-            ctx.lineTo(150,50)
+            ctx.lineTo(width - ctx.lineWidth, ctx.lineWidth)
             // right line
-            ctx.lineTo(150,300)
+            ctx.lineTo(width - ctx.lineWidth, height - ctx.lineWidth)
             // bottom line
-            ctx.lineTo(50,300)
+            ctx.lineTo(ctx.lineWidth + 50, height - ctx.lineWidth)
             // left line through path closing
             ctx.closePath()
             // fill using fill style
@@ -86,8 +92,9 @@ Item{
 
     Text {
         // id: labelB
-        x: 440
-        y: 80
+        anchors.bottom: panelB.top
+        anchors.horizontalCenter: panelB.horizontalCenter    
+
         text: currRight
         font.family: "Ariel"
         font.bold: true
@@ -96,19 +103,23 @@ Item{
 
     Canvas {
         id: panelB
-        x: 390
-        y: 100
-        width: 200; height: 400
+        anchors.left : panelA.right
+   
+        anchors.verticalCenter:panelA.verticalCenter
+        // x: 393
+        // y: 130
+        width: slotPanelWidth; height: slotPanelHeight
         onPaint: {
             var ctx = getContext("2d")
             ctx.lineWidth = 4
             ctx.strokeStyle = "green"
             ctx.fillStyle = "limegreen"
+
             ctx.beginPath()
-            ctx.moveTo(0,50)
-            ctx.lineTo(150,50)
-            ctx.lineTo(100,300)
-            ctx.lineTo(0,300)
+            ctx.moveTo(width - ctx.lineWidth, ctx.lineWidth)
+            ctx.lineTo(ctx.lineWidth, ctx.lineWidth)
+            ctx.lineTo(ctx.lineWidth, height - ctx.lineWidth)
+            ctx.lineTo(width - 50, height - ctx.lineWidth)
             ctx.closePath()
             ctx.fill()
             ctx.stroke()

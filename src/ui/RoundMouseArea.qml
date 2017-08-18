@@ -3,8 +3,8 @@ import QtQuick.Controls 1.2
 
 Item {
     id: roundMouseArea
-    width: 50
-    height: 50
+    width: 60
+    height: 60
 
     property alias mouseX: mouseArea.mouseX
     property alias mouseY: mouseArea.mouseY

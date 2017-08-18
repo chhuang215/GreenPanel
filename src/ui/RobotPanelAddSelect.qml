@@ -19,6 +19,7 @@ Item{
     // The UI slot base
     RobotSlots{
         id: slotsBase
+        anchors.fill: parent
     }
     
     Component{

@@ -43,6 +43,7 @@ Item{
     // The UI slot base
     RobotSlots{
         id: slotsBase
+        anchors.fill: parent
     }
 
     /* Popup */
@@ -54,7 +55,7 @@ Item{
         height: 360
         modal: true
         focus: true
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside	
 
         property int days: 0
         property var plantName: ""
@@ -69,6 +70,33 @@ Item{
             description = ""
             datePlanted = "dd/mm/yy"
             dateReady = "dd/mm/yy"
+        }
+
+        Rectangle{
+            width:30
+            height:30
+            radius: 10
+            color:  maClose.pressed ? "darkgrey" : "grey"
+            anchors.top: parent.top
+            anchors.right: parent.right
+            
+            MouseArea{
+                id: maClose
+                anchors.fill: parent
+
+                onClicked: {
+                    popup.close()
+                }
+            }
+
+            Text{
+                id: txtX
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                font.pointSize: 15; font.bold: true
+                color: maClose.pressed ? "red" : "white"
+                text: "\u274C"
+            }
         }
 
         Rectangle {
