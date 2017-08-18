@@ -7,17 +7,9 @@ Item{
     visible: false
     signal slotsSelectedDone
     property var slots : {}
-    property var slotsSelected: {"A": [0,0,0], "B": [0,0],
-                                "C": [0,0,0], "D": [0,0],
-                                "E": [0,0,0], "F": [0,0],
-                                "G": [0,0,0], "H": [0,0]
-                                }
 
     property var currLeft : slotsBase.currLeft
     property var currRight : slotsBase.currRight
-    onSlotsChanged:{
-        console.log("very test")
-    }
 
     // The UI slot base
     RobotSlots{
