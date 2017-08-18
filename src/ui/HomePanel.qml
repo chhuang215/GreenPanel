@@ -10,8 +10,8 @@ Item{
     signal rotateMotor(int d)
     signal stopMotor
     function updateTemperature(c, f){
-        txtTempC.text = c;
-        txtTempF.text = f;
+        txtTempC.text = c + " \u00B0C";
+        txtTempF.text = f + " \u00B0F";
     }
 
     Column{

@@ -6,6 +6,7 @@ Item{
     property int buttonHeight: 100
     property int buttonWidth: 100
     signal lightTimerChanged(var hr, var dur)
+    signal lightSwitched
     id:"panelLight"
     objectName:"panelLight"
     visible: false
@@ -123,7 +124,8 @@ Item{
             height:130
             text: "Light Switch"
             objectName: "swtLight"            
-            checked: true
+            // checked: true
+            onClicked: lightSwitched()
         }
     }
 }

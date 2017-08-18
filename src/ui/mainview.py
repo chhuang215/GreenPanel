@@ -72,15 +72,14 @@ class MainWindow(QQuickView):
 
         #### Light Panel's child elements ####
         led = GPIOCtrler.get_component(PIN.YELLOW_LED)
-        self.text_light_hr = self.panel_light.findChild(QQuickItem, "txtHour")
-        self.text_light_hr.setProperty("text", led.timer.begin_hour)
-        self.text_dur_hr = self.panel_light.findChild(QQuickItem, "txtDuration")
-        self.text_dur_hr.setProperty("text", led.timer.duration)
-        self.light_switch = self.panel_light.findChild(QQuickItem, "swtLight")
+        text_light_hr = self.panel_light.findChild(QQuickItem, "txtHour")
+        text_light_hr.setProperty("text", led.timer.begin_hour)
+        text_dur_hr = self.panel_light.findChild(QQuickItem, "txtDuration")
+        text_dur_hr.setProperty("text", led.timer.duration)
 
         ## Set event listeners for light panel's elements
         self.panel_light.lightTimerChanged.connect(led.timer.set_timer)
-        self.light_switch.clicked.connect(led.switch)
+        self.panel_light.lightSwitched.connect(led.switch)
 
         # When light button is clicked, nav to light panel
         self.btn_light.clicked.connect(lambda: self.__panel_nav(self.panel_light))
