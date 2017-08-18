@@ -22,7 +22,6 @@ Item{
         // x: 400
         y: 25
         text: ">"
-        objectName: "btnForward"
         onClicked : {
             var a = (currLeft.charCodeAt(0) - 65 + 2) % 8
             currLeft = String.fromCharCode(a + 65)
@@ -36,7 +35,6 @@ Item{
         // x: 300
         y: 25
         text: "<"
-        objectName: "btnBackward"
         onClicked : {
             var a = currLeft.charCodeAt(0) - 65 - 2
             if (a < 0) a = 8 + a 
@@ -76,9 +74,9 @@ Item{
             // top-left start point
             ctx.moveTo(ctx.lineWidth, ctx.lineWidth)
             // upper line
-            ctx.lineTo(width - ctx.lineWidth, ctx.lineWidth)
+            ctx.lineTo(width, ctx.lineWidth)
             // right line
-            ctx.lineTo(width - ctx.lineWidth, height - ctx.lineWidth)
+            ctx.lineTo(width, height - ctx.lineWidth)
             // bottom line
             ctx.lineTo(ctx.lineWidth + 50, height - ctx.lineWidth)
             // left line through path closing
@@ -117,8 +115,8 @@ Item{
 
             ctx.beginPath()
             ctx.moveTo(width - ctx.lineWidth, ctx.lineWidth)
-            ctx.lineTo(ctx.lineWidth, ctx.lineWidth)
-            ctx.lineTo(ctx.lineWidth, height - ctx.lineWidth)
+            ctx.lineTo(0, ctx.lineWidth)
+            ctx.lineTo(0, height - ctx.lineWidth)
             ctx.lineTo(width - 50, height - ctx.lineWidth)
             ctx.closePath()
             ctx.fill()

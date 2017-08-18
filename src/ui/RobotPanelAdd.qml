@@ -6,14 +6,12 @@ Item{
     objectName: "panelRobotAdd"
     visible: false
     signal plantSelected(int type)
-    // Button {
-    //     text: "<-Back"
-    //     objectName: "btnBack"
-    // }
 
     Text{
         id: "txtLabel"
         anchors.horizontalCenter : parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 30
         text: "Select plant"
         font.pointSize: 38
     }
@@ -21,12 +19,13 @@ Item{
     Grid{
         anchors.horizontalCenter : parent.horizontalCenter
         anchors.top : txtLabel.bottom
+        anchors.topMargin: 20
         columns: 4
         spacing: 20
 
         Repeater {
             model: 8
-            Rectangle{
+            Item{
                 width:175
                 height:160
                 Button{

@@ -7,10 +7,8 @@ Item{
     objectName:"panelSetting"
     visible: false
     Column{
-        Button {
-            text: "<-Back"
-            objectName: "btnBack"
-        }
+        anchors.top: parent.top
+        anchors.topMargin: 40
 
         Grid {
             id: grid

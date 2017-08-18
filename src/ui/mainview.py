@@ -45,10 +45,16 @@ class MainWindow(QQuickView):
 
         # Get root
         self.root = self.rootObject()
-        motr = GPIOCtrler.get_component(PIN.MOTOR)                
+
+        # Root child
+        self.btn_setting = self.root.findChild(QQuickItem, "btnSetting")
+
+        # Root signals
+        motr = GPIOCtrler.get_component(PIN.MOTOR)
         self.root.rotateMotor.connect(lambda direction: motr.rotate(direction, motr.PWM_DC_FAST))
         self.root.stopMotor.connect(motr.stop)
         self.root.quit.connect(QCoreApplication.instance().quit)
+        self.root.navBack.connect(self.__panel_nav_back)
 
         # Get panels
         self.panel_home = self.root.findChild(QQuickItem, "panelHome")
@@ -67,8 +73,7 @@ class MainWindow(QQuickView):
         self.txt_clock = self.panel_home.findChild(QQuickItem, "txtClock")
         self.btn_light = self.panel_home.findChild(QQuickItem, "btnLight")
         self.btn_water = self.panel_home.findChild(QQuickItem, "btnWater")
-        self.btn_setting = self.panel_home.findChild(QQuickItem, "btnSetting")
-        self.btn_robot = self.root.findChild(QQuickItem, "btnRobot")
+        self.btn_robot = self.panel_home.findChild(QQuickItem, "btnRobot")
 
         #### Light Panel's child elements ####
         led = GPIOCtrler.get_component(PIN.YELLOW_LED)
@@ -140,13 +145,7 @@ class MainWindow(QQuickView):
         self.water_clock_update_timer.timeout.connect(self.display_update_clock)
         self.water_clock_update_timer.start()
 
-        # Global back buttons
-        all_back_buttons = self.root.findChildren(QQuickItem, "btnBack")
-        for btn in all_back_buttons:
-            btn.clicked.connect(self.__panel_nav_back)
-
         self.__panel_nav(self.panel_home)
-
 
     def __panel_nav(self, panel):
         if self.__nav_stack:
@@ -166,7 +165,7 @@ class MainWindow(QQuickView):
 
     def refresh_slots_status(self):
         sjson = slots.getSlotsJson()
-        self.panel_robot.setProperty("slots",sjson)
+        self.panel_robot.setProperty("slots", sjson)
         self.panel_robot_add_select.setProperty("slots", sjson)
 
     def add_plant_confirm(self, ptype, s):

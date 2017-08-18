@@ -10,11 +10,57 @@ Rectangle {
     signal quit
     signal rotateMotor(int dir)
     signal stopMotor
+    signal navBack
     // color: "lightgray"
 
-    Button {
-        text: "<-Back"
-        objectName: "btnBack"
+    
+
+    Row{
+        id: "topBar"
+        anchors.horizontalCenter: parent.horizontalCenter
+        
+        width:parent.width - 5
+        height: 50
+        anchors.bottomMargin:10
+        Item{
+            width:  Math.max(btnBack.width, btnSetting.width)
+            height: Math.max(btnBack.height, btnSetting.height)
+            anchors.verticalCenter: parent.verticalCenter
+            Button {
+                text: "<-Back"
+                id:"btnBack"
+                objectName: "btnBack"
+                visible: !panelHome.visible
+                onClicked: navBack()
+            }
+            Button{
+                id:"btnSetting"
+                objectName:"btnSetting"
+                text:"Setting"
+                anchors.verticalCenter: parent.verticalCenter
+                visible: panelHome.visible
+            }
+        }
+        Button{
+            id:"btnRotateLeft"
+            objectName:"btnRotateLeft"
+            text:"<-"
+            anchors.verticalCenter: parent.verticalCenter
+            onPressed: rotateMotor(2)
+            onReleased: stopMotor()
+            visible: panelHome.visible || panelRobot.visible || panelRobotAddSelect.visible
+        }
+
+        Button{
+            id:"btnRotateRight"
+            objectName:"btnRotateRight"
+            text:"->"
+            anchors.verticalCenter: parent.verticalCenter
+            onPressed: rotateMotor(1)
+            onReleased: stopMotor()
+            visible: panelHome.visible || panelRobot.visible || panelRobotAddSelect.visible
+
+        }
     }
 
     HomePanel{
@@ -83,6 +129,7 @@ Rectangle {
             panelRobotAddSelect.slotsChanged()
         }
     }
+    
 
     // Grid {
     //     id: grid

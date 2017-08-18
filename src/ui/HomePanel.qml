@@ -10,53 +10,54 @@ Item{
     signal rotateMotor(int d)
     signal stopMotor
     function updateTemperature(c, f){
-        txtTempC.text = c + " \u00B0C";
-        txtTempF.text = f + " \u00B0F";
+        tempDisplay.tempC = c + " \u00B0C";
+        tempDisplay.tempF = f + " \u00B0F";
+    }
+
+    
+    Text{
+        id:"txtClock"
+        objectName:"txtClock"
+        // width: parent.width - btnSetting.width*2 - btnRotateRight.width*4
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        font.pointSize: 38
     }
 
     Column{
+        anchors.centerIn: parent
+        // anchors.topMargin: 10
         width: parent.width
-        
         spacing:40
-        Row{
-            // anchors.horizontalCenter: parent.horizontalCenter
-            width:parent.width
-            height: 50
-            anchors.bottomMargin:10
-            Button{
-                id:"btnSetting"
-                objectName:"btnSetting"
-                text:"Setting"
-                anchors.verticalCenter: parent.verticalCenter
-            }
-            Button{
-                id:"btnRotateLeft"
-                objectName:"btnRotateLeft"
-                text:"<-"
-                anchors.verticalCenter: parent.verticalCenter
-                onPressed: panelHome.rotateMotor(2)
-                onReleased: panelHome.stopMotor()
-            }
+    //     Row{
+    //     //     // anchors.horizontalCenter: parent.horizontalCenter
+    //         width:parent.width
+    //         height: 50
+    //         anchors.bottomMargin:10
+            
+        //     Button{
+        //         id:"btnRotateLeft"
+        //         objectName:"btnRotateLeft"
+        //         text:"<-"
+        //         anchors.verticalCenter: parent.verticalCenter
+        //         onPressed: panelHome.rotateMotor(2)
+        //         onReleased: panelHome.stopMotor()
+        //     }
 
-            Button{
-                id:"btnRotateRight"
-                objectName:"btnRotateRight"
-                text:"->"
-                anchors.verticalCenter: parent.verticalCenter
-                onPressed: panelHome.rotateMotor(1)
-                onReleased: panelHome.stopMotor()
+        //     Button{
+        //         id:"btnRotateRight"
+        //         objectName:"btnRotateRight"
+        //         text:"->"
+        //         anchors.verticalCenter: parent.verticalCenter
+        //         onPressed: panelHome.rotateMotor(1)
+        //         onReleased: panelHome.stopMotor()
 
-            }
+        //     }
+        // }
 
-            Text{
-                objectName:"txtClock"
-                width: parent.width - btnSetting.width*2 - btnRotateRight.width*4
-                // anchors.fill: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                font.pointSize: 38
-            }
-        }
+
         Row {
             x: 119
             spacing: 60
@@ -91,40 +92,26 @@ Item{
 
             }
 
-            Rectangle{
-                objectName: "tempDisplay"
+            Item{
+                id: "tempDisplay"
+                property bool c: true
+                property var tempC: 0
+                property var tempF: 0
                 width: 226
                 height: 130
-                color: "transparent"
                 anchors.verticalCenter: parent.verticalCenter
                 // anchors.horizontalCenter: parent.horizontalCenter
                 Text {
-                    
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-                    id: "txtTempC"
-                    objectName: "txtTempC"
-                    text: "-1"
-
+                    text: parent.c ? parent.tempC : parent.tempF
                     font.pointSize: 40; font.bold: true
-                
-                }
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    id: "txtTempF"
-                    objectName: "txtTempF"
-                    text: "100"
-
-                    font.pointSize: 40; font.bold: true
-                    visible: false
                 }
                 
                 MouseArea { 
                     anchors.fill: parent 
                     onClicked: {
-                        txtTempC.visible = !txtTempC.visible
-                        txtTempF.visible = !txtTempF.visible
+                         parent.c = !parent.c
                     }
                 }
             }
