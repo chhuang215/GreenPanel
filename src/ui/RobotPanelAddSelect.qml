@@ -15,7 +15,10 @@ Item{
 
     property var currLeft : slotsBase.currLeft
     property var currRight : slotsBase.currRight
-    
+    onSlotsChanged:{
+        console.log("very test")
+    }
+
     // The UI slot base
     RobotSlots{
         id: slotsBase
@@ -32,12 +35,11 @@ Item{
             
             onClicked: {
                 if(!disabled){
-                    
                     slots[slotPane][slotNum].status = !selected ? 2 : -1 
-                    slotsSelected[slotPane][slotNum] ^= 1 
+                    // slotsSelected[slotPane][slotNum] ^= 1 
                     
                     panelRobotAddSelect.slotsChanged() 
-                    panelRobotAddSelect.slotsSelectedChanged()
+                    // panelRobotAddSelect.slotsSelectedChanged()
                 }
             }
         }

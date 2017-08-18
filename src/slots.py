@@ -7,6 +7,7 @@ class Slot:
     EMPTY = -1
     OCCUPIED = 0
     READY = 1
+    SELECTED = 2
 
     def __init__(self, status=EMPTY):
         self.status = status

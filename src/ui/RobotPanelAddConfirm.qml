@@ -6,35 +6,116 @@ Item{
     objectName: "panelRobotAddConfirm"
     visible: false
     signal addConfirm(int ptype, var s)
+    signal removeSelection(var slotP, int slotN)
     property int plantType: -1
-    property var slotsSelected: {"A": [0,0,0], "B": [0,0],
-                                "C": [0,0,0], "D": [0,0],
-                                "E": [0,0,0], "F": [0,0],
-                                "G": [0,0,0], "H": [0,0]
-                                }
-    onSlotsSelectedChanged:{
-        console.log("YOYOYOYOYO!")
-    }
-    
-    Grid{
-        id:grid
-        anchors.centerIn: parent
-        columns:3
-        rows: 4
+    property var slots: {}
 
-        Repeater{
-            model: parent.rows
-            Text{
-                text:plantType
-            }
-            Text{
-                text:"stuff"
-            }
-            Button{
-                text:"X"
+    onSlotsChanged:{
+        listModel.clear()
+        // console.log(JSON.stringify(slots))
+        for (var p in slots) {
+            //  console.log(p)
+            for (var i = 0 ; i < slots[p].length; i ++){
+                // console.log(p + " " + i + " ")
+                // console.log(JSON.stringify(slots[p][i]))
+                if(slots[p][i].status == 2){
+                    listModel.append({
+                        "slotP" : p,
+                        "slotN" : i
+                    })
+                }
             }
         }
     }
+
+    ListView {
+        id: listView
+        width:650
+        anchors.top:parent.top
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter:parent.horizontalCenter
+        anchors.topMargin: 90
+        model: listModel
+
+        header: Row {
+            spacing: 1
+            Repeater {
+                id: repeater
+                model: ["Plant Type", "Slot", "Opt"]
+                Label {
+                    width: 200
+                    text: modelData
+                    font.bold: true
+                    font.pixelSize: 20
+                    padding: 10
+                    background: Rectangle { color: "silver" }
+                }
+            }
+        }
+
+        delegate: Row{
+            width: listView.width
+            height: listView.height / 8
+
+            Label {
+                width: 200
+                height: parent.height
+                text: "Plant: " + panelRobotAddConfirm.plantType
+                font.pixelSize: 20
+                padding: 10
+                background: Rectangle { border.color : "black" }
+            }
+    
+            Label {
+                width: 200
+                text: "Location: " + slotP + slotN
+                height: parent.height
+                font.pixelSize: 20
+                padding: 10
+                background: Rectangle { border.color : "black" }
+            }
+                
+            Rectangle{
+                width: 200
+                height: parent.height
+        
+                border.color: "black"
+                Button{
+                    anchors.centerIn: parent
+                    text:"Remove"
+                    onClicked:{
+                        removeSelection(slotP, slotN)
+
+                    }
+                }
+            }
+
+        }
+    }
+
+    ListModel {
+        id: listModel
+
+    }
+    // Grid{
+    //     id:grid
+    //     anchors.centerIn: parent
+    //     columns:3
+    //     rows: 4
+
+    //     Repeater{
+    //         model: parent.rows
+    //         Text{
+    //             text:plantType
+    //         }
+    //         Text{
+    //             text:"stuff"
+    //         }
+    //         Button{
+    //             text:"X"
+    //         }
+    //     }
+    // }
 
     Button{
         // anchors.horizontalCenter: parent.horizontalCenter
@@ -44,7 +125,7 @@ Item{
         anchors.bottomMargin: 15
         text:"CONFIRM"
         onClicked:{
-            parent.addConfirm(plantType, slotsSelected)
+            parent.addConfirm(plantType, slots)
         }
     }
 }

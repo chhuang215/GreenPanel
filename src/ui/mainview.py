@@ -1,5 +1,3 @@
-import os
-import json
 import time
 import datetime
 import controller
@@ -178,7 +176,7 @@ class MainWindow(QQuickView):
 
         for pane, lst in selected_slots.items():
             for i in range(0, len(lst)):
-                if lst[i]:
+                if lst[i]["status"] == slots.Slot.SELECTED:
                     n = "PlantType:" + str(ptype) + " @" + pane + str(i)
                     slots.SLOTS[pane][i].insert_plant(plants.Plant(name=n))
         

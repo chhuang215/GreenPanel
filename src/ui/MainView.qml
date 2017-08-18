@@ -76,7 +76,12 @@ Rectangle {
     RobotPanelAddConfirm{
         id: "panelRobotAddConfirm"
         anchors.fill: parent
-        slotsSelected: panelRobotAddSelect.slotsSelected
+        // slotsSelected: panelRobotAddSelect.slotsSelected
+        slots: panelRobotAddSelect.slots
+        onRemoveSelection:{
+            panelRobotAddSelect.slots[slotP][slotN].status = -1
+            panelRobotAddSelect.slotsChanged()
+        }
     }
 
     // Grid {
