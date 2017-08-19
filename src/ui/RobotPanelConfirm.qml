@@ -2,13 +2,15 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 
 Item{
-    id: "panelRobotAddConfirm"
-    objectName: "panelRobotAddConfirm"
+    id: "panelRobotConfirm"
+    // objectName: "panelRobotAddConfirm"
     visible: false
     signal addConfirm(int ptype, var s)
+    signal removeConfirm(var s)
     signal removeSelection(var slotP, int slotN)
     property int plantType: -1
     property var slots: {}
+    property int mode: 0
 
     onSlotsChanged:{
         listModel.clear()
@@ -17,9 +19,13 @@ Item{
             //  console.log(p)
             for (var i = 0 ; i < slots[p].length; i ++){
                 // console.log(p + " " + i + " ")
-                // console.log(JSON.stringify(slots[p][i]))
+               
                 if(slots[p][i].selected){
+                    // console.log(JSON.stringify(slots[p][i]))
+                    var pn = mode == 0 ? ("Plant: " + plantType) : slots[p][i].plant.name
+                    
                     listModel.append({
+                        "plantName": pn,
                         "slotP" : p,
                         "slotN" : i
                     })
@@ -60,7 +66,7 @@ Item{
             Label {
                 width: 200
                 height: parent.height
-                text: "Plant: " + panelRobotAddConfirm.plantType
+                text: plantName
                 font.pixelSize: 20
                 padding: 10
                 background: Rectangle { border.color : "black" }
@@ -97,25 +103,7 @@ Item{
         id: listModel
 
     }
-    // Grid{
-    //     id:grid
-    //     anchors.centerIn: parent
-    //     columns:3
-    //     rows: 4
 
-    //     Repeater{
-    //         model: parent.rows
-    //         Text{
-    //             text:plantType
-    //         }
-    //         Text{
-    //             text:"stuff"
-    //         }
-    //         Button{
-    //             text:"X"
-    //         }
-    //     }
-    // }
 
     Button{
         // anchors.horizontalCenter: parent.horizontalCenter
@@ -125,7 +113,7 @@ Item{
         anchors.bottomMargin: 15
         text:"CONFIRM"
         onClicked:{
-            parent.addConfirm(plantType, slots)
+            mode == 0 ? parent.addConfirm(plantType, slots) : removeConfirm(slots)
         }
     }
 }

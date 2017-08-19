@@ -6,18 +6,30 @@ Item{
     objectName: "panelRobot"
     visible: false
     signal addButtonClicked
-    property var slots : {"A": [{"status": -1}, {"status": -1}, {"status": -1}], "B": [{"status": -1}, {"status": -1}],
-                        "C": [{"status": -1}, {"status": -1}, {"status": -1}], "D": [{"status": -1}, {"status": -1}],
-                        "E": [{"status": -1}, {"status": -1}, {"status": -1}], "F": [{"status": -1}, {"status": -1}],
-                        "G": [{"status": -1}, {"status": -1}, {"status": -1}], "H": [{"status": -1}, {"status": -1}]
-                        }
+    signal removeButtonClicked
+    property var slots : initSlot()
 
     property var currLeft : slotsBase.currLeft
     property var currRight : slotsBase.currRight
 
-    // onSlotsChanged:{
-    //     console.log(JSON.stringify(slots))
-    // }
+    function initSlot(){
+        var initData = {"status" : -1, "selected" : false}
+        var st = {} 
+        for (var i = 65 ; i <= 72; i ++) {
+            var p = String.fromCharCode(i);
+            var sl = []
+            var sn = 2
+            if (i % 2){
+                sn = 3
+            }
+            for (var j = 0; j < sn; j++){
+                sl.push(initData)
+            }
+            st[p] = sl
+        }
+        // console.log(JSON.stringify(slots,  null, '\t') )
+        return st
+    }
 
     Button {
         x: 700
@@ -32,6 +44,7 @@ Item{
         y: 150
         text: "Remove Plant"
         objectName: "btnRemovePlant"
+        onClicked: parent.removeButtonClicked()
     }
 
     // Button {

@@ -46,7 +46,8 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             onPressed: rotateMotor(2)
             onReleased: stopMotor()
-            visible: panelHome.visible || panelRobot.visible || panelRobotAddSelect.visible
+            onCanceled: stopMotor()
+            visible: panelHome.visible || panelRobot.visible || panelRobotSelect.visible
         }
 
         Button{
@@ -56,7 +57,8 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             onPressed: rotateMotor(1)
             onReleased: stopMotor()
-            visible: panelHome.visible || panelRobot.visible || panelRobotAddSelect.visible
+            onCanceled: stopMotor()
+            visible: panelHome.visible || panelRobot.visible || panelRobotSelect.visible
 
         }
     }
@@ -100,6 +102,12 @@ Rectangle {
     RobotPanel{
         id: "panelRobot"
         anchors.fill: parent
+        onAddButtonClicked: {
+            panelRobotSelect.mode = 0
+        }
+        onRemoveButtonClicked:{
+             panelRobotSelect.mode = 1
+        }
     }
 
     RobotPanelAdd{
@@ -108,26 +116,28 @@ Rectangle {
         
         // param: (int type)
         onPlantSelected:{
-            panelRobotAddConfirm.plantType = type
+            panelRobotConfirm.plantType = type
         }
     }
 
     RobotPanelSelect{
-        id: "panelRobotAddSelect"
-        objectName: "panelRobotAddSelect"
+        id: "panelRobotSelect"
+        objectName: "panelRobotSelect"
         anchors.fill: parent
         // width:parent.width
         slots: panelRobot.slots
+        onModeChanged:{console.log(mode)}
     }
 
-    RobotPanelAddConfirm{
-        id: "panelRobotAddConfirm"
+    RobotPanelConfirm{
+        id: "panelRobotConfirm"
+        objectName: "panelRobotConfirm"
         anchors.fill: parent
-        // slotsSelected: panelRobotAddSelect.slotsSelected
-        slots: panelRobotAddSelect.slots
+        slots: panelRobotSelect.slots
+        mode: panelRobotSelect.mode
         onRemoveSelection:{
-            panelRobotAddSelect.slots[slotP][slotN].selected = false
-            panelRobotAddSelect.slotsChanged()
+            panelRobotSelect.slots[slotP][slotN].selected = false
+            panelRobotSelect.slotsChanged()
         }
     }
     

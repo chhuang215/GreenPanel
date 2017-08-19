@@ -26,7 +26,6 @@ Item{
     Component{
         id: slotHole
         RoundMouseArea {
-            id: rma
             property var slotPane : {}
             status: slots[slotPane][slotNum].status
             selected: slots[slotPane][slotNum].selected
@@ -79,7 +78,7 @@ Item{
     Button{
         id: "btnDoneAddSelect"
         width:150
-        height:150
+        height:100
         
         anchors.right: parent.right
         text: "DONE"
