@@ -2,8 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 
 Item{
-    id: "panelRobotAdd"
-    objectName: "panelRobotAdd"
+    id: "panelRobotSelectPlant"
     visible: false
     signal plantSelected(int type)
 
@@ -34,7 +33,7 @@ Item{
                     width: 150
                     height: 150
                     text: "Plant " + index 
-                    onClicked: panelRobotAdd.plantSelected(index)
+                    onClicked: panelRobotSelectPlant.plantSelected(index)
                 }
                 Text{
                     anchors.horizontalCenter : parent.horizontalCenter

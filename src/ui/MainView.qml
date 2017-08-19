@@ -11,19 +11,46 @@ Rectangle {
     signal rotateMotor(int dir)
     signal stopMotor
     signal navBack
+    signal navTo(var p)
     // color: "lightgray"
+
+    Item{
+        id: clock
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: txtClock.width
+        visible: panelHome.visible
+        Text{
+            id:"txtClock"
+            objectName:"txtClock"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            font.family: "Ariel"
+            font.pointSize: 38
+        }
+    }
 
     Row{
         id: "topBar"
         anchors.horizontalCenter: parent.horizontalCenter
-        
-        width:parent.width - 5
-        height: 50
         anchors.bottomMargin:10
+        anchors.topMargin: 5
+        width:parent.width - 30
+        height: 50
+
+        
+        spacing: 5
+        
+        // Button{
+        //     text: "HUGE TEST NAV"
+        //     onClicked: navTo(panelLight)
+        // }
         Item{
             width:  Math.max(btnBack.width, btnSetting.width)
             height: Math.max(btnBack.height, btnSetting.height)
             anchors.verticalCenter: parent.verticalCenter
+
+
             Button {
                 text: "<-Back"
                 id:"btnBack"
@@ -65,6 +92,7 @@ Rectangle {
 
     HomePanel{
         id: "panelHome"
+        objectName:"panelHome"
         anchors.fill: parent
         onRotateMotor: parent.rotateMotor(d)
         onStopMotor: parent.stopMotor()
@@ -72,11 +100,13 @@ Rectangle {
 
     LightPanel{
         id: "panelLight"
+        objectName:"panelLight"
         anchors.fill: parent
     }
 
     WaterPanel{
         id: "panelWater"
+        objectName: "panelWater"
         anchors.fill: parent
     }
 
@@ -101,6 +131,7 @@ Rectangle {
     /* ROBOT */
     RobotPanel{
         id: "panelRobot"
+        objectName: "panelRobot"
         anchors.fill: parent
         onAddButtonClicked: {
             panelRobotSelect.mode = 0
@@ -110,8 +141,9 @@ Rectangle {
         }
     }
 
-    RobotPanelAdd{
-        id: "panelRobotAdd"
+    RobotPanelSelectPlant{
+        id: "panelRobotSelectPlant"
+        objectName: "panelRobotSelectPlant"
         anchors.fill: parent
         
         // param: (int type)
@@ -124,9 +156,7 @@ Rectangle {
         id: "panelRobotSelect"
         objectName: "panelRobotSelect"
         anchors.fill: parent
-        // width:parent.width
         slots: panelRobot.slots
-        onModeChanged:{console.log(mode)}
     }
 
     RobotPanelConfirm{

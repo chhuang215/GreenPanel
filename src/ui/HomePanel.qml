@@ -5,8 +5,8 @@ import QtQuick.Controls.Material 2.0
 Item{
   
     id:"panelHome"
-    objectName:"panelHome"
     // property alias changeColor:helloText.color
+
     signal rotateMotor(int d)
     signal stopMotor
     function updateTemperature(c, f){
@@ -14,49 +14,11 @@ Item{
         tempDisplay.tempF = f + " \u00B0F";
     }
 
-    
-    Text{
-        id:"txtClock"
-        objectName:"txtClock"
-        // width: parent.width - btnSetting.width*2 - btnRotateRight.width*4
-        anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        font.pointSize: 38
-    }
-
     Column{
         anchors.centerIn: parent
         // anchors.topMargin: 10
         width: parent.width
         spacing:40
-    //     Row{
-    //     //     // anchors.horizontalCenter: parent.horizontalCenter
-    //         width:parent.width
-    //         height: 50
-    //         anchors.bottomMargin:10
-            
-        //     Button{
-        //         id:"btnRotateLeft"
-        //         objectName:"btnRotateLeft"
-        //         text:"<-"
-        //         anchors.verticalCenter: parent.verticalCenter
-        //         onPressed: panelHome.rotateMotor(2)
-        //         onReleased: panelHome.stopMotor()
-        //     }
-
-        //     Button{
-        //         id:"btnRotateRight"
-        //         objectName:"btnRotateRight"
-        //         text:"->"
-        //         anchors.verticalCenter: parent.verticalCenter
-        //         onPressed: panelHome.rotateMotor(1)
-        //         onReleased: panelHome.stopMotor()
-
-        //     }
-        // }
-
 
         Row {
             x: 119

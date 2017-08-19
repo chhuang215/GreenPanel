@@ -47,6 +47,7 @@ class MainWindow(QQuickView):
         self.root = self.rootObject()
 
         # Root child
+        self.txt_clock = self.root.findChild(QQuickItem, "txtClock")
         self.btn_setting = self.root.findChild(QQuickItem, "btnSetting")
 
         # Root signals
@@ -54,7 +55,9 @@ class MainWindow(QQuickView):
         self.root.rotateMotor.connect(lambda direction: motr.rotate(direction, motr.PWM_DC_FAST))
         self.root.stopMotor.connect(motr.stop)
         self.root.quit.connect(QCoreApplication.instance().quit)
+        self.root.navTo.connect(self.__panel_nav)
         self.root.navBack.connect(self.__panel_nav_back)
+        
 
         # Get panels
         self.panel_home = self.root.findChild(QQuickItem, "panelHome")
@@ -65,12 +68,12 @@ class MainWindow(QQuickView):
         self.date_picker = self.root.findChild(QQuickItem, "datePicker")
         
         self.panel_robot = self.root.findChild(QQuickItem, "panelRobot")
-        self.panel_robot_add = self.root.findChild(QQuickItem, "panelRobotAdd")
+        self.panel_robot_select_plant = self.root.findChild(QQuickItem, "panelRobotSelectPlant")
         self.panel_robot_select = self.root.findChild(QQuickItem, "panelRobotSelect")
         self.panel_robot_confirm = self.root.findChild(QQuickItem, "panelRobotConfirm")
 
         #### Home Panel's child elements ####
-        self.txt_clock = self.panel_home.findChild(QQuickItem, "txtClock")
+        
         self.btn_light = self.panel_home.findChild(QQuickItem, "btnLight")
         self.btn_water = self.panel_home.findChild(QQuickItem, "btnWater")
         self.btn_robot = self.panel_home.findChild(QQuickItem, "btnRobot")
@@ -126,9 +129,9 @@ class MainWindow(QQuickView):
         self.panel_robot.visibleChanged.connect(self.refresh_slots_status)
 
         # Robot Plant Add / Remove
-        self.panel_robot.addButtonClicked.connect(lambda: self.__panel_nav(self.panel_robot_add))
+        self.panel_robot.addButtonClicked.connect(lambda: self.__panel_nav(self.panel_robot_select_plant))
         self.panel_robot.removeButtonClicked.connect(lambda: self.__panel_nav(self.panel_robot_select))
-        self.panel_robot_add.plantSelected.connect(lambda: self.__panel_nav(self.panel_robot_select))
+        self.panel_robot_select_plant.plantSelected.connect(lambda: self.__panel_nav(self.panel_robot_select))
         self.panel_robot_select.slotsSelectedDone.connect(lambda: self.__panel_nav(self.panel_robot_confirm))
         self.panel_robot_confirm.addConfirm.connect(self.add_plant_confirm)
         self.panel_robot_confirm.removeConfirm.connect(self.remove_plant_confirm)
@@ -173,7 +176,6 @@ class MainWindow(QQuickView):
     def refresh_slots_status(self):
         sjson = slots.getSlotsJson()
         self.panel_robot.setProperty("slots", sjson)
-        # self.panel_robot_select.setProperty("slots", sjson)
 
     def add_plant_confirm(self, ptype, s):
         
@@ -198,7 +200,6 @@ class MainWindow(QQuickView):
         
         self.__panel_nav_back(layers=2)
 
-        
 
     def display_water_status(self):
         status = GPIOCtrler.get_component(PIN.WATER_LEVEL_SENSOR).has_enough_water()

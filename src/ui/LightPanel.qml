@@ -8,7 +8,6 @@ Item{
     signal lightTimerChanged(var hr, var dur)
     signal lightSwitched
     id:"panelLight"
-    objectName:"panelLight"
     visible: false
     Row{
         anchors.fill:parent

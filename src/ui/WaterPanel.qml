@@ -3,7 +3,8 @@ import QtQuick.Controls 2.0
 
 Item{
     id: "panelWater"
-    objectName: "panelWater"
+    
+    property bool waterGood: false
     visible: false
     
     function changeWaterStatusText(t){

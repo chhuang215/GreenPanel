@@ -3,7 +3,6 @@ import QtQuick.Controls 2.0
 
 Item{
     id: "panelRobot"
-    objectName: "panelRobot"
     visible: false
     signal addButtonClicked
     signal removeButtonClicked
@@ -27,7 +26,6 @@ Item{
             }
             st[p] = sl
         }
-        // console.log(JSON.stringify(slots,  null, '\t') )
         return st
     }
 

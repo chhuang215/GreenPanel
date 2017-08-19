@@ -3,6 +3,7 @@
 import sys
 
 import RPi.GPIO as GPIO
+from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QApplication
 
 from controller import GPIOController, UIController
@@ -56,7 +57,10 @@ def main():
         # start QT UI
         sargv = sys.argv + ['--style', 'material']
         app = QApplication(sargv)
+        font = QFont()
+        font.setFamily("Ariel")
 
+        app.setFont(font)
         # manually detect lid open close event from the start
         lid.open_close()
 
