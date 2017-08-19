@@ -18,7 +18,7 @@ Item{
             for (var i = 0 ; i < slots[p].length; i ++){
                 // console.log(p + " " + i + " ")
                 // console.log(JSON.stringify(slots[p][i]))
-                if(slots[p][i].status == 2){
+                if(slots[p][i].selected){
                     listModel.append({
                         "slotP" : p,
                         "slotN" : i

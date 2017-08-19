@@ -6,6 +6,9 @@ Item{
     property var currLeft: 'A'
     property var currRight: 'B'
 
+    property alias leftPanel: panelA
+    property alias rightPanel: panelB
+
     property int slotPanelWidth: 155
     property int slotPanelHeight: 305
     // Rectangle{
@@ -103,9 +106,9 @@ Item{
         id: panelB
         anchors.left : panelA.right
    
-        anchors.verticalCenter:panelA.verticalCenter
-        // x: 393
-        // y: 130
+        // anchors.verticalCenter:panelA.verticalCenter
+        x: panelA.x + slotPanelWidth
+        y: panelA.y
         width: slotPanelWidth; height: slotPanelHeight
         onPaint: {
             var ctx = getContext("2d")
@@ -122,7 +125,5 @@ Item{
             ctx.fill()
             ctx.stroke()
         }
-    }
-
-  
+    }  
 }

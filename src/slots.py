@@ -7,7 +7,6 @@ class Slot:
     EMPTY = -1
     OCCUPIED = 0
     READY = 1
-    SELECTED = 2
 
     def __init__(self, status=EMPTY):
         self.status = status
@@ -15,6 +14,7 @@ class Slot:
         self.date_planted = None
         self.date_ready = None
         self.days = self.days_passed
+        self.selected = False
 
     def insert_plant(self, plant):
         self.plant = plant

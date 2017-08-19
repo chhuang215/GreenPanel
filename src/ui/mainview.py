@@ -174,7 +174,7 @@ class MainWindow(QQuickView):
 
         for pane, lst in selected_slots.items():
             for i in range(0, len(lst)):
-                if lst[i]["status"] == slots.Slot.SELECTED:
+                if lst[i]["selected"]:
                     n = "PlantType:" + str(ptype) + " @" + pane + str(i)
                     slots.SLOTS[pane][i].insert_plant(plants.Plant(name=n))
         

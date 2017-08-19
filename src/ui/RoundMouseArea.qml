@@ -3,8 +3,8 @@ import QtQuick.Controls 1.2
 
 Item {
     id: roundMouseArea
-    width: 60
-    height: 60
+    width: 64
+    height: 64
 
     property alias mouseX: mouseArea.mouseX
     property alias mouseY: mouseArea.mouseY
@@ -14,7 +14,7 @@ Item {
     property int slotNum : -1
     property int status : -1
     property bool disabled : false
-    property bool selected : status == 2
+    property bool selected : false
 
     property bool containsMouse: {
         var x1 = width / 2;

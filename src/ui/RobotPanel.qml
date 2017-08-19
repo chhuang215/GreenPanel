@@ -15,6 +15,10 @@ Item{
     property var currLeft : slotsBase.currLeft
     property var currRight : slotsBase.currRight
 
+    // onSlotsChanged:{
+    //     console.log(JSON.stringify(slots))
+    // }
+
     Button {
         x: 700
         y: 100

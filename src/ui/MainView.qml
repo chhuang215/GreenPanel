@@ -112,8 +112,9 @@ Rectangle {
         }
     }
 
-    RobotPanelAddSelect{
+    RobotPanelSelect{
         id: "panelRobotAddSelect"
+        objectName: "panelRobotAddSelect"
         anchors.fill: parent
         // width:parent.width
         slots: panelRobot.slots
@@ -125,7 +126,7 @@ Rectangle {
         // slotsSelected: panelRobotAddSelect.slotsSelected
         slots: panelRobotAddSelect.slots
         onRemoveSelection:{
-            panelRobotAddSelect.slots[slotP][slotN].status = -1
+            panelRobotAddSelect.slots[slotP][slotN].selected = false
             panelRobotAddSelect.slotsChanged()
         }
     }
