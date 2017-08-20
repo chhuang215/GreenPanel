@@ -47,7 +47,7 @@ Item{
             sourceComponent: slotHole
             
             onLoaded:{
-                item.x = slotsBase.leftPanel.x + (slotsBase.slotPanelWidth/2) - (item.width/2) + 5 + (6 * index)
+                item.x = slotsBase.leftPanel.x + (slotsBase.slotPanelWidth/2) - (item.width/2) + 23 - (6 * index)
                 item.y = (slots[currLeft].length == 3 ? 170 : 200) + 80 * index
                 item.slotNum = index
                 item.slotPane = Qt.binding(function() { return currLeft} )
@@ -65,7 +65,7 @@ Item{
             // y:(slots[currRight].length == 3 ? 170 : 210) + 80 * index
             onLoaded:{
     
-                item.x = slotsBase.rightPanel.x + (slotsBase.slotPanelWidth/2) - (item.width/2) - 5 - (6 * index)
+                item.x = slotsBase.rightPanel.x + (slotsBase.slotPanelWidth/2) - (item.width/2) - 23 + (6 * index)
                 item.y = (slots[currRight].length == 3 ? 170 : 200) + 80 * index
                 item.slotNum = index
                 item.slotPane = Qt.binding(function() { return currRight} )

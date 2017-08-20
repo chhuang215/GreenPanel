@@ -64,7 +64,7 @@ new_p = plants.Plant()
 SLOTS["A"][1].insert_plant(plants.Plant(name="PlantA1"))
 SLOTS["A"][1].set_date_planted(datetime.date(2017, 1, 1))
 SLOTS["A"][1].check_status()
-SLOTS["A"][2].insert_plant(plants.Plant(name="PlantA2_YO!"))
+SLOTS["A"][2].insert_plant(plants.Lettuce())
 
 def json_seriel(obj):
     if isinstance(obj, (datetime.datetime, datetime.date)):

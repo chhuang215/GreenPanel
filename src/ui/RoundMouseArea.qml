@@ -47,9 +47,14 @@ Item {
 
             if(selected) return "blue"
 
-            if(status == -1) return "white"
-            else if (status == 1) return "green"
-            else if (status == 0) return "red"
+            switch (status){
+                case 0:
+                    return "red"
+                case 1:
+                    return "green"
+                default:
+                    return "white"
+            }
         }
         border.color: "black"
         border.width: 1
