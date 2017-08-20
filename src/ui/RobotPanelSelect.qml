@@ -23,6 +23,7 @@ Item{
         anchors.fill: parent
     }
     
+    /* The Slot Hole Component */
     Component{
         id: slotHole
         RoundMouseArea {
