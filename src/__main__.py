@@ -12,6 +12,7 @@ import water
 import temperature
 import pump
 import motor
+import notifier
 from led import LED
 from lid import Lid
 
@@ -68,6 +69,8 @@ def main():
         ui_view.show()
         ui_view.showFullScreen()
 
+        notifier.NOTIFIER.activate()
+
         ret = app.exec_()
 
         # Teminate
@@ -75,10 +78,12 @@ def main():
 
     finally:
         # cleanup and deactive timers
+        notifier.NOTIFIER.deactivate()
         wpump.timer.deactivate()
         main_light.timer.deactivate()
         motr.timer.deactivate()
         motr.pwm.stop()
+        
         GPIO.cleanup()
 
 if __name__ == '__main__':

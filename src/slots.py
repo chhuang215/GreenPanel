@@ -1,5 +1,8 @@
 import json
 import datetime
+import threading
+import controller
+
 import plants
 
 class Slot:    
@@ -60,8 +63,7 @@ SLOTS = {
     "H": [Slot(), Slot()]
     }
 
-new_p = plants.Plant()
-SLOTS["A"][1].insert_plant(plants.Plant(name="PlantA1"))
+SLOTS["A"][1].insert_plant(plants.Plant(name="PlantA2"))
 SLOTS["A"][1].set_date_planted(datetime.date(2017, 1, 1))
 SLOTS["A"][1].check_status()
 SLOTS["A"][2].insert_plant(plants.Lettuce())
@@ -73,3 +75,20 @@ def json_seriel(obj):
 
 def getSlotsJson():
     return json.loads(json.dumps(SLOTS, default=json_seriel))
+
+def check_slots():
+    msg = ""
+    ready_counter = 0
+    for sp, sr in SLOTS.items():
+        for s in sr:
+            if s.plant:
+                stat = s.check_status()
+                if stat == Slot.READY:
+                    ready_counter += 1
+                    msg += sp + str(sr.index(s)+1) + " "
+                
+    if ready_counter == 1:
+        msg += "IS READY!"
+    elif ready_counter > 1:
+        msg += "ARE READY!"
+    controller.UIController.get_ui().notification_robot(msg)

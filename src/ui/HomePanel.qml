@@ -13,6 +13,9 @@ Item{
         tempDisplay.tempC = c + " \u00B0C";
         tempDisplay.tempF = f + " \u00B0F";
     }
+    function notifyRobot(msg){
+        btnRobot.text = "Robot Guy\n" + msg 
+    }
 
     Column{
         anchors.centerIn: parent
