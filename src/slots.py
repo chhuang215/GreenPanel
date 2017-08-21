@@ -3,6 +3,7 @@ import datetime
 import threading
 import controller
 
+import db
 import plants
 
 class Slot:    
@@ -19,8 +20,9 @@ class Slot:
         self.days = self.days_passed
         self.selected = False
 
-    def insert_plant(self, plant):
-        self.plant = plant
+    def insert_plant(self, plant_id):
+        pname, pdays = plants.get_plant_data(plant_id)
+        self.plant = plants.Plant(plant_id, name=pname, days_harvest=pdays)
         self.set_date_planted(datetime.date.today())
         self.status = Slot.OCCUPIED
 
@@ -62,20 +64,31 @@ SLOTS = {
     "H": [Slot(), Slot()]
     }
 
-SLOTS["A"][1].insert_plant(plants.Plant(name="PlantA2"))
-SLOTS["A"][1].set_date_planted(datetime.date(2017, 1, 1))
-SLOTS["A"][1].check_status()
-SLOTS["A"][2].insert_plant(plants.Lettuce())
 
-def json_seriel(obj):
-    if isinstance(obj, (datetime.datetime, datetime.date)):
-        return obj.isoformat()
-    return obj.__dict__
+def insert_plant(panel, slotnum, plantid):
+    s = SLOTS[panel][slotnum]
+    s.insert_plant(plantid)
+    db.exectute_command("INSERT INTO SLOTS VALUES (?, ?, ?, ?)", panel, slotnum , plantid, s.date_planted)
 
-def getSlotsJson():
-    return json.loads(json.dumps(SLOTS, default=json_seriel))
+def remove_plant(panel, slotnum):
+    s = SLOTS[panel][slotnum]
+    s.remove_plant()
+    db.exectute_command("DELETE FROM SLOTS WHERE PANEL=? AND SLOT=?", panel, slotnum)
+
+def syncdb():
+    data = db.exectute_command("SELECT PANEL, SLOT, PLANT, DATE_PLANTED from SLOTS")
+    # print(data)
+    for aslot in data:
+        panel = aslot[0]
+        slotnum = aslot[1]
+        plantid = aslot[2]
+        date_planted = aslot[3]
+
+        SLOTS[panel][slotnum].insert_plant(plantid)
+        SLOTS[panel][slotnum].set_date_planted(date_planted)
 
 def check_slots():
+    # syncdb()
     msg = ""
     ready_counter = 0
     for sp, sr in SLOTS.items():
@@ -91,3 +104,11 @@ def check_slots():
         msg += "ARE READY!"
     
     return msg
+
+def json_seriel(obj):
+    if isinstance(obj, (datetime.datetime, datetime.date)):
+        return obj.isoformat()
+    return obj.__dict__
+
+def getSlotsJson():
+    return json.loads(json.dumps(SLOTS, default=json_seriel))

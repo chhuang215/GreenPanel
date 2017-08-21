@@ -1,13 +1,15 @@
-
+import db
 
 TYPES = []
 
 class Plant:
-    def __init__(self, name="Plant", days_harvest=21):
+    def __init__(self, plant_id, name="Plant", days_harvest=21):
+        self.plant_id = plant_id
         self.name = name
         self.days_harvest = days_harvest
         self.description = "This is " + name
 
-class Lettuce(Plant):
-    def __init__(self):
-        super().__init__(name="Lettuce", days_harvest=21)
+def get_plant_data(plant_id):
+    data = db.exectute_command("SELECT NAME, DAYS from PLANTS where ID=?", plant_id)[0]
+    
+    return data[0], data[1]

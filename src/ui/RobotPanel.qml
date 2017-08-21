@@ -114,7 +114,7 @@ Item{
             }
         }
 
-        Rectangle {
+        Item {
             x: 20
             y: 10
             height: 20
@@ -143,7 +143,7 @@ Item{
             height: 180
             rows: 3; columns: 2; spacing: 10
 
-            Rectangle {
+            Item {
                 width: 220
                 height: 40
                 Text {
@@ -153,7 +153,7 @@ Item{
                 }
             }
 
-            Rectangle {
+            Item {
                 width: 100
                 height: 40
                 Text {
@@ -163,7 +163,7 @@ Item{
                 }
             }
 
-            Rectangle {
+            Item {
                 width: 220
                 height: 40
                 Text {
@@ -173,7 +173,7 @@ Item{
                 }
             }
 
-            Rectangle {
+            Item {
                 width: 100
                 height: 40
                 Text {
@@ -183,7 +183,7 @@ Item{
                 }
             }
 
-            Rectangle {
+            Item {
                 width: 220
                 height: 40
                 Text {
@@ -193,7 +193,7 @@ Item{
                 }
             }
 
-            Rectangle {
+            Item {
                 width: 100
                 height: 40
                 Text {
@@ -205,7 +205,7 @@ Item{
             }
         }
 
-        Rectangle{
+        Item{
             x: 20
             y: 180
             width: 100
@@ -217,7 +217,7 @@ Item{
             }
         }
 
-        Rectangle{
+        Item{
             x: 20
             y: 210
             width: 600

@@ -179,15 +179,15 @@ class MainWindow(QQuickView):
         QMetaObject.invokeMethod(self.panel_home, "notifyRobot", 
                                  Qt.QueuedConnection, Q_ARG(QVariant, slots.check_slots()))
 
-    def add_plant_confirm(self, ptype, s):
+    def add_plant_confirm(self, plant_id, s):
         
         selected_slots = s.toVariant()
 
         for pane, lst in selected_slots.items():
             for i in range(0, len(lst)):
                 if lst[i]["selected"]:
-                    n = "PlantType:" + str(ptype) + " @" + pane + str(i)
-                    slots.SLOTS[pane][i].insert_plant(plants.Plant(name=n))
+                    # n = "PlantType:" + str(ptype) + " @" + pane + str(i)
+                    slots.insert_plant(pane, i, plant_id)
 
         self.__panel_nav_back(layers=3)
     
@@ -198,7 +198,7 @@ class MainWindow(QQuickView):
         for pane, lst in selected_slots.items():
             for i in range(0, len(lst)):
                 if lst[i]["selected"]:
-                    slots.SLOTS[pane][i].remove_plant()
+                    slots.remove_plant(pane, i)
         
         self.__panel_nav_back(layers=2)
 

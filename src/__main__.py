@@ -6,6 +6,8 @@ import RPi.GPIO as GPIO
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QApplication
 
+import db
+
 from controller import GPIOController, UIController
 
 import water
@@ -15,6 +17,9 @@ import motor
 import notifier
 from led import LED
 from lid import Lid
+import slots
+
+db.init()
 
 PIN = GPIOController.PIN
 
@@ -64,6 +69,8 @@ def main():
         app.setFont(font)
         # manually detect lid open close event from the start
         lid.open_close()
+
+        slots.syncdb()
 
         ui_view = UIController.get_ui()
         ui_view.show()
