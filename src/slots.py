@@ -35,8 +35,7 @@ class Slot:
         self.date_ready = self.date_planted + datetime.timedelta(days=self.plant.days_harvest)
 
     def check_status(self):
-        
-        if (self.days_passed >= self.plant.days_harvest):
+        if self.plant is not None and self.days_passed >= self.plant.days_harvest:
             self.status = Slot.READY
 
         return self.status
@@ -81,14 +80,14 @@ def check_slots():
     ready_counter = 0
     for sp, sr in SLOTS.items():
         for s in sr:
-            if s.plant:
-                stat = s.check_status()
-                if stat == Slot.READY:
-                    ready_counter += 1
-                    msg += sp + str(sr.index(s)+1) + " "
+            stat = s.check_status()
+            if stat == Slot.READY:
+                ready_counter += 1
+                msg += sp + str(sr.index(s)+1) + " "
                 
     if ready_counter == 1:
         msg += "IS READY!"
     elif ready_counter > 1:
         msg += "ARE READY!"
-    controller.UIController.get_ui().notification_robot(msg)
+    
+    return msg

@@ -14,7 +14,7 @@ class LED():
     ON = 1
     OFF = 0
 
-    def __init__(self, gpio_pin, status, timer=False):
+    def __init__(self, gpio_pin, status, enable_timer=False):
  
         self.status = status
         self.pin = gpio_pin
@@ -22,7 +22,7 @@ class LED():
         self.resume()
         self.timer = None
 
-        if timer:
+        if enable_timer:
             self.timer = LightTimer(self)
             self.timer.activate()
 

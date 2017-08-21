@@ -41,5 +41,6 @@ class Lid:
             self.status = Lid.OPENED
             blue_led.turn_on_temporary()
             yellow_led.turn_off_temporary()
-            motr.stop()
             motr.timer.deactivate()
+            motr.stop()
+          

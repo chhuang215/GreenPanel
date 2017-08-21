@@ -1,7 +1,10 @@
 import sys
 import datetime
 import unittest
-from unittest.mock import patch, MagicMock, Mock
+from unittest.mock import patch, MagicMock
+import pump
+import water
+import controller
 
 try:
     if(not isinstance(sys.modules["RPi"], MagicMock)):
@@ -17,9 +20,6 @@ except KeyError:
     mock_RPi_GPIO = MagicMock()
     sys.modules["RPi.GPIO"] = mock_RPi_GPIO
 
-import pump
-import water
-import controller
 import RPi.GPIO
 
 class TestWaterPump(unittest.TestCase):
@@ -31,7 +31,7 @@ class TestWaterPump(unittest.TestCase):
         wsensor = mock_water_sensor(gc.PIN.WATER_LEVEL_SENSOR)
         gc.GPIO_COMPONENTS[str(gc.PIN.WATER_LEVEL_SENSOR)] = wsensor
 
-        self.pump = pump.WaterPump(gc.PIN.WATER_PUMP, timer=False)
+        self.pump = pump.WaterPump(gc.PIN.WATER_PUMP, enable_timer=False)
 
     def test_pump_on(self):
         self.pump.turn_on()

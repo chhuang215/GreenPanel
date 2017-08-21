@@ -14,6 +14,11 @@ Rectangle {
     signal navTo(var p)
     // color: "lightgray"
 
+    Rectangle{
+        anchors.fill: parent
+        border.width:1
+    }
+
     Item{
         id: clock
         anchors.top: parent.top
@@ -114,6 +119,19 @@ Rectangle {
     SettingPanel{
         id: "panelSetting"
         anchors.fill: parent
+
+        Button{
+        anchors.bottom:parent.bottom
+        anchors.right:parent.right
+        anchors.rightMargin: 10
+        anchors.bottomMargin: 10
+        text:"quit"
+        objectName:"btnQuit"
+        onClicked:{
+            main.quit()
+        }
+    }
+
     }
 
     SetTime{
@@ -184,17 +202,4 @@ Rectangle {
     //     Cell { cellColor: "steelblue"; onClicked: panelHome.changeColor = cellColor }
     //     Cell { cellColor: "black"; onClicked: panelHome.changeColor = cellColor }
     // }
-
-    Button{
-        anchors.bottom:parent.bottom
-        anchors.right:parent.right
-        anchors.rightMargin: 10
-        anchors.bottomMargin: 10
-        text:"quit"
-        objectName:"btnQuit"
-        onClicked:{
-            parent.quit()
-        }
-    }
-
 }

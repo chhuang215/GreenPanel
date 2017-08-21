@@ -7,13 +7,13 @@ import controller
 GPIOController = controller.GPIOController
 
 class WaterPump:
-    def __init__(self, gpio_pin, timer=True):
+    def __init__(self, gpio_pin, enable_timer=True):
  
         self.pin = gpio_pin
 
         self.timer = PumpTimer(self)
 
-        if timer: 
+        if enable_timer: 
             self.timer.activate()
     
     def turn_on(self):
@@ -76,5 +76,6 @@ class PumpTimer():
 
     def deactivate(self):
         print("PUMP TIMER DEACTIVATED", self.pump.pin, datetime.datetime.now())
-        self._timer.cancel()
+        if self._timer is not None:
+            self._timer.cancel()
         self.is_activated = False

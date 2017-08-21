@@ -41,7 +41,7 @@ class TestLid(unittest.TestCase):
         self.led_blue = hwc.get_component(pins.BLUE_LED)
         RPi.GPIO.output.assert_called_with(self.led_blue.pin, RPi.GPIO.LOW)
 
-        hwc.add_component(motor.Motor, pins.MOTOR, timer=False)
+        hwc.add_component(motor.Motor, pins.MOTOR, enable_timer=False)
         # RPi.GPIO.output.assert_has_calls([call(self.led_yellow.pin, RPi.GPIO.HIGH), call(self.led_blue.pin, RPi.GPIO.LOW)])
 
     def test_trigger_open_lid(self):

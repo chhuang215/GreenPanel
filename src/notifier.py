@@ -18,7 +18,8 @@ class Notifier:
         if not self.is_activated:
             return
 
-        slots.check_slots()
+        for fun in self.lst_functions:
+            fun()
 
         now = datetime.datetime.now()
 
@@ -43,7 +44,9 @@ class Notifier:
 
     def deactivate(self):
         print("NOTIFIER DEACTIVATED", datetime.datetime.now())
-        self._timer.cancel()
+        if self._timer is not None:
+            self._timer.cancel()
         self.is_activated = False
 
 NOTIFIER = Notifier()
+

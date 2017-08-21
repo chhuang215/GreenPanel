@@ -176,11 +176,8 @@ class MainWindow(QQuickView):
     def refresh_slots_status(self):
         sjson = slots.getSlotsJson()
         self.panel_robot.setProperty("slots", sjson)
-        slots.check_slots()
-        
-    def notification_robot(self, msg):
         QMetaObject.invokeMethod(self.panel_home, "notifyRobot", 
-                                 Qt.QueuedConnection, Q_ARG(QVariant, msg))
+                                 Qt.QueuedConnection, Q_ARG(QVariant, slots.check_slots()))
 
     def add_plant_confirm(self, ptype, s):
         

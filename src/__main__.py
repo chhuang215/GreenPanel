@@ -36,7 +36,7 @@ def main():
     lid = GPIOController.add_component(Lid, PIN.PUSH_BUTTON)
 
     # Lights
-    main_light = GPIOController.add_component(LED, PIN.YELLOW_LED, LED.ON, timer=True)
+    main_light = GPIOController.add_component(LED, PIN.YELLOW_LED, LED.ON, enable_timer=True)
     GPIOController.add_component(LED, PIN.BLUE_LED, LED.OFF)
 
     # Temperature Sensor
@@ -69,6 +69,7 @@ def main():
         ui_view.show()
         ui_view.showFullScreen()
 
+        notifier.NOTIFIER.lst_functions.append(ui_view.refresh_slots_status)
         notifier.NOTIFIER.activate()
 
         ret = app.exec_()
@@ -85,6 +86,7 @@ def main():
         motr.pwm.stop()
         
         GPIO.cleanup()
+
 
 if __name__ == '__main__':
     main()
