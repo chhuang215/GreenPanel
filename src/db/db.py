@@ -2,20 +2,19 @@
 
 import sqlite3
 import datetime
-import shelve
 import pickle
 
 def set_setting(newsetting):
     '''newsetting: {'light_hour', 'light_duration', 'temperature_unit', 'language'})'''
     settings = get_setting()
     settings.update(newsetting)
-    with open('setting.pickle', 'wb') as setting_file:
+    with open('db/setting.pickle', 'wb') as setting_file:
         pickle.dump(settings, setting_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 def get_setting():
     '''returns: {'light_hour' int, 'light_duration' int, 'temperature_unit' str, 'language' str}'''
     # settings = None
-    with open('setting.pickle', 'rb') as setting_file:
+    with open('db/setting.pickle', 'rb') as setting_file:
         settings = pickle.load(setting_file)
 
     return settings
@@ -39,7 +38,7 @@ def init():
     #     "language": "en"
     # }
 
-    # with open('setting.pickle', 'wb') as setting_file:
+    # with open('db/setting.pickle', 'wb') as setting_file:
     #     pickle.dump(init_setting, setting_file, protocol=pickle.HIGHEST_PROTOCOL)
 
     # with open('setting.pickle', 'rb') as setting_file:
