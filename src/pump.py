@@ -11,10 +11,10 @@ class WaterPump:
  
         self.pin = gpio_pin
 
-        self.timer = PumpTimer(self)
+        self.timer = None
 
         if enable_timer: 
-            self.timer.activate()
+            self.timer = PumpTimer(self)
     
     def turn_on(self):
         GPIO.output(self.pin, GPIO.HIGH)

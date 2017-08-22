@@ -6,8 +6,8 @@ import db
 import slots
 import plants
 
-from PyQt5.QtCore import (Qt, QUrl, QThread, QCoreApplication, QVariant, QJsonValue,
-                          QTimer, QMetaObject, Q_ARG, pyqtSignal)
+from PyQt5.QtCore import (Qt, QUrl, QCoreApplication, QVariant, QJsonValue,
+                          QTimer, QMetaObject, Q_ARG)
 # from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQuick import QQuickView, QQuickItem
 
@@ -15,26 +15,6 @@ from PyQt5.QtQml import QQmlApplicationEngine, QQmlProperty, QQmlComponent
 
 GPIOCtrler = controller.GPIOController
 PIN = GPIOCtrler.PIN
-
-class TemperatureDisplayThread(QThread):
-    SIG_CHK_SHOW_TEMP = pyqtSignal(object, object)
-    def __init__(self, panel_home):
-        super().__init__()
-        self.panel_home = panel_home
-        
-        self.SIG_CHK_SHOW_TEMP.connect(self.display_temp)
-        # a reference to the get_temperture method from TemperatureSensor Modal
-        self.get_temperature = GPIOCtrler.get_component(PIN.TEMPERATURE_SENSOR).get_temperature
-
-    def display_temp(self, tc, tf):
-        QMetaObject.invokeMethod(self.panel_home, "updateTemperature", 
-                                 Qt.QueuedConnection, Q_ARG(QVariant, tc), Q_ARG(QVariant, tf))
-
-    def run(self):
-        while True:
-            tc, tf = self.get_temperature()
-            self.SIG_CHK_SHOW_TEMP.emit(tc, tf)
-            time.sleep(5)
 
 class MainWindow(QQuickView):
     def __init__(self):
@@ -146,11 +126,9 @@ class MainWindow(QQuickView):
         #refresh if change plant to add
         self.panel_robot_confirm.plantDataChanged.connect(self.refresh_slots_status) 
 
-        # Instantiate temperature sensor thread
-        self.tsensor_thread = TemperatureDisplayThread(self.panel_home)
-
-        # start temperature thread
-        self.tsensor_thread.start()
+        # listen to temperature update
+        tsensor = GPIOCtrler.get_component(PIN.TEMPERATURE_SENSOR)
+        tsensor.UPDATED.connect(self.display_update_temperature)
 
         # Display clock right away
         self.display_update_clock()
@@ -222,6 +200,16 @@ class MainWindow(QQuickView):
         
     def display_update_clock(self):
         self.txt_clock.setProperty("text", datetime.datetime.now().strftime('%I:%M %p'))
+
+    def display_update_temperature(self, tc, tf):
+        status = 0
+        if tc > 40:
+            status = 1
+        elif tc < 1:
+            status = -1
+        QMetaObject.invokeMethod(self.panel_home, "updateTemperature", Qt.QueuedConnection,
+                                 Q_ARG(QVariant, tc), Q_ARG(QVariant, tf), Q_ARG(QVariant, status))
+
 
     def settings_confirm(self):
         self.language = self.root.findChild(QQuickItem, "chosenItemText")

@@ -14,15 +14,15 @@ Item{
 
     property alias temperatureUnit : tempDisplay.unit
 
-    function updateTemperature(c, f){
+    function updateTemperature(c, f, s){
         tempDisplay.tempC = c + " \u00B0C";
         tempDisplay.tempF = f + " \u00B0F";
+        tempDisplay.status = s;
+
     }
     function notifyRobot(msg){
         robotNotification.text = msg 
     }
-
-   
 
     Column{
         anchors.horizontalCenter: parent.horizontalCenter
@@ -69,6 +69,7 @@ Item{
                 property var unit: 'c'
                 property var tempC: 0
                 property var tempF: 0
+                property var status: 0
                 property bool c: unit == "c"
 
                 width: 226
@@ -91,6 +92,22 @@ Item{
                 }
                 onUnitChanged:{
                     panelHome.unitChanged(unit)
+                }
+
+                Rectangle{
+                    width: txtTempNotification.width + 10
+                    height: txtTempNotification.height + 10
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    color: tempDisplay.status == 1 ? 'red' : tempDisplay.status == -1 ? 'lightblue' : 'green'
+                    visible: tempDisplay.status != 0
+                    Text{
+                        id: txtTempNotification
+                        anchors.centerIn: parent
+                        text: tempDisplay.status == 1 ? 'HOT' : tempDisplay.status == -1 ? 'COLD' : ''
+                        // color: "white"
+                        font.pointSize:12
+                    }
                 }
             }
 

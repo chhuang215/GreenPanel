@@ -48,7 +48,7 @@ def main():
     GPIOController.add_component(LED, PIN.BLUE_LED, LED.OFF)
 
     # Temperature Sensor
-    GPIOController.add_component(temperature.TemperatureSensor, PIN.TEMPERATURE_SENSOR)
+    tsensor = GPIOController.add_component(temperature.TemperatureSensor, PIN.TEMPERATURE_SENSOR)
 
     # Water Sensor
     GPIOController.add_component(water.WaterSensor, PIN.WATER_LEVEL_SENSOR)
@@ -79,11 +79,15 @@ def main():
         ui_view.show()
         ui_view.showFullScreen()
 
+        tsensor.start()
+
         notifier.NOTIFIER.lst_functions.append(slots.check_slots)
         notifier.NOTIFIER.lst_functions.append(ui_view.refresh_slots_status)
         notifier.NOTIFIER.activate()
 
         main_light.timer.activate()
+        wpump.timer.activate()
+        motr.timer.activate()
 
         ret = app.exec_()
 

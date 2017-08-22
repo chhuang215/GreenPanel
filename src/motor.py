@@ -23,7 +23,6 @@ class Motor:
         self.pwm.start(0)
         if enable_timer:
             self.timer.enabled = True
-            self.timer.activate()
 
     def manual_rotate(self, direction):
         lid = GPIOController.get_component(GPIOController.PIN.PUSH_BUTTON)
