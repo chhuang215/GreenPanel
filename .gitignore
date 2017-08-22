@@ -4,5 +4,6 @@ __pycache__/
 *.save
 *.qmlc
 *.pyc
-
+*.db
+*.pickle
 src/RPi
