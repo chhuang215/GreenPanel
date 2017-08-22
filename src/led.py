@@ -5,6 +5,7 @@ LED modal
 import threading
 import datetime
 import RPi.GPIO as GPIO
+import db
 from controller import GPIOController
 '''
     LED class
@@ -14,17 +15,13 @@ class LED():
     ON = 1
     OFF = 0
 
-    def __init__(self, gpio_pin, status, enable_timer=False):
+    def __init__(self, gpio_pin, status):
  
         self.status = status
         self.pin = gpio_pin
 
         self.resume()
         self.timer = None
-
-        if enable_timer:
-            self.timer = LightTimer(self)
-            self.timer.activate()
 
     def switch(self):
         '''Switch light off if on, else switch it on'''
@@ -91,6 +88,8 @@ class LightTimer():
         self.end_hour = (begin + duration) % 24
         self.duration = duration
 
+        db.set_setting({"light_hour" : begin, "light_duration": duration})
+
         if self.is_activated:
             self.deactivate()
             self.activate()
@@ -137,5 +136,6 @@ class LightTimer():
 
     def deactivate(self):
         print("LED TIMER DEACTIVATED", self.led.pin, datetime.datetime.now())
-        self._timer.cancel()
+        if self._timer is not None:
+            self._timer.cancel()
         self.is_activated = False

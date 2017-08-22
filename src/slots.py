@@ -69,17 +69,17 @@ STATUS_MSG = ""
 def insert_plant(panel, slotnum, plantid):
     s = SLOTS[panel][slotnum]
     s.insert_plant(plantid)
-    db.exectute_command("INSERT INTO SLOTS VALUES (?, ?, ?, ?)", panel, slotnum , plantid, s.date_planted)
+    db.execute_command("INSERT INTO SLOTS VALUES (?, ?, ?, ?)", panel, slotnum , plantid, s.date_planted)
     check_slots()
 
 def remove_plant(panel, slotnum):
     s = SLOTS[panel][slotnum]
     s.remove_plant()
-    db.exectute_command("DELETE FROM SLOTS WHERE PANEL=? AND SLOT=?", panel, slotnum)
+    db.execute_command("DELETE FROM SLOTS WHERE PANEL=? AND SLOT=?", panel, slotnum)
     check_slots()
 
 def syncdb():
-    data = db.exectute_command("SELECT PANEL, SLOT, PLANT, DATE_PLANTED from SLOTS")
+    data = db.execute_command("SELECT PANEL, SLOT, PLANT, DATE_PLANTED from SLOTS")
     # print(data)
     for aslot in data:
         panel = aslot[0]

@@ -15,7 +15,7 @@ import temperature
 import pump
 import motor
 import notifier
-from led import LED
+from led import LED, LightTimer
 from lid import Lid
 import slots
 
@@ -37,11 +37,14 @@ def main():
 
     ### initialize software modals of connected gpio hardwares ###
 
+    settings = db.get_setting() #user settings
+
     # Lid
     lid = GPIOController.add_component(Lid, PIN.PUSH_BUTTON)
 
     # Lights
-    main_light = GPIOController.add_component(LED, PIN.YELLOW_LED, LED.ON, enable_timer=True)
+    main_light = GPIOController.add_component(LED, PIN.YELLOW_LED, LED.ON)
+    main_light.timer = LightTimer(main_light, settings["light_hour"], settings["light_duration"])
     GPIOController.add_component(LED, PIN.BLUE_LED, LED.OFF)
 
     # Temperature Sensor
@@ -79,6 +82,8 @@ def main():
         notifier.NOTIFIER.lst_functions.append(slots.check_slots)
         notifier.NOTIFIER.lst_functions.append(ui_view.refresh_slots_status)
         notifier.NOTIFIER.activate()
+
+        main_light.timer.activate()
 
         ret = app.exec_()
 

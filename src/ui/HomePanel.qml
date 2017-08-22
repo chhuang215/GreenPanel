@@ -9,6 +9,10 @@ Item{
 
     signal rotateMotor(int d)
     signal stopMotor
+    signal unitChanged(var unit)
+
+    property alias temperatureUnit : tempDisplay.unit
+
     function updateTemperature(c, f){
         tempDisplay.tempC = c + " \u00B0C";
         tempDisplay.tempF = f + " \u00B0F";
@@ -61,9 +65,12 @@ Item{
 
             Item{
                 id: "tempDisplay"
-                property bool c: true
+                
+                property var unit: 'c'
                 property var tempC: 0
                 property var tempF: 0
+                property bool c: unit == "c"
+
                 width: 226
                 height: 130
                 anchors.verticalCenter: parent.verticalCenter
@@ -78,8 +85,12 @@ Item{
                 MouseArea { 
                     anchors.fill: parent 
                     onClicked: {
-                         parent.c = !parent.c
+                         parent.unit = parent.unit == 'c' ? 'f' : 'c'
+                         parent.c ? temperatureUnitChanged("c") : temperatureUnitChanged("f")
                     }
+                }
+                onUnitChanged:{
+                    panelHome.unitChanged(unit)
                 }
             }
 

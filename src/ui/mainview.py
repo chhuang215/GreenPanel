@@ -2,6 +2,7 @@ import time
 import datetime
 import controller
 
+import db
 import slots
 import plants
 
@@ -57,10 +58,10 @@ class MainWindow(QQuickView):
         self.root.quit.connect(QCoreApplication.instance().quit)
         self.root.navTo.connect(self.__panel_nav)
         self.root.navBack.connect(self.__panel_nav_back)
-        
 
         # Get panels
         self.panel_home = self.root.findChild(QQuickItem, "panelHome")
+        self.panel_home.setProperty("temperatureUnit", db.get_setting()["temperature_unit"])
         self.panel_light = self.root.findChild(QQuickItem, "panelLight")
         self.panel_water = self.root.findChild(QQuickItem, "panelWater")
         self.panel_setting = self.root.findChild(QQuickItem, "panelSetting")
@@ -79,6 +80,9 @@ class MainWindow(QQuickView):
         self.btn_light = self.panel_home.findChild(QQuickItem, "btnLight")
         self.btn_water = self.panel_home.findChild(QQuickItem, "btnWater")
         self.btn_robot = self.panel_home.findChild(QQuickItem, "btnRobot")
+
+        # Home Panel signals
+        self.panel_home.unitChanged.connect(lambda unit: db.set_setting({"temperature_unit": unit}))
 
         #### Light Panel's child elements ####
         led = GPIOCtrler.get_component(PIN.YELLOW_LED)

@@ -4,10 +4,9 @@ import threading
 import RPi.GPIO as GPIO
 from controller import GPIOController
 
-
-
 class Motor:
-
+    '''Motor class'''
+    
     PWM_FREQ = 40
     PWM_DC = 28
     PWM_DC_FAST = 50

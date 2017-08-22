@@ -20,23 +20,8 @@ Rectangle {
         border.width:1
     }
 
-    Item{
-        id: clock
-        anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: txtClock.width
-        visible: panelHome.visible
-        Text{
-            id:"txtClock"
-            objectName:"txtClock"
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            font.family: "Ariel"
-            font.pointSize: 38
-        }
-    }
 
-    Row{
+    Item{
         id: "topBar"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottomMargin:10
@@ -45,7 +30,7 @@ Rectangle {
         height: 50
 
         
-        spacing: 5
+        
         
         // Button{
         //     text: "HUGE TEST NAV"
@@ -72,28 +57,50 @@ Rectangle {
                 visible: panelHome.visible
             }
         }
-        Button{
-            id:"btnRotateLeft"
-            objectName:"btnRotateLeft"
-            text:"<-"
-            anchors.verticalCenter: parent.verticalCenter
-            onPressed: rotateMotor(2)
-            onReleased: stopMotor()
-            onCanceled: stopMotor()
-            visible: panelHome.visible || panelRobot.visible || panelRobotSelect.visible
+
+        Item{
+            id: clock
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: txtClock.width
+            visible: panelHome.visible
+            Text{
+                id:"txtClock"
+                objectName:"txtClock"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                font.family: "Ariel"
+                font.pointSize: 38
+            }
         }
 
-        Button{
-            id:"btnRotateRight"
-            objectName:"btnRotateRight"
-            text:"->"
-            anchors.verticalCenter: parent.verticalCenter
-            onPressed: rotateMotor(1)
-            onReleased: stopMotor()
-            onCanceled: stopMotor()
-            visible: panelHome.visible || panelRobot.visible || panelRobotSelect.visible
+        Row{
+            anchors.right: parent.right
+            spacing: 5
+            Button{
+                id:"btnRotateLeft"
+                objectName:"btnRotateLeft"
+                text:"<-"
+                anchors.verticalCenter: parent.verticalCenter
+                onPressed: rotateMotor(2)
+                onReleased: stopMotor()
+                onCanceled: stopMotor()
+                visible: panelHome.visible || panelRobot.visible || panelRobotSelect.visible
+            }
 
+            Button{
+                id:"btnRotateRight"
+                objectName:"btnRotateRight"
+                text:"->"
+                anchors.verticalCenter: parent.verticalCenter
+                onPressed: rotateMotor(1)
+                onReleased: stopMotor()
+                onCanceled: stopMotor()
+                visible: panelHome.visible || panelRobot.visible || panelRobotSelect.visible
+
+            }
         }
+        
     }
 
     HomePanel{

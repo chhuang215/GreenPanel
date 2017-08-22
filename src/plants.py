@@ -10,9 +10,9 @@ class Plant:
         self.description = "This is " + name
 
 def get_plant_data(plant_id):
-    data = db.exectute_command("SELECT NAME, DAYS from PLANTS where ID=?", plant_id)[0]    
+    data = db.execute_command("SELECT NAME, DAYS from PLANTS where ID=?", plant_id)[0]    
     return data[0], data[1]
 
 def get_all_plants():
-    data = db.exectute_command("SELECT * from PLANTS")
+    data = db.execute_command("SELECT * from PLANTS")
     return data

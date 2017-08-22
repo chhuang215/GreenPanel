@@ -1,7 +1,27 @@
+'''db.py'''
+
 import sqlite3
 import datetime
+import shelve
+import pickle
 
-def exectute_command(cmd, *args):
+def set_setting(newsetting):
+    '''newsetting: {'light_hour', 'light_duration', 'temperature_unit', 'language'})'''
+    settings = get_setting()
+    settings.update(newsetting)
+    with open('setting.pickle', 'wb') as setting_file:
+        pickle.dump(settings, setting_file, protocol=pickle.HIGHEST_PROTOCOL)
+
+def get_setting():
+    '''returns: {'light_hour' int, 'light_duration' int, 'temperature_unit' str, 'language' str}'''
+    # settings = None
+    with open('setting.pickle', 'rb') as setting_file:
+        settings = pickle.load(setting_file)
+
+    return settings
+
+def execute_command(cmd, *args):
+    '''execute SQLite command'''
     conn = sqlite3.connect('db/main.db', detect_types=sqlite3.PARSE_DECLTYPES)
     cur = conn.cursor()
     cur.execute(cmd, (args))
@@ -11,6 +31,21 @@ def exectute_command(cmd, *args):
     return data
 
 def init():
+
+    # init_setting = {
+    #     "light_hour" : 7,
+    #     "light_duration": 17,
+    #     "temperature_unit": "c",
+    #     "language": "en"
+    # }
+
+    # with open('setting.pickle', 'wb') as setting_file:
+    #     pickle.dump(init_setting, setting_file, protocol=pickle.HIGHEST_PROTOCOL)
+
+    # with open('setting.pickle', 'rb') as setting_file:
+    #     settings = pickle.load(setting_file)
+    #     print(settings)
+
     conn = sqlite3.connect('db/main.db', detect_types=sqlite3.PARSE_DECLTYPES)
     cur = conn.cursor()
     cur.execute('''CREATE TABLE if not exists PLANTS
@@ -21,9 +56,19 @@ def init():
     cur.execute('''CREATE TABLE if not exists SLOTS
          (PANEL CHAR(1) NOT NULL,
          SLOT INT NOT NULL,
-         PLANT INT ,
+         PLANT INT NOT NULL,
          DATE_PLANTED date,
+         FOREIGN KEY(PLANT) REFERENCES PLANTS(ID) ,
          PRIMARY KEY ( PANEL, SLOT));''')
+
+    # cur.execute('''CREATE TABLE if not exists SETTING
+    #      (PANEL CHAR(1) NOT NULL,
+    #      SLOT INT NOT NULL,
+    #      PLANT INT NOT NULL,
+    #      DATE_PLANTED date,
+    #      FOREIGN KEY(PLANT) REFERENCES PLANTS(ID) ,
+    #      PRIMARY KEY ( PANEL, SLOT));''')
+
     # cur.execute("DELETE FROM SLOTS")
     # cur.execute("DELETE FROM PLANTS")
 
@@ -36,7 +81,7 @@ def init():
 
     # cur.execute("INSERT INTO SLOTS ( PANEL,SLOT, PLANT, DATE_PLANTED) VALUES (?, ?, ?, ?)", ('A', 1 , 1, datetime.date(2017, 1, 1)))
     # cur.execute("INSERT INTO SLOTS (PANEL,SLOT, PLANT,  DATE_PLANTED) VALUES (?, ?, ?, ?)", ('A', 2 , 1, datetime.date.today()))
-    # conn.commit()
+    conn.commit()
 
     d = cur.execute("SELECT * from PLANTS")
     print(d)
