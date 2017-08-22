@@ -4,7 +4,9 @@ import QtQuick.Controls 2.0
 Item{
     id: "panelRobotSelectPlant"
     visible: false
-    signal plantSelected(int type)
+    signal plantSelected(var plantData)
+
+    property var plantList: {}
 
     Text{
         id: "txtLabel"
@@ -23,7 +25,7 @@ Item{
         spacing: 20
 
         Repeater {
-            model: 8
+            model: plantList
             Item{
                 width:175
                 height:160
@@ -32,13 +34,13 @@ Item{
                     anchors.horizontalCenter : parent.horizontalCenter
                     width: 150
                     height: 150
-                    text: "Plant " + index 
-                    onClicked: panelRobotSelectPlant.plantSelected(index)
+                    text: modelData[1]
+                    onClicked: panelRobotSelectPlant.plantSelected(modelData)
                 }
                 Text{
                     anchors.horizontalCenter : parent.horizontalCenter
                     anchors.bottom : parent.bottom
-                    text: "Label: Plant " + index 
+                    text: modelData[1] + " id:" + modelData[0] 
                     font.pointSize: 16
                 }
             }

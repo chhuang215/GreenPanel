@@ -24,12 +24,20 @@ def init():
          PLANT INT ,
          DATE_PLANTED date,
          PRIMARY KEY ( PANEL, SLOT));''')
+    # cur.execute("DELETE FROM SLOTS")
+    # cur.execute("DELETE FROM PLANTS")
+
+    # cur.execute("UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='PLANTS';")
 
     # cur.execute("INSERT INTO PLANTS (NAME, DAYS) VALUES ('LETTUCE', 21)")
-    # cur.execute("INSERT INTO PLANTS (NAME, DAYS) VALUES ('ANOTHER LETTUCE', 21)")
+    # cur.execute("INSERT INTO PLANTS (NAME, DAYS) VALUES ('PlantA', 21)")
+    # cur.execute("INSERT INTO PLANTS (NAME, DAYS) VALUES ('PlantB', 21)")
+    
+
     # cur.execute("INSERT INTO SLOTS ( PANEL,SLOT, PLANT, DATE_PLANTED) VALUES (?, ?, ?, ?)", ('A', 1 , 1, datetime.date(2017, 1, 1)))
     # cur.execute("INSERT INTO SLOTS (PANEL,SLOT, PLANT,  DATE_PLANTED) VALUES (?, ?, ?, ?)", ('A', 2 , 1, datetime.date.today()))
     # conn.commit()
+
     d = cur.execute("SELECT * from PLANTS")
     print(d)
     for row in d:

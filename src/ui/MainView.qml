@@ -13,6 +13,7 @@ Rectangle {
     signal navBack
     signal navTo(var p)
     // color: "lightgray"
+    property bool busySlots: panelRobotSelect.visible || panelRobotSelectPlant.visible || panelRobotConfirm.visible
 
     Rectangle{
         anchors.fill: parent
@@ -164,9 +165,9 @@ Rectangle {
         objectName: "panelRobotSelectPlant"
         anchors.fill: parent
         
-        // param: (int type)
+        // param: (var plantData) <obj>
         onPlantSelected:{
-            panelRobotConfirm.plantType = type
+            panelRobotConfirm.plantData = plantData
         }
     }
 

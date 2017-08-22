@@ -98,7 +98,7 @@ class LightTimer():
     def check_timer(self):
 
         curr_dt = datetime.datetime.now()
-        print("!Check_Timer %s" % self.led.__class__.__name__, "pin:%d" % self.led.pin, curr_dt)
+        print("!LED Check_Timer %s" % self.led.__class__.__name__, "pin:%d" % self.led.pin, curr_dt)
         hour = curr_dt.hour
         if (
                 (self.begin_hour < self.end_hour and
@@ -123,7 +123,7 @@ class LightTimer():
         next_check_time = now.replace(minute=0, second=0, microsecond=0)
         next_check_time += datetime.timedelta(hours=1)
         interval = next_check_time - now
-        print("NEXT check time", next_check_time)
+        print("LED NEXT check time", next_check_time)
         self._timer = threading.Timer(interval.total_seconds(), self.__check_timer_loop)
         self._timer.start()
 

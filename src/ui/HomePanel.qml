@@ -18,10 +18,12 @@ Item{
     }
 
     Column{
-        anchors.centerIn: parent
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin:60
         // anchors.topMargin: 10
         width: parent.width
-        spacing:40
+        spacing:50
 
         Row {
             x: 119

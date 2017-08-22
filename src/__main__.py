@@ -76,6 +76,7 @@ def main():
         ui_view.show()
         ui_view.showFullScreen()
 
+        notifier.NOTIFIER.lst_functions.append(slots.check_slots)
         notifier.NOTIFIER.lst_functions.append(ui_view.refresh_slots_status)
         notifier.NOTIFIER.activate()
 

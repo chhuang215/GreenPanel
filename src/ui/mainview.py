@@ -10,7 +10,7 @@ from PyQt5.QtCore import (Qt, QUrl, QThread, QCoreApplication, QVariant, QJsonVa
 # from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQuick import QQuickView, QQuickItem
 
-from PyQt5.QtQml import QQmlApplicationEngine, QQmlProperty, QQmlComponent 
+from PyQt5.QtQml import QQmlApplicationEngine, QQmlProperty, QQmlComponent
 
 GPIOCtrler = controller.GPIOController
 PIN = GPIOCtrler.PIN
@@ -52,8 +52,8 @@ class MainWindow(QQuickView):
 
         # Root signals
         motr = GPIOCtrler.get_component(PIN.MOTOR)
-        self.root.rotateMotor.connect(lambda direction: motr.rotate(direction, motr.PWM_DC_FAST))
-        self.root.stopMotor.connect(motr.stop)
+        self.root.rotateMotor.connect(motr.manual_rotate)
+        self.root.stopMotor.connect(motr.manual_stop)
         self.root.quit.connect(QCoreApplication.instance().quit)
         self.root.navTo.connect(self.__panel_nav)
         self.root.navBack.connect(self.__panel_nav_back)
@@ -69,6 +69,8 @@ class MainWindow(QQuickView):
         
         self.panel_robot = self.root.findChild(QQuickItem, "panelRobot")
         self.panel_robot_select_plant = self.root.findChild(QQuickItem, "panelRobotSelectPlant")
+        self.panel_robot_select_plant.setProperty('plantList', [list(p) for p in plants.get_all_plants()])
+
         self.panel_robot_select = self.root.findChild(QQuickItem, "panelRobotSelect")
         self.panel_robot_confirm = self.root.findChild(QQuickItem, "panelRobotConfirm")
 
@@ -136,7 +138,7 @@ class MainWindow(QQuickView):
         self.panel_robot_confirm.addConfirm.connect(self.add_plant_confirm)
         self.panel_robot_confirm.removeConfirm.connect(self.remove_plant_confirm)
         #refresh if change plant to add
-        self.panel_robot_confirm.plantTypeChanged.connect(self.refresh_slots_status) 
+        self.panel_robot_confirm.plantDataChanged.connect(self.refresh_slots_status) 
 
         # Instantiate temperature sensor thread
         self.tsensor_thread = TemperatureDisplayThread(self.panel_home)
@@ -174,10 +176,11 @@ class MainWindow(QQuickView):
         self.__nav_stack[-1].setVisible(True)
 
     def refresh_slots_status(self):
-        sjson = slots.getSlotsJson()
-        self.panel_robot.setProperty("slots", sjson)
+        if self.root.property("busySlots") is False:
+            sjson = slots.getSlotsJson()
+            self.panel_robot.setProperty("slots", sjson)
         QMetaObject.invokeMethod(self.panel_home, "notifyRobot", 
-                                 Qt.QueuedConnection, Q_ARG(QVariant, slots.check_slots()))
+                                 Qt.QueuedConnection, Q_ARG(QVariant, slots.STATUS_MSG))
 
     def add_plant_confirm(self, plant_id, s):
         

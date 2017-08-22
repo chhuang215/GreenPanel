@@ -8,7 +8,7 @@ Item{
     signal addConfirm(int ptype, var s)
     signal removeConfirm(var s)
     signal removeSelection(var slotP, int slotN)
-    property int plantType: -1
+    property var plantData: {}
     property var slots: {}
     property int mode: 0
 
@@ -19,17 +19,22 @@ Item{
             //  console.log(p)
             for (var i = 0 ; i < slots[p].length; i ++){
                 // console.log(p + " " + i + " ")
-               
-                if(slots[p][i].selected){
-                    // console.log(JSON.stringify(slots[p][i]))
-                    var pn = mode == 0 ? ("Plant: " + plantType) : slots[p][i].plant.name
-                    
-                    listModel.append({
-                        "plantName": pn,
-                        "slotP" : p,
-                        "slotN" : i
-                    })
+                if(!slots[p][i].selected) continue
+                // console.log(JSON.stringify(slots[p][i]))
+                var pn = ""
+                if (mode == 0){
+                    pn =  plantData[1]+ "(id:"+plantData[0]+")" 
                 }
+                else{
+                    pn =  slots[p][i].plant.name + "(id:" +slots[p][i].plant.plant_id+")" 
+                }
+                
+                listModel.append({
+                    "plantName": pn,
+                    "slotP" : p,
+                    "slotN" : i
+                })
+                
             }
         }
     }
@@ -113,7 +118,7 @@ Item{
         anchors.bottomMargin: 15
         text:"CONFIRM"
         onClicked:{
-            mode == 0 ? parent.addConfirm(plantType, slots) : removeConfirm(slots)
+            mode == 0 ? parent.addConfirm(plantData[0], slots) : removeConfirm(slots)
         }
     }
 }

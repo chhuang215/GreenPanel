@@ -64,16 +64,19 @@ SLOTS = {
     "H": [Slot(), Slot()]
     }
 
+STATUS_MSG = ""
 
 def insert_plant(panel, slotnum, plantid):
     s = SLOTS[panel][slotnum]
     s.insert_plant(plantid)
     db.exectute_command("INSERT INTO SLOTS VALUES (?, ?, ?, ?)", panel, slotnum , plantid, s.date_planted)
+    check_slots()
 
 def remove_plant(panel, slotnum):
     s = SLOTS[panel][slotnum]
     s.remove_plant()
     db.exectute_command("DELETE FROM SLOTS WHERE PANEL=? AND SLOT=?", panel, slotnum)
+    check_slots()
 
 def syncdb():
     data = db.exectute_command("SELECT PANEL, SLOT, PLANT, DATE_PLANTED from SLOTS")
@@ -89,21 +92,20 @@ def syncdb():
 
 def check_slots():
     # syncdb()
-    msg = ""
+    global STATUS_MSG
+    STATUS_MSG = ""
     ready_counter = 0
     for sp, sr in SLOTS.items():
         for s in sr:
             stat = s.check_status()
             if stat == Slot.READY:
                 ready_counter += 1
-                msg += sp + str(sr.index(s)+1) + " "
+                STATUS_MSG += sp + str(sr.index(s)+1) + " "
                 
     if ready_counter == 1:
-        msg += "IS READY!"
+        STATUS_MSG += "IS READY!"
     elif ready_counter > 1:
-        msg += "ARE READY!"
-    
-    return msg
+        STATUS_MSG += "ARE READY!"
 
 def json_seriel(obj):
     if isinstance(obj, (datetime.datetime, datetime.date)):

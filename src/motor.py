@@ -2,7 +2,7 @@ import datetime
 import threading
 
 import RPi.GPIO as GPIO
-import controller
+from controller import GPIOController
 
 
 
@@ -25,6 +25,16 @@ class Motor:
         if enable_timer:
             self.timer.enabled = True
             self.timer.activate()
+
+    def manual_rotate(self, direction):
+        lid = GPIOController.get_component(GPIOController.PIN.PUSH_BUTTON)
+        if lid.status == lid.OPENED:
+            self.rotate(direction=direction, dutycycle=Motor.PWM_DC_FAST)
+
+    def manual_stop(self):
+        lid = GPIOController.get_component(GPIOController.PIN.PUSH_BUTTON)
+        if lid.status == lid.OPENED:
+            self.stop()
 
     def rotate(self, direction=RIGHT, dutycycle=PWM_DC):
         self.pwm.ChangeDutyCycle(dutycycle)
