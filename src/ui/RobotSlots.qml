@@ -15,6 +15,14 @@ Item{
 
     property int slotPanelWidth: 155
     property int slotPanelHeight: 305
+
+    property int capsuleRadius: 50
+    property int capsuleHeight: 160
+
+    property int aX: 98
+    property int aY: 75
+    property int aDisplacement: 10
+
     // Rectangle{
     //     width:parent.width
     //     height:parent.height
@@ -76,7 +84,18 @@ Item{
             ctx.lineWidth = 4
             ctx.strokeStyle = "green"
             // setup the fill
-            ctx.fillStyle = "limegreen"
+            ctx.fillStyle = "light green"
+            
+            ctx.beginPath()
+            ctx.moveTo(aX - capsuleRadius, aY)
+            ctx.arc(aX, aY, capsuleRadius, Math.PI, 0)
+            ctx.lineTo(aX + capsuleRadius - aDisplacement, aY + capsuleHeight)
+            ctx.arc(aX - aDisplacement, aY + capsuleHeight, capsuleRadius, 0, Math.PI)
+            ctx.lineTo(aX - capsuleRadius, aY)
+            ctx.closePath()
+            ctx.fill()
+            ctx.stroke()
+            
             // begin a new path to draw
             ctx.beginPath()
             // top-left start point
@@ -90,7 +109,7 @@ Item{
             // left line through path closing
             ctx.closePath()
             // fill using fill style
-            ctx.fill()
+            //ctx.fill()
             // stroke using line width and stroke style
             ctx.stroke()
         }
