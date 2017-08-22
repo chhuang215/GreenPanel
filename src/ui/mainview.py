@@ -83,6 +83,8 @@ class MainWindow(QQuickView):
 
         # Home Panel signals
         self.panel_home.unitChanged.connect(lambda unit: db.set_setting({"temperature_unit": unit}))
+        self.panel_home.clearNotify.connect(slots.clear_notified)
+        self.panel_home.clearNotify.connect(self.refresh_slots_status)
 
         #### Light Panel's child elements ####
         led = GPIOCtrler.get_component(PIN.YELLOW_LED)
@@ -187,7 +189,6 @@ class MainWindow(QQuickView):
                                  Qt.QueuedConnection, Q_ARG(QVariant, slots.STATUS_MSG))
 
     def add_plant_confirm(self, plant_id, s):
-        
         selected_slots = s.toVariant()
 
         for pane, lst in selected_slots.items():

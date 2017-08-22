@@ -19,6 +19,7 @@ class Slot:
         self.date_ready = None
         self.days = self.days_passed
         self.selected = False
+        self.notify_confirmed = False
 
     def insert_plant(self, plant_id):
         pname, pdays = plants.get_plant_data(plant_id)
@@ -30,6 +31,7 @@ class Slot:
         self.plant = None
         self.date_planted = None
         self.date_ready = None
+        self.notify_confirmed = False
         self.status = Slot.EMPTY
 
     def set_date_planted(self, date):
@@ -63,6 +65,8 @@ SLOTS = {
     "G": [Slot(), Slot(), Slot()],
     "H": [Slot(), Slot()]
     }
+
+READY_NOT_NOTIFY_CONFIRMED_SLOTS = []
 
 STATUS_MSG = ""
 
@@ -98,14 +102,22 @@ def check_slots():
     for sp, sr in SLOTS.items():
         for s in sr:
             stat = s.check_status()
-            if stat == Slot.READY:
+            if stat == Slot.READY and not s.notify_confirmed:
                 ready_counter += 1
                 STATUS_MSG += sp + str(sr.index(s)+1) + " "
+                READY_NOT_NOTIFY_CONFIRMED_SLOTS.append(s)
                 
     if ready_counter == 1:
         STATUS_MSG += "IS READY!"
     elif ready_counter > 1:
         STATUS_MSG += "ARE READY!"
+
+def clear_notified():
+    for s in READY_NOT_NOTIFY_CONFIRMED_SLOTS:
+        s.notify_confirmed = True
+
+    READY_NOT_NOTIFY_CONFIRMED_SLOTS.clear()
+    check_slots()
 
 def json_seriel(obj):
     if isinstance(obj, (datetime.datetime, datetime.date)):

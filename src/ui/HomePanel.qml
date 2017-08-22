@@ -8,8 +8,9 @@ Item{
     // property alias changeColor:helloText.color
 
     signal rotateMotor(int d)
-    signal stopMotor
+    signal stopMotor()
     signal unitChanged(var unit)
+    signal clearNotify()
 
     property alias temperatureUnit : tempDisplay.unit
 
@@ -18,8 +19,10 @@ Item{
         tempDisplay.tempF = f + " \u00B0F";
     }
     function notifyRobot(msg){
-        btnRobot.text = "Robot Guy\n" + msg 
+        robotNotification.text = msg 
     }
+
+   
 
     Column{
         anchors.horizontalCenter: parent.horizontalCenter
@@ -37,17 +40,14 @@ Item{
                 width:226
                 height:130
                 text: "water"
-                objectName: "btnWater"             
+                objectName: "btnWater"
             }
 
             Button {
                 width:226
                 height:130
                 text: "nutrient"
-                // objectName: "swtLight"            
-                
             }
-
         }
 
         Row {
@@ -100,10 +100,62 @@ Item{
                 id:"btnRobot"
                 objectName:"btnRobot"
                 text: qsTr("Robot Guy")    
-            }
 
+                Item{
+                    id: robotNotification
+                    property alias text: txt.text
+                    width: txt.width + 20
+                    height: txt.height + 10
+                    anchors.top: btnRobot.top
+                    anchors.right: btnRobot.right
+                    visible : opacity > 0.0
+                    opacity : txt.text.length > 0 ? 1 : 0
+
+                    states: [
+                        State { when: txt.text.length > 0;
+                            PropertyChanges {   target: robotNotification; opacity: 1.0    }
+                        },
+                        State { when: txt.text.length <= 0;
+                            PropertyChanges {   target: robotNotification; opacity: 0.0    }
+                        }
+                    ]
+                    transitions: Transition {
+                        NumberAnimation {property:'opacity'; duration: 200}
+                    }
+
+                    Rectangle{
+                        anchors.fill: parent
+                        color: "darkgreen"
+                        Text{
+                            id: txt
+                            anchors.centerIn: parent
+                            text: ""
+                            color: "white"
+                            font.pointSize:12
+                        }
+
+                        Rectangle{
+                            anchors.verticalCenter: parent.top
+                            anchors.horizontalCenter: parent.right
+                            width: 18; height: 18; radius: 10
+                            color: "darkred"
+                            Text{
+                                anchors.centerIn: parent
+                                text: "\u274C"
+                                color: "white"
+                                font.pointSize:7.5
+                            }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked:{
+                                    panelHome.clearNotify()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
-
 }
 
