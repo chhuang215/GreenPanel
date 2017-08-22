@@ -7,14 +7,16 @@ Item{
         id: datePicker
         objectName:"datePicker"
         visible: false
+        width: 400
+        height: 400
         weekNumbersVisible: true
         anchors.centerIn: parent
         
         Button {
                 id:"btnDateConfirm"
                 objectName:"btnDateConfirm"
-                x: 250
-                y: 200
+                x: 450
+                y: 350
                 width:100
                 height:50
                 text: "Confirm"
