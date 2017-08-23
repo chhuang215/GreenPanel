@@ -67,7 +67,9 @@ class Signaler(QObject):
 
     TEMPERATURE_UPDATE = pyqtSignal(float, float)
     SLOTS_REFRESH = pyqtSignal(object, object)
+    NUTRIENT_REFRESH = pyqtSignal(int)
     LIGHT_SWITCH = pyqtSignal(bool)
+    
     # def __init__(self):
     #     super().__init__()
 

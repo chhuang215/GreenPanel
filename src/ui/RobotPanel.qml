@@ -108,9 +108,9 @@ Item{
                 id: txtX
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                font.pointSize: 15; font.bold: true
+                font.pointSize: 17; font.bold: true
                 color: maClose.pressed ? "red" : "white"
-                text: "\u274C"
+                text: "\u00D7"
             }
         }
 

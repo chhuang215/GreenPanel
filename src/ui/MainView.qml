@@ -109,6 +109,7 @@ Rectangle {
         anchors.fill: parent
         onRotateMotor: parent.rotateMotor(d)
         onStopMotor: parent.stopMotor()
+        nutrientBtnNoti: panelNutrient.days
     }
 
     LightPanel{
@@ -120,6 +121,12 @@ Rectangle {
     WaterPanel{
         id: "panelWater"
         objectName: "panelWater"
+        anchors.fill: parent
+    }
+
+    NutrientPanel{
+        id: "panelNutrient"
+        objectName: "panelNutrient"
         anchors.fill: parent
     }
 

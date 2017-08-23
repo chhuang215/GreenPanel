@@ -17,7 +17,7 @@ GPIOCtrler = controller.GPIOController
 PIN = GPIOCtrler.PIN
 
 class MainWindow(QQuickView):
-    
+
     def __init__(self):
         super().__init__()
  
@@ -45,6 +45,7 @@ class MainWindow(QQuickView):
         self.panel_home.setProperty("temperatureUnit", db.get_setting()["temperature_unit"])
         self.panel_light = self.root.findChild(QQuickItem, "panelLight")
         self.panel_water = self.root.findChild(QQuickItem, "panelWater")
+        self.panel_nutrient = self.root.findChild(QQuickItem, "panelNutrient")
         self.panel_setting = self.root.findChild(QQuickItem, "panelSetting")
         self.time_picker = self.root.findChild(QQuickItem, "timePicker")
         self.date_picker = self.root.findChild(QQuickItem, "datePicker")
@@ -60,11 +61,13 @@ class MainWindow(QQuickView):
         
         self.btn_light = self.panel_home.findChild(QQuickItem, "btnLight")
         self.btn_water = self.panel_home.findChild(QQuickItem, "btnWater")
+        self.btn_nutrient = self.panel_home.findChild(QQuickItem, "btnNutrient")
         self.btn_robot = self.panel_home.findChild(QQuickItem, "btnRobot")
 
         # Home Panel signals
-        self.panel_home.unitChanged.connect(lambda unit: db.set_setting({"temperature_unit": unit}))
+        self.panel_home.unitChanged.connect(lambda unit: db.store_setting({"temperature_unit": unit}))
         self.panel_home.clearNotify.connect(slots.clear_notified)
+        self.btn_nutrient.clicked.connect(lambda: self.__panel_nav(self.panel_nutrient))
 
         #### Light Panel's child elements ####
         led = GPIOCtrler.get_component(PIN.YELLOW_LED)
@@ -76,6 +79,9 @@ class MainWindow(QQuickView):
         ## Set event listeners for light panel's elements
         self.panel_light.lightTimerChanged.connect(led.timer.set_timer)
         self.panel_light.lightSwitched.connect(led.switch)
+
+        ### Nutrient Panel signals
+        self.panel_nutrient.nutrientAdded.connect(self.renew_nutrient_days)
 
         # When light button is clicked, nav to light panel
         self.btn_light.clicked.connect(lambda: self.__panel_nav(self.panel_light))
@@ -129,7 +135,9 @@ class MainWindow(QQuickView):
 
         # listen to updates
         controller.SIGNALER.SLOTS_REFRESH.connect(self.refresh_slots_status)
+        controller.SIGNALER.NUTRIENT_REFRESH.connect(self.refresh_nutrient_days)
         controller.SIGNALER.TEMPERATURE_UPDATE.connect(self.display_update_temperature)
+        
 
         # Display clock right away
         self.display_update_clock()
@@ -159,6 +167,14 @@ class MainWindow(QQuickView):
                 panel.setVisible(False)
         
         self.__nav_stack[-1].setVisible(True)
+
+    def renew_nutrient_days(self):
+        today = datetime.date.today()
+        db.store_slots_info({"nutrient_last_added":today})
+        slots.check_nutrient()
+
+    def refresh_nutrient_days(self, days):
+        self.panel_nutrient.setProperty("days", days)
 
     def refresh_slots_status(self, sjson, status_msg):
         if self.root.property("busySlots") is False:

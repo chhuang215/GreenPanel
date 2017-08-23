@@ -92,7 +92,7 @@ class LightTimer():
         self.end_hour = (begin + duration) % 24
         self.duration = duration
 
-        db.set_setting({"light_hour" : begin, "light_duration": duration})
+        db.store_setting({"light_hour" : begin, "light_duration": duration})
 
         if self.is_activated:
             self.deactivate()

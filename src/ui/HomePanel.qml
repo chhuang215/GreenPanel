@@ -12,6 +12,7 @@ Item{
     signal unitChanged(var unit)
     signal clearNotify()
 
+    property alias nutrientBtnNoti : txtNutrientNoti.text
     property alias temperatureUnit : tempDisplay.unit
 
     function updateTemperature(c, f, s){
@@ -44,9 +45,26 @@ Item{
             }
 
             Button {
+                objectName: "btnNutrient"
                 width:226
                 height:130
                 text: "nutrient"
+
+                Rectangle{
+                    width: 36
+                    height: 36
+                    radius: 10
+                    color: txtNutrientNoti.text == 0 ? "red" : "green"
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    Text{
+                        id: txtNutrientNoti
+                        anchors.centerIn: parent
+                        text: "0"
+                        font.pointSize: 16
+                        color: "white"
+                    }
+                }
             }
         }
 
@@ -125,6 +143,8 @@ Item{
                     height: txt.height + 10
                     anchors.top: btnRobot.top
                     anchors.right: btnRobot.right
+                    anchors.topMargin: -10
+                    anchors.rightMargin: -5
                     visible : opacity > 0.0
                     opacity : txt.text.length > 0 ? 1 : 0
 
@@ -150,17 +170,18 @@ Item{
                             color: "white"
                             font.pointSize:12
                         }
-
-                        Rectangle{
+                        MouseArea{anchors.fill:parent}
+                        Rectangle{ // X button
                             anchors.verticalCenter: parent.top
                             anchors.horizontalCenter: parent.right
-                            width: 18; height: 18; radius: 10
+                            width: 18.5; height: 18.5; radius: 10
                             color: "darkred"
                             Text{
                                 anchors.centerIn: parent
-                                text: "\u274C"
+                                text: "\u00D7"
                                 color: "white"
-                                font.pointSize:7.5
+                                font.pointSize:14
+                                font.bold: true
                             }
                             MouseArea{
                                 anchors.fill: parent

@@ -4,20 +4,32 @@ import sqlite3
 import datetime
 import pickle
 
-def set_setting(newsetting):
+def store_slots_info(newinfo):
+    info = get_slots_info()
+    info.update(newinfo)
+    store_file_obj('db/plantslots.pickle', info)
+
+def get_slots_info():
+    return get_file_obj('db/plantslots.pickle')
+
+def store_setting(newsetting):
     '''newsetting: {'light_hour', 'light_duration', 'temperature_unit', 'language'})'''
     settings = get_setting()
     settings.update(newsetting)
-    with open('db/setting.pickle', 'wb') as setting_file:
-        pickle.dump(settings, setting_file, protocol=pickle.HIGHEST_PROTOCOL)
+    store_file_obj('db/setting.pickle', settings)
 
 def get_setting():
     '''returns: {'light_hour' int, 'light_duration' int, 'temperature_unit' str, 'language' str}'''
-    # settings = None
-    with open('db/setting.pickle', 'rb') as setting_file:
-        settings = pickle.load(setting_file)
+    return get_file_obj('db/setting.pickle')
 
-    return settings
+def store_file_obj(filepath, data):
+    with open(filepath, 'wb') as f:
+        pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+def get_file_obj(filepath):
+    with open(filepath, 'rb') as f:
+        filedata = pickle.load(f)
+    return filedata
 
 def execute_command(cmd, *args):
     '''execute SQLite command'''
@@ -39,16 +51,20 @@ def reset():
         "language": "en"
     }
 
-    nutrient = {
-        "last_added": None
+    plant_slots = {
+        "nutrient_last_added": None,
+        "notified_slots": None
     }
 
-    with open('db/setting.pickle', 'wb') as setting_file:
+    with open('db/setting.pickle', 'w+b') as setting_file, open('db/plantslots.pickle', 'w+b') as ps_file:
         pickle.dump(init_setting, setting_file, protocol=pickle.HIGHEST_PROTOCOL)
+        pickle.dump(plant_slots, ps_file, protocol=pickle.HIGHEST_PROTOCOL)
 
-    with open('setting.pickle', 'rb') as setting_file:
+    with open('db/setting.pickle', 'rb') as setting_file, open('db/plantslots.pickle', 'rb') as ps_file:
         settings = pickle.load(setting_file)
+        pslots = pickle.load(ps_file)
         print(settings)
+        print(pslots)
 
     conn = sqlite3.connect('db/main.db', detect_types=sqlite3.PARSE_DECLTYPES)
     cur = conn.cursor()
