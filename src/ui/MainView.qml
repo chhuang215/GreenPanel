@@ -13,6 +13,8 @@ Rectangle {
     signal navBack
     signal navTo(var p)
     // color: "lightgray"
+    property var nutrientDays: -1
+    property bool waterLevelIsGood: false
     property bool busySlots: panelRobotSelect.visible || panelRobotSelectPlant.visible || panelRobotConfirm.visible
 
     Rectangle{
@@ -29,9 +31,6 @@ Rectangle {
         width:parent.width - 30
         height: 50
 
-        
-        
-        
         // Button{
         //     text: "HUGE TEST NAV"
         //     onClicked: navTo(panelLight)
@@ -109,7 +108,8 @@ Rectangle {
         anchors.fill: parent
         onRotateMotor: parent.rotateMotor(d)
         onStopMotor: parent.stopMotor()
-        nutrientBtnNoti: panelNutrient.days
+        nutrientDays: main.nutrientDays
+        waterGood: waterLevelIsGood
     }
 
     LightPanel{
@@ -122,12 +122,14 @@ Rectangle {
         id: "panelWater"
         objectName: "panelWater"
         anchors.fill: parent
+        waterGood: waterLevelIsGood
     }
 
     NutrientPanel{
         id: "panelNutrient"
         objectName: "panelNutrient"
         anchors.fill: parent
+        days: nutrientDays
     }
 
     /* SETTING */

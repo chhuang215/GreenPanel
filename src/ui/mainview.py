@@ -64,10 +64,15 @@ class MainWindow(QQuickView):
         self.btn_nutrient = self.panel_home.findChild(QQuickItem, "btnNutrient")
         self.btn_robot = self.panel_home.findChild(QQuickItem, "btnRobot")
 
-        # Home Panel signals
+        # Home Panel signals / events
         self.panel_home.unitChanged.connect(lambda unit: db.store_setting({"temperature_unit": unit}))
         self.panel_home.clearNotify.connect(slots.clear_notified)
+        
+        # When Home Panel's X button is clicked, nav to X panel
+        self.btn_light.clicked.connect(lambda: self.__panel_nav(self.panel_light))
+        self.btn_water.clicked.connect(lambda: self.__panel_nav(self.panel_water))
         self.btn_nutrient.clicked.connect(lambda: self.__panel_nav(self.panel_nutrient))
+        self.btn_setting.clicked.connect(lambda: self.__panel_nav(self.panel_setting))
 
         #### Light Panel's child elements ####
         led = GPIOCtrler.get_component(PIN.YELLOW_LED)
@@ -76,21 +81,12 @@ class MainWindow(QQuickView):
         text_dur_hr = self.panel_light.findChild(QQuickItem, "txtDuration")
         text_dur_hr.setProperty("text", led.timer.duration)
 
-        ## Set event listeners for light panel's elements
+        # light panel signals / events
         self.panel_light.lightTimerChanged.connect(led.timer.set_timer)
         self.panel_light.lightSwitched.connect(led.switch)
 
-        ### Nutrient Panel signals
+        # Nutrient Panel signals
         self.panel_nutrient.nutrientAdded.connect(self.renew_nutrient_days)
-
-        # When light button is clicked, nav to light panel
-        self.btn_light.clicked.connect(lambda: self.__panel_nav(self.panel_light))
-
-        # When water button is clicked, nav to water panel
-        self.btn_water.clicked.connect(lambda: self.__panel_nav(self.panel_water))
-
-        # When settings button is clicked, nav to settings panel
-        self.btn_setting.clicked.connect(lambda: self.__panel_nav(self.panel_setting))
 
         # When confirm button is clicked in settings, nav back to main panel
         self.btn_setting_confirm = self.root.findChild(QQuickItem, "btnConfirm")
@@ -130,14 +126,12 @@ class MainWindow(QQuickView):
         self.panel_robot_confirm.addConfirm.connect(self.add_plant_confirm)
         self.panel_robot_confirm.removeConfirm.connect(self.remove_plant_confirm)
         #refresh if change plant to add
-        self.panel_robot_confirm.plantDataChanged.connect(slots.check_slots) 
+        self.panel_robot_confirm.plantDataChanged.connect(slots.check_slots)
 
-
-        # listen to updates
+        # listen to updates outside qt
         controller.SIGNALER.SLOTS_REFRESH.connect(self.refresh_slots_status)
-        controller.SIGNALER.NUTRIENT_REFRESH.connect(self.refresh_nutrient_days)
+        controller.SIGNALER.NUTRIENT_REFRESH.connect(lambda days: self.root.setProperty("nutrientDays", days))
         controller.SIGNALER.TEMPERATURE_UPDATE.connect(self.display_update_temperature)
-        
 
         # Display clock right away
         self.display_update_clock()
@@ -149,7 +143,6 @@ class MainWindow(QQuickView):
         self.water_clock_update_timer.timeout.connect(self.display_update_clock)
         self.water_clock_update_timer.start()
 
-        
         self.__panel_nav(self.panel_home)
 
     def __panel_nav(self, panel):
@@ -171,11 +164,10 @@ class MainWindow(QQuickView):
     def renew_nutrient_days(self):
         today = datetime.date.today()
         db.store_slots_info({"nutrient_last_added":today})
-        slots.check_nutrient()
+        slots.check_nutrient() #this will trigger nutrient days signal
 
-    def refresh_nutrient_days(self, days):
-        self.panel_nutrient.setProperty("days", days)
-
+    # def refresh_nutrient_days(self, days):
+        
     def refresh_slots_status(self, sjson, status_msg):
         if self.root.property("busySlots") is False:
             self.panel_robot.setProperty("slots", sjson)
@@ -206,12 +198,7 @@ class MainWindow(QQuickView):
     @pyqtSlot()
     def display_water_status(self):
         status = GPIOCtrler.get_component(PIN.WATER_LEVEL_SENSOR).has_enough_water()
-        msg = "Add water yo"
-        if status:
-            msg = "Water is good."
-        self.btn_water.setProperty("text", msg)
-        QMetaObject.invokeMethod(self.panel_water, "changeWaterStatusText", 
-                                 Qt.QueuedConnection, Q_ARG(QVariant, msg))
+        self.root.setProperty("waterLevelIsGood", status)
         
     def display_update_clock(self):
         self.txt_clock.setProperty("text", datetime.datetime.now().strftime('%I:%M %p'))
@@ -227,22 +214,22 @@ class MainWindow(QQuickView):
                                  Q_ARG(QVariant, tc), Q_ARG(QVariant, tf), Q_ARG(QVariant, status))
 
     def settings_confirm(self):
-        self.language = self.root.findChild(QQuickItem, "chosenItemText")
-        setting_language = str(self.language.property("text"))
+        language = self.root.findChild(QQuickItem, "chosenItemText")
+        setting_language = str(language.property("text"))
         print("Language is: " + setting_language)
     
     def time_confirm(self):
-        self.hour = self.root.findChild(QQuickItem, "hourText")
-        hour = str(self.hour.property("text"))
+        hour = self.root.findChild(QQuickItem, "hourText")
+        hour = str(hour.property("text"))
         print("Hour is: " + hour)
 
-        self.minute = self.root.findChild(QQuickItem, "minuteText")
-        minute = str(self.minute.property("text"))
+        minute = self.root.findChild(QQuickItem, "minuteText")
+        minute = str(minute.property("text"))
         print("minute is: " + minute)
 
     def date_confirm(self):
-        self.date = self.root.findChild(QQuickItem, "datePicker")
-        year = str(self.date.property("selectedDate").year())
-        month = str(self.date.property("selectedDate").month())
-        day = str(self.date.property("selectedDate").day())
+        date = self.root.findChild(QQuickItem, "datePicker")
+        year = str(date.property("selectedDate").year())
+        month = str(date.property("selectedDate").month())
+        day = str(date.property("selectedDate").day())
         print("Day:" + day + " Month:" + month + " Year:" + year)

@@ -12,7 +12,8 @@ Item{
     signal unitChanged(var unit)
     signal clearNotify()
 
-    property alias nutrientBtnNoti : txtNutrientNoti.text
+    property bool waterGood : false 
+    property int nutrientDays : -1
     property alias temperatureUnit : tempDisplay.unit
 
     function updateTemperature(c, f, s){
@@ -42,6 +43,22 @@ Item{
                 height:130
                 text: "water"
                 objectName: "btnWater"
+
+                Rectangle{
+                    width: txtWaterNoti.width + 10
+                    height: 36
+                    radius: 10
+                    color: waterGood ? "blue" : "saddlebrown"
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    Text{
+                        id: txtWaterNoti
+                        anchors.centerIn: parent
+                        text: waterGood ? "Good" : "Need water"
+                        font.pointSize: 16
+                        color: "white"
+                    }
+                }
             }
 
             Button {
@@ -60,7 +77,7 @@ Item{
                     Text{
                         id: txtNutrientNoti
                         anchors.centerIn: parent
-                        text: "0"
+                        text: panelHome.nutrientDays
                         font.pointSize: 16
                         color: "white"
                     }
@@ -163,6 +180,7 @@ Item{
                     Rectangle{
                         anchors.fill: parent
                         color: "darkgreen"
+                        radius: 10
                         Text{
                             id: txt
                             anchors.centerIn: parent
