@@ -14,13 +14,26 @@ Item{
 
     property int slotPanelWidth: 155
     property int slotPanelHeight: 305
-
+    
     property int capsuleRadius: 50
     property int capsuleHeight: 160
+
+    property int capsuleRadius2: 25
+    property int capsuleHeight2: 160
 
     property int aX: 98
     property int aY: 75
     property int aDisplacement: 10
+
+    property int bX: 58
+    property int bY: 75
+    property int bDisplacement: 10
+
+    property int hX: 170
+    property int hY: 50
+
+    property int cX: 125
+    property int cY: 115
 
     // Rectangle{
     //     width:parent.width
@@ -60,6 +73,40 @@ Item{
         }
     }
 
+    Canvas {
+        id: frame
+        x: 0
+        y: 0
+        width: 800
+        height: 480
+        onPaint: {
+            var ctx = getContext("2d")
+            ctx.lineWidth = 4
+            ctx.strokeStyle = "green"
+            ctx.fillStyle = "light green"
+
+            ctx.beginPath();
+            ctx.arc(400, -480, 600, 0.4 * Math.PI, 0.6 * Math.PI);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.arc(400, -500, 900, 0.4 * Math.PI, 0.6 * Math.PI);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(215, 90);
+            ctx.lineTo(120, 358)
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(585, 90);
+            ctx.lineTo(680, 358)
+            ctx.stroke();
+
+            //ctx.bezierCurveTo(180,140,620,140,620,100);        
+        }
+    }
+
     Text {
         // id: labelA
         anchors.top: panelA.bottom
@@ -88,6 +135,7 @@ Item{
             // setup the fill
             ctx.fillStyle = "light green"
             
+            // capsule drawing
             ctx.beginPath()
             ctx.moveTo(aX - capsuleRadius, aY)
             ctx.arc(aX, aY, capsuleRadius, Math.PI, 0)
@@ -99,21 +147,21 @@ Item{
             ctx.stroke()
             
             // begin a new path to draw
-            ctx.beginPath()
+            //ctx.beginPath()
             // top-left start point
-            ctx.moveTo(50, ctx.lineWidth)
+            //ctx.moveTo(50, ctx.lineWidth)
             // upper line
-            ctx.lineTo(width, ctx.lineWidth)
+            //ctx.lineTo(width, ctx.lineWidth)
             // right line
-            ctx.lineTo(width, height - ctx.lineWidth)
+            //ctx.lineTo(width, height - ctx.lineWidth)
             // bottom line
-            ctx.lineTo(0, height - ctx.lineWidth)
+            //ctx.lineTo(0, height - ctx.lineWidth)
             // left line through path closing
-            ctx.closePath()
+            //ctx.closePath()
             // fill using fill style
             //ctx.fill()
             // stroke using line width and stroke style
-            ctx.stroke()
+            //ctx.stroke()
         }
     }
 
@@ -138,16 +186,27 @@ Item{
             var ctx = getContext("2d")
             ctx.lineWidth = 4
             ctx.strokeStyle = "green"
-            ctx.fillStyle = "limegreen"
+            ctx.fillStyle = "light green"
 
+            // capsule drawing
             ctx.beginPath()
-            ctx.moveTo(width - 50 - ctx.lineWidth, ctx.lineWidth)
-            ctx.lineTo(0, ctx.lineWidth)
-            ctx.lineTo(0, height - ctx.lineWidth)
-            ctx.lineTo(width - ctx.lineWidth, height - ctx.lineWidth)
+            ctx.moveTo(bX - capsuleRadius, bY)
+            ctx.arc(bX, bY, capsuleRadius, Math.PI, 0)
+            ctx.lineTo(bX + capsuleRadius + bDisplacement, bY + capsuleHeight)
+            ctx.arc(bX + bDisplacement, bY + capsuleHeight, capsuleRadius, 0, Math.PI)
+            ctx.lineTo(bX - capsuleRadius, bY)
             ctx.closePath()
             ctx.fill()
             ctx.stroke()
+            
+            //ctx.beginPath()
+            //ctx.moveTo(width - 50 - ctx.lineWidth, ctx.lineWidth)
+            //ctx.lineTo(0, ctx.lineWidth)
+            //ctx.lineTo(0, height - ctx.lineWidth)
+            //ctx.lineTo(width - ctx.lineWidth, height - ctx.lineWidth)
+            //ctx.closePath()
+            //ctx.fill()
+            //ctx.stroke()
         }
     }  
 
@@ -172,17 +231,28 @@ Item{
             var ctx = getContext("2d")
             ctx.lineWidth = 4
             ctx.strokeStyle = "green"
-            ctx.fillStyle = "limegreen"
+            ctx.fillStyle = "light green"
 
+            // capsule drawing
+            ctx.rotate(13*Math.PI/180)
             ctx.beginPath()
-            ctx.moveTo(width/2, ctx.lineWidth )
-            ctx.lineTo(width/2 + 50, ctx.lineWidth + 15)
-            ctx.lineTo(width/2, height - ctx.lineWidth)
-            ctx.lineTo(ctx.lineWidth + 40, height - ctx.lineWidth - 30)
-            
+            ctx.moveTo(hX - capsuleRadius2, hY)
+            ctx.arc(hX, hY, capsuleRadius2, Math.PI, 0)
+            ctx.lineTo(hX + capsuleRadius2, hY + capsuleHeight2)
+            ctx.arc(hX, hY + capsuleHeight2, capsuleRadius2, 0, Math.PI)
+            ctx.lineTo(hX - capsuleRadius2, hY)
             ctx.closePath()
             ctx.fill()
             ctx.stroke()
+
+            //ctx.beginPath()
+            //ctx.moveTo(width/2, ctx.lineWidth )
+            //ctx.lineTo(width/2 + 50, ctx.lineWidth + 15)
+            //ctx.lineTo(width/2, height - ctx.lineWidth)
+            //ctx.lineTo(ctx.lineWidth + 40, height - ctx.lineWidth - 30)
+            //ctx.closePath()
+            //ctx.fill()
+            //ctx.stroke()
         }
     }  
 
@@ -207,16 +277,28 @@ Item{
             var ctx = getContext("2d")
             ctx.lineWidth = 4
             ctx.strokeStyle = "green"
-            ctx.fillStyle = "limegreen"
+            ctx.fillStyle = "light green"
 
+            // capsule drawing
+            ctx.rotate(-13*Math.PI/180)
             ctx.beginPath()
-            ctx.moveTo(width/2 - 50 - ctx.lineWidth, ctx.lineWidth + 15)
-            ctx.lineTo(width/2, ctx.lineWidth)
-            ctx.lineTo(width - 40, height - ctx.lineWidth - 30)
-            ctx.lineTo(width/2 - ctx.lineWidth, height - ctx.lineWidth)
+            ctx.moveTo(cX - capsuleRadius2, cY)
+            ctx.arc(cX, cY, capsuleRadius2, Math.PI, 0)
+            ctx.lineTo(cX + capsuleRadius2, cY + capsuleHeight2)
+            ctx.arc(cX, cY + capsuleHeight2, capsuleRadius2, 0, Math.PI)
+            ctx.lineTo(cX - capsuleRadius2, cY)
             ctx.closePath()
             ctx.fill()
             ctx.stroke()
+
+            //ctx.beginPath()
+            //ctx.moveTo(width/2 - 50 - ctx.lineWidth, ctx.lineWidth + 15)
+            //ctx.lineTo(width/2, ctx.lineWidth)
+            //ctx.lineTo(width - 40, height - ctx.lineWidth - 30)
+            //ctx.lineTo(width/2 - ctx.lineWidth, height - ctx.lineWidth)
+            //ctx.closePath()
+            //ctx.fill()
+            //ctx.stroke()
         }
     }  
 }
