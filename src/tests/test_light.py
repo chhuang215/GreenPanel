@@ -1,7 +1,7 @@
 import sys
 import datetime
 import unittest
-from unittest.mock import patch, MagicMock, Mock
+from unittest.mock import patch, MagicMock, Mock, mock_open
 
 try:
     if(not isinstance(sys.modules["RPi"], MagicMock)):
@@ -24,7 +24,9 @@ import RPi.GPIO
 
 class TestLight(unittest.TestCase):
 
-    def setUp(self):
+    @patch('builtins.open', mock_open(read_data='1'))
+    @patch('db.db.pickle')
+    def setUp(self, mock_db_pickle):
         pin = controller.GPIOController.PIN.YELLOW_LED
         self.led = led.LED(pin, led.LED.OFF)
         self.led.timer = led.LightTimer(self.led)
