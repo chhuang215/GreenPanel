@@ -31,7 +31,7 @@ class TestWaterPump(unittest.TestCase):
         wsensor = mock_water_sensor(gc.PIN.WATER_LEVEL_SENSOR)
         gc.GPIO_COMPONENTS[str(gc.PIN.WATER_LEVEL_SENSOR)] = wsensor
 
-        self.pump = pump.WaterPump(gc.PIN.WATER_PUMP, enable_timer=False)
+        self.pump = pump.WaterPump(gc.PIN.WATER_PUMP)
 
     def test_pump_on(self):
         self.pump.turn_on()

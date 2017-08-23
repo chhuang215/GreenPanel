@@ -9,19 +9,12 @@ Item{
 
     property var currRightRight: 'H' == currRight ? 'A' : String.fromCharCode(currRight.charCodeAt(0) + 1)
     
+
     property alias leftPanel: panelA
     property alias rightPanel: panelB
 
     property int slotPanelWidth: 155
     property int slotPanelHeight: 305
-
-    property int capsuleRadius: 50
-    property int capsuleHeight: 160
-
-    property int aX: 98
-    property int aY: 75
-    property int aDisplacement: 10
-
     // Rectangle{
     //     width:parent.width
     //     height:parent.height
@@ -33,11 +26,9 @@ Item{
     Button {
         anchors.left:panelB.left
         anchors.leftMargin:20
-        width: 75; height: 70
         // x: 400
         y: 25
         text: ">"
-       
         onClicked : {
             var a = (currLeft.charCodeAt(0) - 65 + 2) % 8
             currLeft = String.fromCharCode(a + 65)
@@ -48,7 +39,6 @@ Item{
     Button {
         anchors.right:panelA.right
         anchors.rightMargin:20
-        width: 75; height: 70
         // x: 300
         y: 25
         text: "<"
@@ -62,9 +52,9 @@ Item{
 
     Text {
         // id: labelA
-        anchors.top: panelA.bottom
+        anchors.bottom: panelA.top
         anchors.right: panelA.right
-        anchors.rightMargin: slotPanelWidth / 2 - 18
+        anchors.rightMargin: 35
         text: currLeft
         font.family: "Ariel"
         font.bold: true
@@ -75,7 +65,7 @@ Item{
         id: panelA
         // anchors.verticalCenter:parent.verticalCenter
         x: 243
-        y: 100
+        y: 130
         // canvas size
         width: slotPanelWidth; height: slotPanelHeight
         // handler to override for drawing
@@ -86,18 +76,7 @@ Item{
             ctx.lineWidth = 4
             ctx.strokeStyle = "green"
             // setup the fill
-            ctx.fillStyle = "light green"
-            
-            ctx.beginPath()
-            ctx.moveTo(aX - capsuleRadius, aY)
-            ctx.arc(aX, aY, capsuleRadius, Math.PI, 0)
-            ctx.lineTo(aX + capsuleRadius - aDisplacement, aY + capsuleHeight)
-            ctx.arc(aX - aDisplacement, aY + capsuleHeight, capsuleRadius, 0, Math.PI)
-            ctx.lineTo(aX - capsuleRadius, aY)
-            ctx.closePath()
-            ctx.fill()
-            ctx.stroke()
-            
+            ctx.fillStyle = "limegreen"
             // begin a new path to draw
             ctx.beginPath()
             // top-left start point
@@ -111,16 +90,16 @@ Item{
             // left line through path closing
             ctx.closePath()
             // fill using fill style
-            //ctx.fill()
+            ctx.fill()
             // stroke using line width and stroke style
             ctx.stroke()
         }
     }
 
     Text {
-        anchors.top: panelB.bottom
+        anchors.bottom: panelB.top
         anchors.left: panelB.left
-        anchors.leftMargin: slotPanelWidth / 2 - 18
+        anchors.leftMargin: 35
 
         text: currRight
         font.family: "Ariel"
@@ -152,10 +131,10 @@ Item{
     }  
 
     Text {
-        anchors.top: panelH.bottom
-        anchors.topMargin: - 15
-        anchors.left: panelH.left
-        anchors.leftMargin: slotPanelWidth - 75
+        anchors.bottom: panelH.top
+        anchors.bottomMargin: - 15
+        anchors.right: panelH.right
+        anchors.rightMargin: slotPanelWidth - 45
 
         text: currLeftLeft
         font.bold: true
@@ -187,10 +166,10 @@ Item{
     }  
 
     Text {
-        anchors.top: panelC.bottom
-        anchors.topMargin: - 15
-        anchors.right: panelC.right
-        anchors.rightMargin: slotPanelWidth - 75
+        anchors.bottom: panelC.top
+        anchors.bottomMargin: - 15
+        anchors.left: panelC.left
+        anchors.leftMargin: slotPanelWidth - 45
 
         text: currRightRight
         font.bold: true

@@ -5,24 +5,26 @@ import QtQuick.Controls.Material 2.0
 Item{
   
     id:"panelHome"
-    // property alias changeColor:helloText.color
+    // property alias btnRobot : btnRobot
 
     signal rotateMotor(int d)
     signal stopMotor()
     signal unitChanged(var unit)
     signal clearNotify()
 
+    property bool waterGood : false 
+    property int nutrientDays : -1
     property alias temperatureUnit : tempDisplay.unit
 
-    function updateTemperature(c, f){
+    function updateTemperature(c, f, s){
         tempDisplay.tempC = c + " \u00B0C";
         tempDisplay.tempF = f + " \u00B0F";
+        tempDisplay.status = s;
+
     }
     function notifyRobot(msg){
         robotNotification.text = msg 
     }
-
-   
 
     Column{
         anchors.horizontalCenter: parent.horizontalCenter
@@ -41,12 +43,45 @@ Item{
                 height:130
                 text: "water"
                 objectName: "btnWater"
+
+                Rectangle{
+                    width: txtWaterNoti.width + 10
+                    height: 36
+                    radius: 10
+                    color: waterGood ? "blue" : "saddlebrown"
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    Text{
+                        id: txtWaterNoti
+                        anchors.centerIn: parent
+                        text: waterGood ? "Good" : "Need water"
+                        font.pointSize: 16
+                        color: "white"
+                    }
+                }
             }
 
             Button {
+                objectName: "btnNutrient"
                 width:226
                 height:130
                 text: "nutrient"
+
+                Rectangle{
+                    width: 36
+                    height: 36
+                    radius: 10
+                    color: txtNutrientNoti.text == 0 ? "red" : "green"
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    Text{
+                        id: txtNutrientNoti
+                        anchors.centerIn: parent
+                        text: panelHome.nutrientDays
+                        font.pointSize: 16
+                        color: "white"
+                    }
+                }
             }
         }
 
@@ -69,6 +104,7 @@ Item{
                 property var unit: 'c'
                 property var tempC: 0
                 property var tempF: 0
+                property var status: 0
                 property bool c: unit == "c"
 
                 width: 226
@@ -92,6 +128,22 @@ Item{
                 onUnitChanged:{
                     panelHome.unitChanged(unit)
                 }
+
+                Rectangle{
+                    width: txtTempNotification.width + 10
+                    height: txtTempNotification.height + 10
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    color: tempDisplay.status == 1 ? 'red' : tempDisplay.status == -1 ? 'lightblue' : 'green'
+                    visible: tempDisplay.status != 0
+                    Text{
+                        id: txtTempNotification
+                        anchors.centerIn: parent
+                        text: tempDisplay.status == 1 ? 'HOT' : tempDisplay.status == -1 ? 'COLD' : ''
+                        // color: "white"
+                        font.pointSize:12
+                    }
+                }
             }
 
             Button {
@@ -108,6 +160,8 @@ Item{
                     height: txt.height + 10
                     anchors.top: btnRobot.top
                     anchors.right: btnRobot.right
+                    anchors.topMargin: -10
+                    anchors.rightMargin: -5
                     visible : opacity > 0.0
                     opacity : txt.text.length > 0 ? 1 : 0
 
@@ -126,6 +180,7 @@ Item{
                     Rectangle{
                         anchors.fill: parent
                         color: "darkgreen"
+                        radius: 10
                         Text{
                             id: txt
                             anchors.centerIn: parent
@@ -133,17 +188,18 @@ Item{
                             color: "white"
                             font.pointSize:12
                         }
-
-                        Rectangle{
+                        MouseArea{anchors.fill:parent}
+                        Rectangle{ // X button
                             anchors.verticalCenter: parent.top
                             anchors.horizontalCenter: parent.right
-                            width: 18; height: 18; radius: 10
+                            width: 18.5; height: 18.5; radius: 10
                             color: "darkred"
                             Text{
                                 anchors.centerIn: parent
-                                text: "\u274C"
+                                text: "\u00D7"
                                 color: "white"
-                                font.pointSize:7.5
+                                font.pointSize:14
+                                font.bold: true
                             }
                             MouseArea{
                                 anchors.fill: parent

@@ -6,28 +6,9 @@ Item{
     visible: false
     signal addButtonClicked
     signal removeButtonClicked
-    property var slots : initSlot()
-
-    property var currLeft : slotsBase.currLeft
-    property var currRight : slotsBase.currRight
-
-    function initSlot(){
-        var initData = {"status" : -1, "selected" : false}
-        var st = {} 
-        for (var i = 65 ; i <= 72; i ++) {
-            var p = String.fromCharCode(i);
-            var sl = []
-            var sn = 2
-            if (i % 2){
-                sn = 3
-            }
-            for (var j = 0; j < sn; j++){
-                sl.push(initData)
-            }
-            st[p] = sl
-        }
-        return st
-    }
+    property var slots : {}
+    property alias currLeft : robotSlots.currLeft
+    property alias currRight : robotSlots.currRight
 
     Button {
         x: 700
@@ -57,7 +38,7 @@ Item{
 
     // The UI slot base
     RobotSlots{
-        id: slotsBase
+        id: robotSlots
         anchors.fill: parent
     }
 
@@ -108,9 +89,9 @@ Item{
                 id: txtX
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                font.pointSize: 15; font.bold: true
+                font.pointSize: 17; font.bold: true
                 color: maClose.pressed ? "red" : "white"
-                text: "\u274C"
+                text: "\u00D7"
             }
         }
 
@@ -239,7 +220,10 @@ Item{
         status: slots[currLeft][slotNum]["status"]
 
         x: 305
-        y: 180
+        y: robotSlots.leftPanel.y + 50
+
+        // x: 305
+        // y: 180
         
         onClicked: {
             var s = slots[currLeft][slotNum]
@@ -263,7 +247,7 @@ Item{
         status: slots[currLeft][slotNum]["status"]
 
         x: 305
-        y: 250
+        y: robotSlots.leftPanel.y + 120
 
         onClicked: {
             var s = slots[currLeft][slotNum]
@@ -287,7 +271,7 @@ Item{
         status: slots[currLeft][slotNum]["status"]
 
         x: 305
-        y: 320
+        y: robotSlots.leftPanel.y + 190
 
         onClicked: {
             var s = slots[currLeft][slotNum]
@@ -313,7 +297,7 @@ Item{
         status: slots[currRight][slotNum]["status"]
 
         x: 430
-        y: 210
+        y: robotSlots.leftPanel.y + 80
 
         onClicked: {
             var s = slots[currRight][slotNum]
@@ -337,7 +321,7 @@ Item{
         status: slots[currRight][slotNum]["status"]
 
         x: 430
-        y: 280
+        y: robotSlots.leftPanel.y + 150
 
         onClicked: {
             var s = slots[currRight][slotNum]

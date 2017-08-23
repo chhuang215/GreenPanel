@@ -1,21 +1,22 @@
+'''temperature.py'''
 import os
 import glob
 import time
 import threading
+from controller import SIGNALER
 
-class TemperatureSensor():
-
+class TemperatureSensor(threading.Thread):
+    
     def __init__(self, pin):
-        # threading.Thread.__init__(self)
+        super().__init__(daemon=True)
         self.__device_file = None
+        self.temperature_c = self.temperature_f = 0
         if os.name == "posix" and os.uname().nodename.startswith("raspberrypi"):
             os.system('modprobe w1-gpio')
             os.system('modprobe w1-therm')
-            
-            # self.daemon = True
             base_dir = '/sys/bus/w1/devices/'
             device_folder = glob.glob(base_dir + '28*')[0]
-            self.__device_file = device_folder + '/w1_slave'            
+            self.__device_file = device_folder + '/w1_slave'   
 
     def read_temp_raw(self):
 
@@ -41,10 +42,8 @@ class TemperatureSensor():
             temp_f = temp_c * (9 / 5) + 32
             return temp_c, temp_f
 
-    def get_temperature(self):
-        '''returns current temperature'''
-        temp_c = temp_f = "NaN"
-
+    def __update_temperature(self):
+        temp_c = temp_f = -100
         try:
             temp_c, temp_f = self.read_temp()
             temp_c = round(temp_c, 1)
@@ -53,7 +52,12 @@ class TemperatureSensor():
             print("Temperature Sensor Not Found, value mocked")
             import random
             temp_c = round(random.choice([19.333, 20.444, 21.555, 22.666, 23.777, 24.111]), 1)
-         
-            temp_f = round(temp_c * (9/5) + 32,1)
+            temp_f = round(temp_c * (9/5) + 32, 1)
+        self.temperature_c, self.temperature_f = temp_c, temp_f
+        SIGNALER.TEMPERATURE_UPDATE.emit(self.temperature_c, self.temperature_f)
 
-        return temp_c, temp_f
+    def run(self):
+        while True:
+            self.__update_temperature()
+            time.sleep(4)
+        

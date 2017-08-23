@@ -14,7 +14,6 @@ import water
 import temperature
 import pump
 import motor
-import notifier
 from led import LED, LightTimer
 from lid import Lid
 import slots
@@ -48,7 +47,7 @@ def main():
     GPIOController.add_component(LED, PIN.BLUE_LED, LED.OFF)
 
     # Temperature Sensor
-    GPIOController.add_component(temperature.TemperatureSensor, PIN.TEMPERATURE_SENSOR)
+    tsensor = GPIOController.add_component(temperature.TemperatureSensor, PIN.TEMPERATURE_SENSOR)
 
     # Water Sensor
     GPIOController.add_component(water.WaterSensor, PIN.WATER_LEVEL_SENSOR)
@@ -64,7 +63,7 @@ def main():
 
     try:
         # start QT UI
-        sargv = sys.argv + ['--style', 'material']
+        sargv = sys.argv + ['-style', 'material']
         app = QApplication(sargv)
         font = QFont()
         font.setFamily("Ariel")
@@ -79,11 +78,12 @@ def main():
         ui_view.show()
         ui_view.showFullScreen()
 
-        notifier.NOTIFIER.lst_functions.append(slots.check_slots)
-        notifier.NOTIFIER.lst_functions.append(ui_view.refresh_slots_status)
-        notifier.NOTIFIER.activate()
-
+        # Start threads and timers
+        tsensor.start()
+        slots.REFRESH_TIMER.activate()
         main_light.timer.activate()
+        wpump.timer.activate()
+        motr.timer.activate()
 
         ret = app.exec_()
 
@@ -92,7 +92,7 @@ def main():
 
     finally:
         # cleanup and deactive timers
-        notifier.NOTIFIER.deactivate()
+        slots.REFRESH_TIMER.deactivate()
         wpump.timer.deactivate()
         main_light.timer.deactivate()
         motr.timer.deactivate()
