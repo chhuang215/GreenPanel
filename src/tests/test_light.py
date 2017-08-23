@@ -24,9 +24,8 @@ import RPi.GPIO
 
 class TestLight(unittest.TestCase):
 
-    @patch('builtins.open', mock_open(read_data='1'))
-    @patch('db.db.pickle')
-    def setUp(self, mock_db_pickle):
+    @patch('led.db')
+    def setUp(self, mock_db):
         pin = controller.GPIOController.PIN.YELLOW_LED
         self.led = led.LED(pin, led.LED.OFF)
         self.led.timer = led.LightTimer(self.led)
@@ -45,8 +44,9 @@ class TestLight(unittest.TestCase):
         self.assertEqual(self.led.status, self.led.OFF)
         RPi.GPIO.output.assert_called_with(self.led.pin, RPi.GPIO.LOW)
 
-
-    def test_set_timer(self):
+    # @patch('builtins.open', mock_open(read_data='1'))
+    @patch('led.db')
+    def test_set_timer(self, mock_db):
         b_hr = 12
         duration = 17
         self.led.timer.set_timer(b_hr, duration)
