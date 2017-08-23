@@ -11,15 +11,15 @@ Item{
 
     property var slots : {}
 
-    property var currLeft : slotsBase.currLeft
-    property var currRight : slotsBase.currRight
+    property alias currLeft : robotSlots.currLeft
+    property alias currRight : robotSlots.currRight
 
     // onSlotsChanged:{
     //     console.log(JSON.stringify(slots))
     // }
     // The UI slot base
     RobotSlots{
-        id: slotsBase
+        id: robotSlots
         anchors.fill: parent
     }
     
@@ -48,8 +48,8 @@ Item{
             sourceComponent: slotHole
             
             onLoaded:{
-                item.x = slotsBase.leftPanel.x + (slotsBase.slotPanelWidth/2) - (item.width/2) + 23 - (6 * index)
-                item.y = (slots[currLeft].length == 3 ? 170 : 200) + 80 * index
+                item.x = robotSlots.leftPanel.x + (robotSlots.slotPanelWidth/2) - (item.width/2) + 23 - (6 * index)
+                item.y = robotSlots.leftPanel.y + (slots[currLeft].length == 3 ?  + 50 : 80) + 80 * index
                 item.slotNum = index
                 item.slotPane = Qt.binding(function() { return currLeft} )
             }
@@ -65,9 +65,8 @@ Item{
             // x: 440 - (5 * index)
             // y:(slots[currRight].length == 3 ? 170 : 210) + 80 * index
             onLoaded:{
-    
-                item.x = slotsBase.rightPanel.x + (slotsBase.slotPanelWidth/2) - (item.width/2) - 23 + (6 * index)
-                item.y = (slots[currRight].length == 3 ? 170 : 200) + 80 * index
+                item.x = robotSlots.rightPanel.x + (robotSlots.slotPanelWidth/2) - (item.width/2) - 23 + (6 * index)
+                item.y = robotSlots.rightPanel.y + (slots[currRight].length == 3 ?  + 50 : 80) + 80 * index
                 item.slotNum = index
                 item.slotPane = Qt.binding(function() { return currRight} )
             }

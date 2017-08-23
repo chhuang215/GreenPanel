@@ -9,7 +9,6 @@ Item{
 
     property var currRightRight: 'H' == currRight ? 'A' : String.fromCharCode(currRight.charCodeAt(0) + 1)
     
-
     property alias leftPanel: panelA
     property alias rightPanel: panelB
 
@@ -34,9 +33,11 @@ Item{
     Button {
         anchors.left:panelB.left
         anchors.leftMargin:20
+        width: 75; height: 70
         // x: 400
         y: 25
         text: ">"
+       
         onClicked : {
             var a = (currLeft.charCodeAt(0) - 65 + 2) % 8
             currLeft = String.fromCharCode(a + 65)
@@ -47,6 +48,7 @@ Item{
     Button {
         anchors.right:panelA.right
         anchors.rightMargin:20
+        width: 75; height: 70
         // x: 300
         y: 25
         text: "<"
@@ -60,9 +62,9 @@ Item{
 
     Text {
         // id: labelA
-        anchors.bottom: panelA.top
+        anchors.top: panelA.bottom
         anchors.right: panelA.right
-        anchors.rightMargin: 35
+        anchors.rightMargin: slotPanelWidth / 2 - 18
         text: currLeft
         font.family: "Ariel"
         font.bold: true
@@ -73,7 +75,7 @@ Item{
         id: panelA
         // anchors.verticalCenter:parent.verticalCenter
         x: 243
-        y: 130
+        y: 100
         // canvas size
         width: slotPanelWidth; height: slotPanelHeight
         // handler to override for drawing
@@ -116,9 +118,9 @@ Item{
     }
 
     Text {
-        anchors.bottom: panelB.top
+        anchors.top: panelB.bottom
         anchors.left: panelB.left
-        anchors.leftMargin: 35
+        anchors.leftMargin: slotPanelWidth / 2 - 18
 
         text: currRight
         font.family: "Ariel"
@@ -150,10 +152,10 @@ Item{
     }  
 
     Text {
-        anchors.bottom: panelH.top
-        anchors.bottomMargin: - 15
-        anchors.right: panelH.right
-        anchors.rightMargin: slotPanelWidth - 45
+        anchors.top: panelH.bottom
+        anchors.topMargin: - 15
+        anchors.left: panelH.left
+        anchors.leftMargin: slotPanelWidth - 75
 
         text: currLeftLeft
         font.bold: true
@@ -185,10 +187,10 @@ Item{
     }  
 
     Text {
-        anchors.bottom: panelC.top
-        anchors.bottomMargin: - 15
-        anchors.left: panelC.left
-        anchors.leftMargin: slotPanelWidth - 45
+        anchors.top: panelC.bottom
+        anchors.topMargin: - 15
+        anchors.right: panelC.right
+        anchors.rightMargin: slotPanelWidth - 75
 
         text: currRightRight
         font.bold: true

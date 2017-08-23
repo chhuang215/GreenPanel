@@ -13,9 +13,28 @@ Rectangle {
     signal navBack
     signal navTo(var p)
     // color: "lightgray"
+    property var plantSlots: initSlot()
     property var nutrientDays: -1
     property bool waterLevelIsGood: false
     property bool busySlots: panelRobotSelect.visible || panelRobotSelectPlant.visible || panelRobotConfirm.visible
+
+    function initSlot(){
+        var initData = {"status" : -1, "selected" : false}
+        var st = {} 
+        for (var i = 65 ; i <= 72; i ++) {
+            var p = String.fromCharCode(i);
+            var sl = []
+            var sn = 2
+            if (i % 2){
+                sn = 3
+            }
+            for (var j = 0; j < sn; j++){
+                sl.push(initData)
+            }
+            st[p] = sl
+        }
+        return st
+    }
 
     Rectangle{
         anchors.fill: parent
@@ -168,11 +187,19 @@ Rectangle {
         id: "panelRobot"
         objectName: "panelRobot"
         anchors.fill: parent
+        slots: main.plantSlots
         onAddButtonClicked: {
             panelRobotSelect.mode = 0
         }
         onRemoveButtonClicked:{
              panelRobotSelect.mode = 1
+        }
+        onVisibleChanged:{ 
+            // if leaves panel, sync robot panel's view
+            if(!visible) {
+                panelRobotSelect.currLeft = currLeft
+                panelRobotSelect.currRight = currRight
+            }
         }
     }
 
@@ -191,7 +218,14 @@ Rectangle {
         id: "panelRobotSelect"
         objectName: "panelRobotSelect"
         anchors.fill: parent
-        slots: panelRobot.slots
+        slots: main.plantSlots
+        onVisibleChanged:{ 
+            // if leaves panel, sync robot panel's view
+            if(!visible) {
+                panelRobot.currLeft = currLeft
+                panelRobot.currRight = currRight
+            }
+        }
     }
 
     RobotPanelConfirm{

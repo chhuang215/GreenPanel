@@ -170,7 +170,7 @@ class MainWindow(QQuickView):
         
     def refresh_slots_status(self, sjson, status_msg):
         if self.root.property("busySlots") is False:
-            self.panel_robot.setProperty("slots", sjson)
+            self.root.setProperty("plantSlots", sjson)
         QMetaObject.invokeMethod(self.panel_home, "notifyRobot", 
                                  Qt.QueuedConnection, Q_ARG(QVariant, status_msg))
 
