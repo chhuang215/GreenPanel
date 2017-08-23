@@ -39,6 +39,10 @@ def reset():
         "language": "en"
     }
 
+    nutrient = {
+        "last_added": None
+    }
+
     with open('db/setting.pickle', 'wb') as setting_file:
         pickle.dump(init_setting, setting_file, protocol=pickle.HIGHEST_PROTOCOL)
 

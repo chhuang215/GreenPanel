@@ -6,7 +6,7 @@ import threading
 import datetime
 import RPi.GPIO as GPIO
 import db
-from controller import GPIOController
+from controller import GPIOController, SIGNALER
 '''
     LED class
 '''
@@ -39,14 +39,18 @@ class LED():
     def turn_on(self):
         self.status = LED.ON
 
+        SIGNALER.LIGHT_SWITCH.emit(True)
+
         lid = GPIOController.get_component(GPIOController.PIN.PUSH_BUTTON)
         if lid.status == lid.OPENED:
             return
 
         GPIO.output(self.pin, GPIO.HIGH)
         
+        
     def turn_off(self):
         self.status = LED.OFF
+        SIGNALER.LIGHT_SWITCH.emit(False)
         GPIO.output(self.pin, GPIO.LOW)
 
     def turn_on_temporary(self):

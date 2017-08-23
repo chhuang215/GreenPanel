@@ -7,7 +7,7 @@ import slots
 import plants
 
 from PyQt5.QtCore import (Qt, QUrl, QCoreApplication, QVariant, QJsonValue,
-                          QTimer, QMetaObject, Q_ARG)
+                          QTimer, QMetaObject, Q_ARG, pyqtSlot, pyqtSignal)
 # from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQuick import QQuickView, QQuickItem
 
@@ -17,9 +17,10 @@ GPIOCtrler = controller.GPIOController
 PIN = GPIOCtrler.PIN
 
 class MainWindow(QQuickView):
+    
     def __init__(self):
         super().__init__()
-
+ 
 #        self.setSource(QUrl('MainView.qml'))
         self.setSource(QUrl.fromLocalFile('ui/MainView.qml'))
         self.__nav_stack = []
@@ -64,7 +65,6 @@ class MainWindow(QQuickView):
         # Home Panel signals
         self.panel_home.unitChanged.connect(lambda unit: db.set_setting({"temperature_unit": unit}))
         self.panel_home.clearNotify.connect(slots.clear_notified)
-        self.panel_home.clearNotify.connect(self.refresh_slots_status)
 
         #### Light Panel's child elements ####
         led = GPIOCtrler.get_component(PIN.YELLOW_LED)
@@ -114,7 +114,7 @@ class MainWindow(QQuickView):
         self.btn_robot.clicked.connect(lambda: self.__panel_nav(self.panel_robot))
 
         # Refresh slots status whenever Robot panel is visible
-        self.panel_robot.visibleChanged.connect(self.refresh_slots_status)
+        self.panel_robot.visibleChanged.connect(slots.check_slots)
 
         # Robot Plant Add / Remove
         self.panel_robot.addButtonClicked.connect(lambda: self.__panel_nav(self.panel_robot_select_plant))
@@ -124,11 +124,12 @@ class MainWindow(QQuickView):
         self.panel_robot_confirm.addConfirm.connect(self.add_plant_confirm)
         self.panel_robot_confirm.removeConfirm.connect(self.remove_plant_confirm)
         #refresh if change plant to add
-        self.panel_robot_confirm.plantDataChanged.connect(self.refresh_slots_status) 
+        self.panel_robot_confirm.plantDataChanged.connect(slots.check_slots) 
 
-        # listen to temperature update
-        tsensor = GPIOCtrler.get_component(PIN.TEMPERATURE_SENSOR)
-        tsensor.UPDATED.connect(self.display_update_temperature)
+
+        # listen to updates
+        controller.SIGNALER.SLOTS_REFRESH.connect(self.refresh_slots_status)
+        controller.SIGNALER.TEMPERATURE_UPDATE.connect(self.display_update_temperature)
 
         # Display clock right away
         self.display_update_clock()
@@ -159,12 +160,11 @@ class MainWindow(QQuickView):
         
         self.__nav_stack[-1].setVisible(True)
 
-    def refresh_slots_status(self):
+    def refresh_slots_status(self, sjson, status_msg):
         if self.root.property("busySlots") is False:
-            sjson = slots.getSlotsJson()
             self.panel_robot.setProperty("slots", sjson)
         QMetaObject.invokeMethod(self.panel_home, "notifyRobot", 
-                                 Qt.QueuedConnection, Q_ARG(QVariant, slots.STATUS_MSG))
+                                 Qt.QueuedConnection, Q_ARG(QVariant, status_msg))
 
     def add_plant_confirm(self, plant_id, s):
         selected_slots = s.toVariant()
@@ -172,7 +172,6 @@ class MainWindow(QQuickView):
         for pane, lst in selected_slots.items():
             for i in range(0, len(lst)):
                 if lst[i]["selected"]:
-                    # n = "PlantType:" + str(ptype) + " @" + pane + str(i)
                     slots.insert_plant(pane, i, plant_id)
 
         self.__panel_nav_back(layers=3)
@@ -188,7 +187,7 @@ class MainWindow(QQuickView):
         
         self.__panel_nav_back(layers=2)
 
-
+    @pyqtSlot()
     def display_water_status(self):
         status = GPIOCtrler.get_component(PIN.WATER_LEVEL_SENSOR).has_enough_water()
         msg = "Add water yo"
@@ -201,6 +200,7 @@ class MainWindow(QQuickView):
     def display_update_clock(self):
         self.txt_clock.setProperty("text", datetime.datetime.now().strftime('%I:%M %p'))
 
+    @pyqtSlot(float, float)
     def display_update_temperature(self, tc, tf):
         status = 0
         if tc > 40:
@@ -209,7 +209,6 @@ class MainWindow(QQuickView):
             status = -1
         QMetaObject.invokeMethod(self.panel_home, "updateTemperature", Qt.QueuedConnection,
                                  Q_ARG(QVariant, tc), Q_ARG(QVariant, tf), Q_ARG(QVariant, status))
-
 
     def settings_confirm(self):
         self.language = self.root.findChild(QQuickItem, "chosenItemText")

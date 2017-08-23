@@ -5,7 +5,7 @@ import QtQuick.Controls.Material 2.0
 Item{
   
     id:"panelHome"
-    // property alias changeColor:helloText.color
+    // property alias btnRobot : btnRobot
 
     signal rotateMotor(int d)
     signal stopMotor()

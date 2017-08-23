@@ -1,14 +1,14 @@
+'''temperature.py'''
 import os
 import glob
 import time
 import threading
-from PyQt5.QtCore import QThread, pyqtSignal
+from controller import SIGNALER
 
-class TemperatureSensor(QThread):
-    UPDATED = pyqtSignal(object, object)
+class TemperatureSensor(threading.Thread):
     
     def __init__(self, pin):
-        super().__init__()
+        super().__init__(daemon=True)
         self.__device_file = None
         self.temperature_c = self.temperature_f = 0
         if os.name == "posix" and os.uname().nodename.startswith("raspberrypi"):
@@ -43,7 +43,6 @@ class TemperatureSensor(QThread):
             return temp_c, temp_f
 
     def __update_temperature(self):
-        print("Temperature updated")
         temp_c = temp_f = -100
         try:
             temp_c, temp_f = self.read_temp()
@@ -55,7 +54,7 @@ class TemperatureSensor(QThread):
             temp_c = round(random.choice([19.333, 20.444, 21.555, 22.666, 23.777, 24.111]), 1)
             temp_f = round(temp_c * (9/5) + 32, 1)
         self.temperature_c, self.temperature_f = temp_c, temp_f
-        self.UPDATED.emit(self.temperature_c, self.temperature_f)
+        SIGNALER.TEMPERATURE_UPDATE.emit(self.temperature_c, self.temperature_f)
 
     def run(self):
         while True:

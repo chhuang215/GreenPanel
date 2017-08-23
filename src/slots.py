@@ -1,8 +1,8 @@
 import json
 import datetime
 import threading
-import controller
 
+import controller
 import db
 import plants
 
@@ -55,6 +55,45 @@ class Slot:
         self.days = delta.days
         return self.days 
 
+class RefreshTimer():
+
+    def __init__(self):
+        self._timer = None
+        self.is_activated = False
+
+    def __check_timer_loop(self):
+        if not self.is_activated:
+            return
+
+        check_slots()
+
+        now = datetime.datetime.now()
+
+        print("SLOTs timer loop", now)
+        next_check_time = now.replace(second=0, microsecond=0)
+        next_check_time += datetime.timedelta(minutes=1)
+            
+        interval = next_check_time - now
+        print("SLOTs timer next check time", next_check_time)
+        self._timer = threading.Timer(interval.total_seconds(), self.__check_timer_loop)
+        self._timer.start()
+
+    def activate(self):
+        print("SLOTs timer ACTIVATED", datetime.datetime.now())
+        if not self.is_activated:
+            ### Activate timerv ###
+            self.is_activated = True
+            self.__check_timer_loop()
+            #######################
+
+    def deactivate(self):
+        print("SLOTs timer DEACTIVATED", datetime.datetime.now())
+        if self._timer is not None:
+            self._timer.cancel()
+        self.is_activated = False
+
+REFRESH_TIMER = RefreshTimer()
+
 SLOTS = {
     "A": [Slot(), Slot(), Slot()],
     "B": [Slot(), Slot()],
@@ -66,9 +105,7 @@ SLOTS = {
     "H": [Slot(), Slot()]
     }
 
-READY_NOT_NOTIFY_CONFIRMED_SLOTS = []
-
-STATUS_MSG = ""
+READY_NOT_CONFIRMED_SLOTS = []
 
 def insert_plant(panel, slotnum, plantid):
     s = SLOTS[panel][slotnum]
@@ -95,28 +132,28 @@ def syncdb():
         SLOTS[panel][slotnum].set_date_planted(date_planted)
 
 def check_slots():
-    # syncdb()
-    global STATUS_MSG
-    STATUS_MSG = ""
+    msg = ""
     ready_counter = 0
     for sp, sr in SLOTS.items():
         for s in sr:
             stat = s.check_status()
             if stat == Slot.READY and not s.notify_confirmed:
                 ready_counter += 1
-                STATUS_MSG += sp + str(sr.index(s)+1) + " "
-                READY_NOT_NOTIFY_CONFIRMED_SLOTS.append(s)
+                msg += sp + str(sr.index(s)+1) + " "
+                READY_NOT_CONFIRMED_SLOTS.append(s)
                 
     if ready_counter == 1:
-        STATUS_MSG += "IS READY!"
+        msg += "IS READY!"
     elif ready_counter > 1:
-        STATUS_MSG += "ARE READY!"
+        msg += "ARE READY!"
+
+    controller.SIGNALER.SLOTS_REFRESH.emit(getSlotsJson(), msg)
 
 def clear_notified():
-    for s in READY_NOT_NOTIFY_CONFIRMED_SLOTS:
+    for s in READY_NOT_CONFIRMED_SLOTS:
         s.notify_confirmed = True
 
-    READY_NOT_NOTIFY_CONFIRMED_SLOTS.clear()
+    READY_NOT_CONFIRMED_SLOTS.clear()
     check_slots()
 
 def json_seriel(obj):

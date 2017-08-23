@@ -1,5 +1,6 @@
 """controller.py"""
 import collections
+from PyQt5.QtCore import QObject, pyqtSignal
 # from ui import MainWindow
 
 class UIController:
@@ -61,3 +62,13 @@ class GPIOController:
         if not isinstance(pin, str):
             pin = str(pin)
         return GPIOController.GPIO_COMPONENTS[pin]
+
+class Signaler(QObject):
+
+    TEMPERATURE_UPDATE = pyqtSignal(float, float)
+    SLOTS_REFRESH = pyqtSignal(object, object)
+    LIGHT_SWITCH = pyqtSignal(bool)
+    # def __init__(self):
+    #     super().__init__()
+
+SIGNALER = Signaler()
