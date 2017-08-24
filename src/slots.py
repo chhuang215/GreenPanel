@@ -183,7 +183,7 @@ def check_slots():
                 if s not in NOTIFIED_SLOTS:
                     NOTIFIED_SLOTS.append(s)
                 
-    db.store_slots_info({"slots": SLOTS})
+    # db.store_slots_info({"slots": SLOTS})
     if ready_counter == 1:
         msg += "IS READY!"
     elif ready_counter > 1:
