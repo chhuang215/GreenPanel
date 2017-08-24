@@ -56,7 +56,7 @@ class Slot:
         self.date_planted = date
         self.date_ready = self.date_planted + datetime.timedelta(days=self.plant.days_harvest)
 
-    def check_status(self):
+    def check_and_update_status(self):
         """
         Check and return current slot status
         
@@ -176,7 +176,7 @@ def check_slots():
     ready_counter = 0
     for sp, sr in SLOTS.items():
         for s in sr:
-            stat = s.check_status()
+            stat = s.check_and_update_status()
             if stat == Slot.READY and s.notify:
                 ready_counter += 1
                 msg += sp + str(sr.index(s)+1) + " "

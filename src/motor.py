@@ -61,7 +61,7 @@ class MotorRotateTimer:
         print("!MOTOR Check_Timer %s %s" % (self.motor.__class__.__name__, curr_dt), end='')
         minute = curr_dt.minute
         if minute % 30 >= 0 and minute % 30 < 15:
-            self.motor.rotate()
+            self.motor.rotate(direction=Motor.DIR_CCW)
             print(" ! MOTOR_ROTATING")
         else:
             self.motor.stop()
