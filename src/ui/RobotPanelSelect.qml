@@ -7,7 +7,7 @@ Item{
     visible: false
     signal slotsSelectedDone
 
-    property int mode: 0
+    property int mode: 0 // 0 is AddMode, 1 is RemoveMode
 
     property var slots : {}
 

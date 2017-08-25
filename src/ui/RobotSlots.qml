@@ -121,7 +121,7 @@ Item{
             ctx.strokeStyle = "green"
             ctx.fillStyle = "lightgreen"
             // ctx.resetTransform()
-            
+
             // frame
             ctx.beginPath();
             ctx.arc(capsulesCenter, -480 - anchors.topMargin, 600, 0.4 * Math.PI, 0.6 * Math.PI)
@@ -238,7 +238,6 @@ Item{
     //     anchors.right: panelA.right
     //     anchors.rightMargin: slotPanelWidth / 2 - 18
     //     text: currLeft
-    //     font.family: "Ariel"
     //     font.bold: true
     //     font.pointSize: 36
     // }
@@ -296,7 +295,6 @@ Item{
     //     anchors.leftMargin: slotPanelWidth / 2 - 18
 
     //     text: currRight
-    //     font.family: "Ariel"
     //     font.bold: true
     //     font.pointSize: 36
     // }

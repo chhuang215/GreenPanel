@@ -179,8 +179,9 @@ class MainWindow(QQuickView):
 
         for pane, lst in selected_slots.items():
             for i in range(0, len(lst)):
-                if lst[i]["selected"]:
-                    slots.insert_plant(pane, i, plant_id)
+                slotdata = lst[i]
+                if slotdata["selected"]:
+                    slots.insert_plant(pane, i, plant_id, date_added=slotdata["date_planted"])
 
         self.__panel_nav_back(layers=3)
     

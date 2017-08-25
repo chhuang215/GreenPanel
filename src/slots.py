@@ -24,7 +24,7 @@ class Slot:
         self.selected = False
         self.notify = True
 
-    def insert_plant(self, plant_id):
+    def insert_plant(self, plant_id, date_added=datetime.datetime.today()):
         """
         Insert Plant obj
 
@@ -34,7 +34,7 @@ class Slot:
         """
         pname, pdays = plants.get_plant_data(plant_id)
         self.plant = plants.Plant(plant_id, name=pname, days_harvest=pdays)
-        self.set_date_planted(datetime.date.today())
+        self.set_date_planted(date_added)
         self.status = Slot.OCCUPIED
 
     def remove_plant(self):
@@ -136,9 +136,11 @@ SLOTS = {
 
 NOTIFIED_SLOTS = []
 
-def insert_plant(panel, slotnum, plantid):
+def insert_plant(panel, slotnum, plantid, date_added=datetime.datetime.today()):
     s = SLOTS[panel][slotnum]
-    s.insert_plant(plantid)
+    if not isinstance(date_added, datetime.date):
+        date_added = date_added.toPyDateTime().date()
+    s.insert_plant(plantid, date_added)
     db.execute_command("INSERT INTO SLOTS VALUES (?, ?, ?, ?)", panel, slotnum , plantid, s.date_planted)
     check_slots()
 
@@ -200,7 +202,7 @@ def clear_notified():
 
 def json_seriel(obj):
     if isinstance(obj, (datetime.datetime, datetime.date)):
-        return obj.isoformat()
+        return obj.strftime('%m/%d/%Y')
     return obj.__dict__
 
 def getSlotsJson():
