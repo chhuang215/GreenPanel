@@ -93,7 +93,7 @@ Item{
 
             Label {
                 width: 200
-                text: dateAdded.toLocaleDateString()
+                text: dateAdded.toDateString()
                 height: parent.height
                 font.pixelSize: 20
                 padding: 10
