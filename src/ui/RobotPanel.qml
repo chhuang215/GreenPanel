@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
-
+import QtQuick.Layouts 1.3
+import Qt.labs.calendar 1.0
 Item{
     id: "panelRobot"
     visible: false
@@ -54,6 +55,7 @@ Item{
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside	
 
         property int days: 0
+        property var slotPos: {}
         property var plantName: ""
         property var description: ""
         property var imgSource: "images/placeholder.png"
@@ -66,6 +68,7 @@ Item{
             description = ""
             datePlanted = "dd/mm/yy"
             dateReady = "dd/mm/yy"
+            slotPos: {}
         }
 
         Rectangle{
@@ -103,7 +106,7 @@ Item{
                 id: plantNameTxt1
                 anchors.verticalCenter: parent.verticalCenter
                 font.pointSize: 18; font.bold: true
-                text:popup.plantName
+                text:popup.plantName + " @" + popup.slotPos
             }
         }
 
@@ -210,17 +213,55 @@ Item{
             }
         }
 
+        Button{
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.bottomMargin: 15
+            anchors.rightMargin: 15
+            text:"Remove this plant"
+
+        }
+
+        // Item{
+        //     x: 300
+        //     y: 140
+        //     width:280
+        //     height:300
+        //     ColumnLayout {
+        //         DayOfWeekRow {
+        //             locale: grid.locale
+        //             Layout.fillWidth: true
+        //         }
+
+        //         MonthGrid {
+        //             id: grid
+        //             month: Calendar.December
+        //             year: 2017
+        //             title: "Dec 2017"
+        //             locale: Qt.locale("en_US")
+        //             Layout.fillWidth: true
+        //         }
+
+        //         MonthGrid {
+        //             // id: grid
+        //             month: (grid.month + 1) % 11
+        //             year: month == 0 ? grid.year + 1 : grid.year
+        //             locale: Qt.locale("en_US")
+        //             Layout.fillWidth: true
+        //         }
+        //     }
+           
+        // }
+
     }/* end Popup */
 
     /* SLOTS on the LEFT */
     RoundMouseArea {
-        id: roundMouseArea1
-
         slotNum: 0
         status: slots[currLeft][slotNum]["status"]
 
         x: 305
-        y: robotSlots.leftPanel.y + 50
+        y: robotSlots.capsuleY + 50
 
         // x: 305
         // y: 180
@@ -228,7 +269,7 @@ Item{
         onClicked: {
             var s = slots[currLeft][slotNum]
             var plant = s.plant
-
+            popup.slotPos = [currLeft, slotNum]
             if(plant) {
                 popup.plantName = plant.name
                 popup.datePlanted = s.date_planted
@@ -241,18 +282,16 @@ Item{
     }
 
     RoundMouseArea {
-        id: roundMouseArea2
-
         slotNum: 1
         status: slots[currLeft][slotNum]["status"]
 
         x: 305
-        y: robotSlots.leftPanel.y + 120
+        y: robotSlots.capsuleY + 120
 
         onClicked: {
             var s = slots[currLeft][slotNum]
             var plant = s.plant
-
+            popup.slotPos = [currLeft, slotNum]
             if(plant) {
                 popup.plantName = plant.name
                 popup.datePlanted = s.date_planted
@@ -265,18 +304,16 @@ Item{
     }
 
     RoundMouseArea {
-        // id: roundMouseArea2
-
         slotNum: 2
         status: slots[currLeft][slotNum]["status"]
 
         x: 305
-        y: robotSlots.leftPanel.y + 190
+        y: robotSlots.capsuleY + 190
 
         onClicked: {
             var s = slots[currLeft][slotNum]
             var plant = s.plant
-
+            popup.slotPos = [currLeft, slotNum]
             if(plant) {
                 popup.plantName = plant.name
                 popup.datePlanted = s.date_planted
@@ -291,18 +328,16 @@ Item{
 
     /* SLOTS on the RIGHT */
     RoundMouseArea {
-        // id: roundMouseArea2
-
         slotNum: 0
         status: slots[currRight][slotNum]["status"]
 
         x: 430
-        y: robotSlots.leftPanel.y + 80
+        y: robotSlots.capsuleY + 80
 
         onClicked: {
             var s = slots[currRight][slotNum]
             var plant = s.plant
-
+            popup.slotPos = [currRight, slotNum]
             if(plant) {
                 popup.plantName = plant.name
                 popup.datePlanted = s.date_planted
@@ -315,18 +350,16 @@ Item{
     }
 
     RoundMouseArea {
-        // id: roundMouseArea2
-
         slotNum: 1
         status: slots[currRight][slotNum]["status"]
 
         x: 430
-        y: robotSlots.leftPanel.y + 150
+        y: robotSlots.capsuleY + 150
 
         onClicked: {
             var s = slots[currRight][slotNum]
             var plant = s.plant
-
+            popup.slotPos = [currRight, slotNum]
             if(plant) {
                 popup.plantName = plant.name
                 popup.datePlanted = s.date_planted

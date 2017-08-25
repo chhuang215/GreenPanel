@@ -3,7 +3,7 @@ import QtQuick.Controls 2.0
 
 Item{
     id: "panelNutrient"
-    signal nutrientAdded()
+    signal nutrientAdded(int days)
     property int days: 0
     visible: false
 
@@ -16,10 +16,18 @@ Item{
     }
 
     Button{
+        id: btnResetNutrientDays
         anchors.top : txtStatus.bottom
         anchors.horizontalCenter:txtStatus.horizontalCenter
         text: "Ok, I added new nutrients"
-        onClicked: nutrientAdded()
-        visible: days <= 0
+        onClicked: nutrientAdded(15)
+    }
+    Button{
+        anchors.left : btnResetNutrientDays.right
+        anchors.leftMargin: 5
+        anchors.top : btnResetNutrientDays.top
+        text: "-1 day"
+        onClicked: nutrientAdded(days-1)
+        visible: days > 0
     }
 }
