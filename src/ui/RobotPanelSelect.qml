@@ -48,8 +48,10 @@ Item{
             sourceComponent: slotHole
             
             onLoaded:{
-                item.x = robotSlots.leftPanel.x + (robotSlots.slotPanelWidth/2) - (item.width/2) + 23 - (6 * index)
-                item.y = robotSlots.leftPanel.y + (slots[currLeft].length == 3 ?  + 50 : 80) + 80 * index
+                // item.x = robotSlots.leftPanel.x + (robotSlots.slotPanelWidth/2) - (item.width/2) + 23 - (6 * index)
+                // item.y = robotSlots.leftPanel.y + (slots[currLeft].length == 3 ?  + 50 : 80) + 80 * index
+                item.x = robotSlots.capsuleAX + robotSlots.capsuleRadius + item.width/2 - 5 - (5 * index)
+                item.y = robotSlots.capsuleY  + (slots[currLeft].length == 3 ?  + 50 : 80) + 80 * index
                 item.slotNum = index
                 item.slotPane = Qt.binding(function() { return currLeft} )
             }
@@ -62,11 +64,11 @@ Item{
         model: slots[currRight].length
         Loader { 
             sourceComponent: slotHole
-            // x: 440 - (5 * index)
-            // y:(slots[currRight].length == 3 ? 170 : 210) + 80 * index
             onLoaded:{
-                item.x = robotSlots.rightPanel.x + (robotSlots.slotPanelWidth/2) - (item.width/2) - 23 + (6 * index)
-                item.y = robotSlots.rightPanel.y + (slots[currRight].length == 3 ?  + 50 : 80) + 80 * index
+                // item.x = robotSlots.rightPanel.x + (robotSlots.slotPanelWidth/2) - (item.width/2) - 23 + (6 * index)
+                // item.y = robotSlots.rightPanel.y + (slots[currRight].length == 3 ?  + 50 : 80) + 80 * index
+                item.x = robotSlots.capsuleBX + robotSlots.capsuleRadius + item.width/2 - 5 + (5 * index)
+                item.y = robotSlots.capsuleY  + (slots[currRight].length == 3 ?  + 50 : 80) + 80 * index
                 item.slotNum = index
                 item.slotPane = Qt.binding(function() { return currRight} )
             }

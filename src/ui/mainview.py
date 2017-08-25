@@ -161,13 +161,13 @@ class MainWindow(QQuickView):
         
         self.__nav_stack[-1].setVisible(True)
 
-    def renew_nutrient_days(self):
-        today = datetime.date.today()
-        db.store_slots_info({"nutrient_last_added":today})
+    def renew_nutrient_days(self, days):
+        day_diff = 15 - days
+        date_added = datetime.date.today()
+        date_added -= datetime.timedelta(day_diff)
+        db.store_slots_info({"nutrient_last_added":date_added})
         slots.check_nutrient() #this will trigger nutrient days signal
 
-    # def refresh_nutrient_days(self, days):
-        
     def refresh_slots_status(self, sjson, status_msg):
         if self.root.property("busySlots") is False:
             self.root.setProperty("plantSlots", sjson)
