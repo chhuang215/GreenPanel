@@ -87,7 +87,6 @@ Rectangle {
                 objectName:"txtClock"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                font.family: "Ariel"
                 font.pointSize: 38
             }
         }

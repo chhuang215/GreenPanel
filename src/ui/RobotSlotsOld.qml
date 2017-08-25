@@ -56,7 +56,6 @@ Item{
         anchors.right: panelA.right
         anchors.rightMargin: 35
         text: currLeft
-        font.family: "Ariel"
         font.bold: true
         font.pointSize: 36
     }
@@ -102,7 +101,6 @@ Item{
         anchors.leftMargin: 35
 
         text: currRight
-        font.family: "Ariel"
         font.bold: true
         font.pointSize: 36
     }

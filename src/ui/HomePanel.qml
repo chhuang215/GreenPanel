@@ -158,9 +158,9 @@ Item{
                     property alias text: txt.text
                     width: txt.width + 20
                     height: txt.height + 10
-                    anchors.top: btnRobot.top
+                    anchors.bottom: btnRobot.top
                     anchors.right: btnRobot.right
-                    anchors.topMargin: -10
+                    anchors.bottomMargin: - 25
                     anchors.rightMargin: -5
                     visible : opacity > 0.0
                     opacity : txt.text.length > 0 ? 1 : 0
@@ -187,6 +187,11 @@ Item{
                             text: ""
                             color: "white"
                             font.pointSize:12
+                            wrapMode:Text.Wrap 
+                            onTextChanged:{
+                                if(width > btnRobot.width) width = btnRobot.width;
+                                else width = undefined
+                            }
                         }
                         MouseArea{anchors.fill:parent}
                         Rectangle{ // X button
