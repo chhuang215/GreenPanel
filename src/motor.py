@@ -7,9 +7,9 @@ from controller import GPIOController
 class Motor:
     '''Motor class'''
     
-    PWM_FREQ = 100
-    PWM_DC = 28
-    PWM_DC_FAST = 50
+    PWM_FREQ = 75
+    PWM_DC = 45
+    PWM_DC_FAST = 75
 
     DIR_CW = RIGHT = 1
     DIR_CCW = LEFT = 2
@@ -25,14 +25,14 @@ class Motor:
             self.timer.enabled = True
 
     def manual_rotate(self, direction):
-        lid = GPIOController.get_component(GPIOController.PIN.PUSH_BUTTON)
-        if lid.status == lid.OPENED:
-            self.rotate(direction=direction, dutycycle=Motor.PWM_DC_FAST)
+        #lid = GPIOController.get_component(GPIOController.PIN.PUSH_BUTTON)
+       # if lid.status == lid.OPENED:
+        self.rotate(direction=direction, dutycycle=Motor.PWM_DC_FAST)
 
     def manual_stop(self):
-        lid = GPIOController.get_component(GPIOController.PIN.PUSH_BUTTON)
-        if lid.status == lid.OPENED:
-            self.stop()
+        #lid = GPIOController.get_component(GPIOController.PIN.PUSH_BUTTON)
+        #if lid.status == lid.OPENED:
+        self.stop()
 
     def rotate(self, direction=RIGHT, dutycycle=PWM_DC):
         self.pwm.ChangeDutyCycle(dutycycle)
@@ -60,7 +60,9 @@ class MotorRotateTimer:
         curr_dt = datetime.datetime.now()
         print("!MOTOR Check_Timer %s %s" % (self.motor.__class__.__name__, curr_dt), end='')
         minute = curr_dt.minute
-        if minute % 30 >= 0 and minute % 30 < 15:
+        hour = curr_dt.hour
+        #if minute % 30 >= 0 and minute % 30 < 15:
+        if hour >= 7 and hour < 24 and (minute >= 0 and minute < 5):
             self.motor.rotate(direction=Motor.DIR_CCW)
             print(" ! MOTOR_ROTATING")
         else:
@@ -75,7 +77,7 @@ class MotorRotateTimer:
         now = datetime.datetime.now()
         print("MOTOR TIMER loop", now)
         next_check_time = now.replace(second=0, microsecond=0)
-        tt = 15 - (now.minute % 15)
+        tt = 5 - (now.minute % 5)
         next_check_time += datetime.timedelta(minutes=tt)
         interval = next_check_time - now
         print("MOTOR next check time", next_check_time)

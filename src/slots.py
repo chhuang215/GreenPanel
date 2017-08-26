@@ -94,8 +94,8 @@ class RefreshTimer():
         now = datetime.datetime.now()
 
         print("SLOTs timer loop", now)
-        next_check_time = now.replace(second=0, microsecond=0)
-        next_check_time += datetime.timedelta(minutes=5)
+        next_check_time = now.replace(minute=0, second=0, microsecond=0)
+        next_check_time += datetime.timedelta(hours=1)
             
         interval = next_check_time - now
         print("SLOTs timer next check time", next_check_time)
