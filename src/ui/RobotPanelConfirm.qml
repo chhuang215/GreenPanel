@@ -43,34 +43,43 @@ Item{
         }
     }
 
+
+    Row {
+        id: listHeader
+        anchors.top:parent.top
+        anchors.topMargin: 75
+        anchors.horizontalCenter:parent.horizontalCenter
+        spacing: 1
+        
+        Repeater {
+            id: repeater
+            model: ["Plant Type", "Slot", "DatePlanted", ""]
+
+            Label {
+                width: index == 2 ? 200 : index == 3 ? 160 : 180
+                text: modelData
+                font.bold: true
+                font.pixelSize: 20
+                padding: 10
+                background: Rectangle { color: "silver" }
+            }
+        }
+    }
+
     ListView {
         id: listView
         width: 720
-        anchors.top:parent.top
-        anchors.bottom: parent.bottom
+        
+        anchors.top:listHeader.bottom
+        anchors.bottom: btnConfirm.top
+        anchors.bottomMargin: 30
         anchors.horizontalCenter:parent.horizontalCenter
-        anchors.topMargin: 90
+        anchors.topMargin: 5
         model: listModel
-        header: Row {
-            spacing: 1
-            Repeater {
-                id: repeater
-                model: ["Plant Type", "Slot", "DatePlanted", ""]
-
-                Label {
-                    width: index == 2 ? 200 : index == 3 ? 160 : 180
-                    text: modelData
-                    font.bold: true
-                    font.pixelSize: 20
-                    padding: 10
-                    background: Rectangle { color: "silver" }
-                }
-            }
-        }
 
         delegate: Row{
             width: listView.width
-            height: listView.height / 8
+            height: listView.height / 6
             spacing:1
 
             Label {
@@ -257,7 +266,7 @@ Item{
                 border.color: "black"
                 Button{
                     anchors.centerIn: parent
-                    text:"Remove"
+                    text:"\u00D7"
                     onClicked:{
                         removeSelection(slotP, slotN)
 
@@ -274,6 +283,7 @@ Item{
 
     Button{
         // anchors.horizontalCenter: parent.horizontalCenter
+        id: btnConfirm
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.rightMargin: 70

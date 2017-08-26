@@ -6,7 +6,6 @@ Item{
     property var currLeft: 'A'
     property var currRight: 'B'
     property var currLeftLeft: 'A' == currLeft ? 'H' : String.fromCharCode(currLeft.charCodeAt(0) - 1)
-
     property var currRightRight: 'H' == currRight ? 'A' : String.fromCharCode(currRight.charCodeAt(0) + 1)
     
     property int capsuleRadius: 50
@@ -15,6 +14,7 @@ Item{
     property int capsuleRadius2: 25
     property int capsuleHeight2: 160
 
+    // horizontal center point of the canvas drawing
     property int capsulesCenter: capsules.width / 2
 
     property int capsuleXOffset : 57
@@ -27,6 +27,10 @@ Item{
     property int capsuleBX: capsulesCenter + capsuleXOffset
     property int capsuleCX: capsulesCenter + capsuleXOffset2
     property int capsuleHX: capsulesCenter - capsuleXOffset2
+
+    property var slotComponent: {}
+    property int leftSlotsQuantity: 0
+    property int rightSlotsQuantity: 0
 
     Button {
         anchors.left: capsules.horizontalCenter
@@ -167,6 +171,36 @@ Item{
         //     border.width: 2
         //     color: "transparent"
         // }
+    }
+
+    /* SLOTS on the LEFT */
+    Repeater {
+        model: leftSlotsQuantity
+        Loader { 
+            sourceComponent: slotComponent
+            
+            onLoaded:{
+                item.x = capsuleAX + capsuleRadius + item.width/2 - 5 - (5 * (leftSlotsQuantity - 1 - index))
+                item.y = capsuleY  + (leftSlotsQuantity == 3 ?  + 50 : 80) + 80 * (leftSlotsQuantity - 1 - index)
+                item.slotNum = index
+                item.slotPane = Qt.binding(function() { return currLeft} )
+            }
+        }
+    }
+    /* end SLOTS on the LEFT */
+
+    /* SLOTS on the RIGHT */
+    Repeater {
+        model: rightSlotsQuantity
+        Loader { 
+            sourceComponent: slotComponent
+            onLoaded:{
+                item.x = capsuleBX + capsuleRadius + item.width/2 - 5 + (5 * (rightSlotsQuantity  - 1- index))
+                item.y = capsuleY  + (rightSlotsQuantity == 3 ?  + 50 : 80) + 80 * (rightSlotsQuantity - 1 - index)
+                item.slotNum = index
+                item.slotPane = Qt.binding(function() { return currRight} )
+            }
+        }
     }
 
     // property alias leftPanel: panelA
