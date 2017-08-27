@@ -56,7 +56,7 @@ def main():
     wpump = GPIOController.add_component(pump.WaterPump, PIN.WATER_PUMP)
 
     # Motor
-    motr = GPIOController.add_component(motor.Motor, PIN.MOTOR)
+    motr = GPIOController.add_component(motor.Motor, PIN.MOTOR, enable_timer=False)
 
     # Lid open/close event listen
     GPIO.add_event_detect(lid.pin, GPIO.BOTH, callback=lid.open_close)
