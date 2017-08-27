@@ -290,7 +290,7 @@ Item{
         anchors.bottomMargin: 15
         text:"CONFIRM"
         onClicked:{
-            mode == 0 ? parent.addConfirm(plantData[0], slots) : removeConfirm(slots)
+            mode == 0 ? parent.addConfirm(plantData["id"], slots) : removeConfirm(slots)
         }
     }
 }
