@@ -22,7 +22,7 @@ Item{
                 // console.log(JSON.stringify(slots[p][i]))
                 var pn = ""
                 if (mode == 0){
-                    pn = plantData[1]+ " (id:"+plantData[0]+")" 
+                    pn = plantData["name"]+ " (id:"+ plantData["id"] + ")" 
                     slots[p][i].date_planted = new Date()
                 }
                 else{

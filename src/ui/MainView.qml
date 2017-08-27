@@ -209,6 +209,7 @@ Rectangle {
         
         // param: (var plantData) <obj>
         onPlantSelected:{
+            plantData["id"] = index
             panelRobotConfirm.plantData = plantData
         }
     }

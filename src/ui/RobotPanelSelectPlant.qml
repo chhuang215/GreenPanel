@@ -4,9 +4,13 @@ import QtQuick.Controls 2.0
 Item{
     id: "panelRobotSelectPlant"
     visible: false
-    signal plantSelected(var plantData)
+    signal plantSelected(int index, var plantData)
 
     property var plantList: {}
+
+    // onPlantListChanged:{
+    //     console.log(JSON.stringify(plantList,  null, '\t') )
+    // }
 
     Text{
         id: "txtLabel"
@@ -34,13 +38,13 @@ Item{
                     anchors.horizontalCenter : parent.horizontalCenter
                     width: 150
                     height: 150
-                    text: modelData[1]
-                    onClicked: panelRobotSelectPlant.plantSelected(modelData)
+                    text: modelData["name"]
+                    onClicked: panelRobotSelectPlant.plantSelected(index, modelData)
                 }
                 Text{
                     anchors.horizontalCenter : parent.horizontalCenter
                     anchors.bottom : parent.bottom
-                    text: modelData[1] + " id:" + modelData[0] 
+                    text: modelData["name"] + " id:" + index 
                     font.pointSize: 16
                 }
             }

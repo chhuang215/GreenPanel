@@ -52,7 +52,8 @@ class MainWindow(QQuickView):
         
         self.panel_robot = self.root.findChild(QQuickItem, "panelRobot")
         self.panel_robot_select_plant = self.root.findChild(QQuickItem, "panelRobotSelectPlant")
-        self.panel_robot_select_plant.setProperty('plantList', [list(p) for p in plants.get_all_plants()])
+        # self.panel_robot_select_plant.setProperty('plantList', [list(p) for p in plants.get_all_plants()])
+        self.panel_robot_select_plant.setProperty('plantList', plants.get_all_plants())
 
         self.panel_robot_select = self.root.findChild(QQuickItem, "panelRobotSelect")
         self.panel_robot_confirm = self.root.findChild(QQuickItem, "panelRobotConfirm")
@@ -86,7 +87,7 @@ class MainWindow(QQuickView):
         self.panel_light.lightSwitched.connect(led.switch)
 
         # Nutrient Panel signals
-        self.panel_nutrient.nutrientAdded.connect(self.renew_nutrient_days)
+        self.panel_nutrient.nutrientAdded.connect(slots.renew_nutrient_days)
 
         # When confirm button is clicked in settings, nav back to main panel
         self.btn_setting_confirm = self.root.findChild(QQuickItem, "btnConfirm")
@@ -160,13 +161,6 @@ class MainWindow(QQuickView):
                 panel.setVisible(False)
         
         self.__nav_stack[-1].setVisible(True)
-
-    def renew_nutrient_days(self, days):
-        day_diff = 15 - days
-        date_added = datetime.date.today()
-        date_added -= datetime.timedelta(day_diff)
-        db.store_slots_info({"nutrient_last_added":date_added})
-        slots.check_nutrient() #this will trigger nutrient days signal
 
     def refresh_slots_status(self, sjson, status_msg):
         if self.root.property("busySlots") is False:

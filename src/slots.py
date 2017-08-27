@@ -1,4 +1,9 @@
-'''slots.py'''
+'''
+slots.py
+
+plant slots info and manipulation.
+
+'''
 import json
 import datetime
 import threading
@@ -94,8 +99,8 @@ class RefreshTimer():
         now = datetime.datetime.now()
 
         print("SLOTs timer loop", now)
-        next_check_time = now.replace(minute=0, second=0, microsecond=0)
-        next_check_time += datetime.timedelta(hours=1)
+        next_check_time = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        next_check_time += datetime.timedelta(days=1)
             
         interval = next_check_time - now
         print("SLOTs timer next check time", next_check_time)
@@ -118,21 +123,7 @@ class RefreshTimer():
 
 REFRESH_TIMER = RefreshTimer()
 
-
-
-# SLOTS = db.get_slots_info()["slots"]
-
-# if SLOTS is None:
-SLOTS = {
-    "A": [Slot(), Slot(), Slot()],
-    "B": [Slot(), Slot()],
-    "C": [Slot(), Slot(), Slot()],
-    "D": [Slot(), Slot()],
-    "E": [Slot(), Slot(), Slot()],
-    "F": [Slot(), Slot()],
-    "G": [Slot(), Slot(), Slot()],
-    "H": [Slot(), Slot()]
-    }
+SLOTS = None
 
 NOTIFIED_SLOTS = []
 
@@ -141,26 +132,27 @@ def insert_plant(panel, slotnum, plantid, date_added=datetime.datetime.today()):
     if not isinstance(date_added, datetime.date):
         date_added = date_added.toPyDateTime().date()
     s.insert_plant(plantid, date_added)
-    db.execute_command("INSERT INTO SLOTS VALUES (?, ?, ?, ?)", panel, slotnum , plantid, s.date_planted)
+    # db.execute_command("INSERT INTO SLOTS VALUES (?, ?, ?, ?)", panel, slotnum , plantid, s.date_planted)
     check_slots()
+    db.store_slots_info({"slots": SLOTS})
 
 def remove_plant(panel, slotnum):
     s = SLOTS[panel][slotnum]
     s.remove_plant()
-    db.execute_command("DELETE FROM SLOTS WHERE PANEL=? AND SLOT=?", panel, slotnum)
+    # db.execute_command("DELETE FROM SLOTS WHERE PANEL=? AND SLOT=?", panel, slotnum)
     check_slots()
+    db.store_slots_info({"slots": SLOTS})
 
 def syncdb():
-    data = db.execute_command("SELECT PANEL, SLOT, PLANT, DATE_PLANTED from SLOTS")
-    # print(data)
-    for aslot in data:
-        panel = aslot[0]
-        slotnum = aslot[1]
-        plantid = aslot[2]
-        date_planted = aslot[3]
+    global SLOTS
+    SLOTS = db.get_slots_info()["slots"]
 
-        SLOTS[panel][slotnum].insert_plant(plantid)
-        SLOTS[panel][slotnum].set_date_planted(date_planted)
+def renew_nutrient_days(days):
+    day_diff = 15 - days
+    date_added = datetime.date.today()
+    date_added -= datetime.timedelta(day_diff)
+    db.store_slots_info({"nutrient_last_added":date_added})
+    check_nutrient() #this will trigger nutrient days signal
 
 def check_nutrient():
     last_added = db.get_slots_info()["nutrient_last_added"]
@@ -170,28 +162,26 @@ def check_nutrient():
         days = 15 - delta.days
         if days < 0:
             days = 0
-
     controller.SIGNALER.NUTRIENT_REFRESH.emit(days)
 
 def check_slots():
     msg = ""
     ready_counter = 0
-    for sp, sr in SLOTS.items():
-        for s in sr:
+    for s_pane, s_row in SLOTS.items():
+        for s in s_row:
             stat = s.check_and_update_status()
             if stat == Slot.READY and s.notify:
                 ready_counter += 1
-                msg += sp + str(sr.index(s)+1) + " "
+                msg += s_pane + str(s_row.index(s)+1) + " "
                 if s not in NOTIFIED_SLOTS:
                     NOTIFIED_SLOTS.append(s)
-                
-    # db.store_slots_info({"slots": SLOTS})
+
     if ready_counter == 1:
         msg += "IS READY!"
     elif ready_counter > 1:
         msg += "ARE READY!"
-    # print(NOTIFIED_SLOTS)
-    controller.SIGNALER.SLOTS_REFRESH.emit(getSlotsJson(), msg)
+
+    controller.SIGNALER.SLOTS_REFRESH.emit(get_slots_json_format(), msg)
 
 def clear_notified():
     for s in NOTIFIED_SLOTS:
@@ -205,5 +195,5 @@ def json_seriel(obj):
         return obj.strftime('%m/%d/%Y')
     return obj.__dict__
 
-def getSlotsJson():
+def get_slots_json_format():
     return json.loads(json.dumps(SLOTS, default=json_seriel))

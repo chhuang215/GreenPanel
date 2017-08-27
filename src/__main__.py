@@ -18,8 +18,6 @@ from led import LED, LightTimer
 from lid import Lid
 import slots
 
-db.init()
-
 PIN = GPIOController.PIN
 
 def main():
