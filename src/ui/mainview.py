@@ -27,7 +27,7 @@ class MainWindow(QObject):
 
         # Get root
         # self.root = self.rootObject()
-        self.root = self.engine.rootObjects()[0]
+        self.root = engine.rootObjects()[0]
 
         # Root child
         self.txt_clock = self.root.findChild(QQuickItem, "txtClock")

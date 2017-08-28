@@ -3,10 +3,10 @@ import QtQuick.Controls 2.0
 
 Item{
 
-    property var currLeft: 'A'
-    property var currRight: 'B'
-    property var currLeftLeft: 'A' == currLeft ? 'H' : String.fromCharCode(currLeft.charCodeAt(0) - 1)
-    property var currRightRight: 'H' == currRight ? 'A' : String.fromCharCode(currRight.charCodeAt(0) + 1)
+    property string currLeft: 'A'
+    property string currRight:  'H' == currLeft ? 'A' : String.fromCharCode(currLeft.charCodeAt(0) + 1)
+    property string currLeftLeft: 'A' == currLeft ? 'H' : String.fromCharCode(currLeft.charCodeAt(0) - 1)
+    property string currRightRight: 'H' == currRight ? 'A' : String.fromCharCode(currRight.charCodeAt(0) + 1)
     
     property int capsuleRadius: 50
     property int capsuleHeight: 160
@@ -42,9 +42,9 @@ Item{
         text: ">"
        
         onClicked : {
-            var a = (currLeft.charCodeAt(0) - 65 + 2) % 8
+            var a = (currLeft.charCodeAt(0) - 65 + 1) % 8
             currLeft = String.fromCharCode(a + 65)
-            currRight = String.fromCharCode(((a + 1) % 8 ) + 65)
+            // currRight = String.fromCharCode(((a + 1) % 8 ) + 65)
         }
     }
 
@@ -57,10 +57,10 @@ Item{
         y: 25
         text: "<"
         onClicked : {
-            var a = currLeft.charCodeAt(0) - 65 - 2
+            var a = currLeft.charCodeAt(0) - 65 - 1
             if (a < 0) a += 8
             currLeft = String.fromCharCode(a + 65)
-            currRight = String.fromCharCode(((a + 1) % 8 ) + 65)
+            // currRight = String.fromCharCode(((a + 1) % 8 ) + 65)
         }
     }
 
@@ -173,32 +173,26 @@ Item{
         // }
     }
 
-    /* SLOTS on the LEFT */
     Repeater {
-        model: leftSlotsQuantity
-        Loader { 
-            sourceComponent: slotComponent
-            
-            onLoaded:{
-                item.x = capsuleAX + capsuleRadius + item.width/2 - 5 - (5 * (leftSlotsQuantity - 1 - index))
-                item.y = capsuleY  + (leftSlotsQuantity == 3 ?  + 50 : 80) + 80 * (leftSlotsQuantity - 1 - index)
-                item.slotNum = index
-                item.slotPane = Qt.binding(function() { return currLeft} )
-            }
-        }
-    }
-    /* end SLOTS on the LEFT */
-
-    /* SLOTS on the RIGHT */
-    Repeater {
-        model: rightSlotsQuantity
-        Loader { 
-            sourceComponent: slotComponent
-            onLoaded:{
-                item.x = capsuleBX + capsuleRadius + item.width/2 - 5 + (5 * (rightSlotsQuantity  - 1- index))
-                item.y = capsuleY  + (rightSlotsQuantity == 3 ?  + 50 : 80) + 80 * (rightSlotsQuantity - 1 - index)
-                item.slotNum = index
-                item.slotPane = Qt.binding(function() { return currRight} )
+        model: [leftSlotsQuantity, rightSlotsQuantity]
+        Repeater{
+            property int slotsQuantity: modelData
+            property int capsuleX: index == 0 ? capsuleAX: capsuleBX
+            property var currLeftRight : index == 0 ? currLeft : currRight
+            model: modelData
+            Loader { 
+                sourceComponent: slotComponent
+                onLoaded:{
+                    if(currLeftRight == currLeft){
+                        item.x = capsuleX + capsuleRadius + item.width/2 - 5 - (5 * (slotsQuantity  - 1- index))
+                    }
+                    else{ 
+                        item.x = capsuleX + capsuleRadius + item.width/2 - 5 + (5 * (slotsQuantity  - 1- index)) 
+                    }
+                    item.y = capsuleY  + (slotsQuantity == 3 ?  + 50 : 80) + 80 * (slotsQuantity - 1 - index)
+                    item.slotNum = index
+                    item.slotPane = Qt.binding(function() { return currLeftRight} )
+                }
             }
         }
     }
