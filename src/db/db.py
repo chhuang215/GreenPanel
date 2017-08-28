@@ -52,7 +52,7 @@ def reset_slots():
     import slots
     Slot = slots.Slot
     plant_slots = {
-        "nutrient_last_added": 0,
+        "nutrient_last_added": None,
         "slots": {
             "A": [Slot(), Slot(), Slot()],
             "B": [Slot(), Slot()],
