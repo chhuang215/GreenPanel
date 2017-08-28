@@ -6,7 +6,7 @@ import db
 import slots
 import plants
 
-from PyQt5.QtCore import (Qt, QUrl, QCoreApplication, QVariant, QJsonValue,
+from PyQt5.QtCore import (QObject, Qt, QUrl, QCoreApplication, QVariant, QJsonValue,
                           QTimer, QMetaObject, Q_ARG, pyqtSlot, pyqtSignal)
 # from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQuick import QQuickView, QQuickItem
@@ -16,17 +16,18 @@ from PyQt5.QtQml import QQmlApplicationEngine, QQmlProperty, QQmlComponent
 GPIOCtrler = controller.GPIOController
 PIN = GPIOCtrler.PIN
 
-class MainWindow(QQuickView):
-
+class MainWindow(QObject):
+# class MainWindow(QQuickView):
     def __init__(self):
         super().__init__()
- 
-#        self.setSource(QUrl('MainView.qml'))
-        self.setSource(QUrl.fromLocalFile('ui/MainView.qml'))
+        engine = QQmlApplicationEngine(self)
+        # self.setSource(QUrl.fromLocalFile('ui/MainView.qml'))
+        engine.load(QUrl.fromLocalFile('ui/MainView.qml'))
         self.__nav_stack = []
 
         # Get root
-        self.root = self.rootObject()
+        # self.root = self.rootObject()
+        self.root = self.engine.rootObjects()[0]
 
         # Root child
         self.txt_clock = self.root.findChild(QQuickItem, "txtClock")

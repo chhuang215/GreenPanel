@@ -73,8 +73,8 @@ def main():
         slots.syncdb()
 
         ui_view = UIController.get_ui()
-        ui_view.show()
-        ui_view.showFullScreen()
+        ui_view.root.show()
+        # ui_view.root.showFullScreen()
 
         # Start threads and timers
         tsensor.start()

@@ -3,16 +3,18 @@ import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
 
 
-Rectangle {
+ApplicationWindow {
 
     id: main
     width: 800; height: 480
-    signal quit
+    maximumWidth : 800
+    maximumHeight : 480
+    flags: Qt.FramelessWindowHint
+    signal quit()
     signal rotateMotor(int dir)
-    signal stopMotor
-    signal navBack
+    signal stopMotor()
+    signal navBack()
     signal navTo(var p)
-    // color: "lightgray"
     property var plantSlots: initSlot()
     property var nutrientDays: -1
     property bool waterLevelIsGood: false
@@ -197,7 +199,6 @@ Rectangle {
             // if leaves panel, sync robot panel's view
             if(!visible) {
                 panelRobotSelect.currLeft = currLeft
-                panelRobotSelect.currRight = currRight
             }
         }
     }
@@ -223,7 +224,6 @@ Rectangle {
             // if leaves panel, sync robot panel's view
             if(!visible) {
                 panelRobot.currLeft = currLeft
-                panelRobot.currRight = currRight
             }
         }
     }
