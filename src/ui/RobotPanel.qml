@@ -12,41 +12,35 @@ Item{
     property alias currRight : robotSlots.currRight
 
     Button {
-        x: 700
-        y: 100
+        id:btnAddPlant
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.topMargin: 100
         text: "Add Plant"
         objectName: "btnAddPlant"
         onClicked: parent.addButtonClicked()
     }
 
     Button {
-        x: 700
-        y: 150
+        anchors.right: parent.right
+        anchors.top : btnAddPlant.bottom
+        anchors.topMargin : 5
         text: "Remove Plant"
         objectName: "btnRemovePlant"
         onClicked: parent.removeButtonClicked()
     }
 
-    // Button {
-    //     x: 700
-    //     y: 200
-    //     text: "SEE JSON"
-    //     onClicked:{
-    //         console.log(JSON.stringify(slots,  null, '\t') )
-    //     }
-    // }
-
-
     /* The Slot Hole Component */
     Component{
         id: slotHole
         RoundMouseArea {
-            property var slotPane : {}
+            property string slotPane : ""
             property int slotNum : -1
-            status: slots[slotPane][slotNum].status
+            property var slotData: slots[slotPane][slotNum]
+            status: slotData.status
             label: slotNum + 1
             onClicked: {
-                var s = slots[slotPane][slotNum]
+                var s = slotData
                 var plant = s.plant
                 popup.slotPos = [slotPane, slotNum]
                 if(plant) {
@@ -79,6 +73,7 @@ Item{
         height: 360
         modal: true
         focus: true
+        dim: false
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside	
 
         property int days: 0
@@ -89,6 +84,11 @@ Item{
         property var datePlanted: "dd/mm/yy"
         property var dateReady: "dd/mm/yy"
         
+        // enter:Transition {
+        //     NumberAnimation { property: "width"; from: 0; to: 640 ; duration: 100}
+        // }
+        enter: null
+        exit: null
         onClosed: {
             days = 0
             plantName = ""
@@ -98,7 +98,7 @@ Item{
             slotPos: {}
         }
 
-        Rectangle{
+        Rectangle{ // X Button
             width:30
             height:30
             radius: 10

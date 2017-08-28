@@ -15,7 +15,7 @@ Item{
     property bool waterGood : false 
     property int nutrientDays : -1
     property alias temperatureUnit : tempDisplay.unit
-
+    
     function updateTemperature(c, f, s){
         tempDisplay.tempC = c + " \u00B0C";
         tempDisplay.tempF = f + " \u00B0F";
@@ -152,7 +152,14 @@ Item{
                 id:"btnRobot"
                 objectName:"btnRobot"
                 text: qsTr("Robot Guy")    
-
+                // background: Rectangle {
+                //     implicitWidth: 100
+                //     implicitHeight: 40
+                //     color: parent.down ? "#d6d6d6" : "#f6f6f6"
+                //     border.color: "#26282a"
+                //     border.width: 1
+                //     radius: 100
+                // }
                 Item{
                     id: robotNotification
                     property alias text: txt.text
