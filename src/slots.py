@@ -6,6 +6,7 @@ plant slots info and manipulation.
 '''
 import json
 import datetime
+from datetime import datetime, date, timedelta
 import threading
 
 import controller
@@ -29,7 +30,7 @@ class Slot:
         self.selected = False
         self.notify = True
 
-    def insert_plant(self, plant_id, date_added=datetime.datetime.today()):
+    def insert_plant(self, plant_id, date_added=date.today()):
         """
         Insert Plant obj
 
@@ -59,7 +60,7 @@ class Slot:
         :param date: 
         """
         self.date_planted = date
-        self.date_ready = self.date_planted + datetime.timedelta(days=self.plant.days_harvest)
+        self.date_ready = self.date_planted + timedelta(days=self.plant.days_harvest)
 
     def check_and_update_status(self):
         """
@@ -78,7 +79,7 @@ class Slot:
             self.days = 0
             return 0
 
-        now = datetime.date.today()
+        now = date.today()
         delta = now - self.date_planted
         self.days = delta.days
         return self.days 
@@ -96,11 +97,11 @@ class RefreshTimer():
         check_slots()
         check_nutrient()
 
-        now = datetime.datetime.now()
+        now = datetime.now()
 
         print("SLOTs timer loop", now)
         next_check_time = now.replace(hour=0, minute=0, second=0, microsecond=0)
-        next_check_time += datetime.timedelta(days=1)
+        next_check_time += timedelta(days=1)
             
         interval = next_check_time - now
         print("SLOTs timer next check time", next_check_time)
@@ -108,7 +109,7 @@ class RefreshTimer():
         self._timer.start()
 
     def activate(self):
-        print("SLOTs timer ACTIVATED", datetime.datetime.now())
+        print("SLOTs timer ACTIVATED", datetime.now())
         if not self.is_activated:
             ### Activate timerv ###
             self.is_activated = True
@@ -116,7 +117,7 @@ class RefreshTimer():
             #######################
 
     def deactivate(self):
-        print("SLOTs timer DEACTIVATED", datetime.datetime.now())
+        print("SLOTs timer DEACTIVATED", datetime.now())
         if self._timer is not None:
             self._timer.cancel()
         self.is_activated = False
@@ -127,9 +128,9 @@ SLOTS = None
 
 NOTIFIED_SLOTS = []
 
-def insert_plant(panel, slotnum, plantid, date_added=datetime.datetime.today()):
+def insert_plant(panel, slotnum, plantid, date_added=date.today()):
     s = SLOTS[panel][slotnum]
-    if not isinstance(date_added, datetime.date):
+    if not isinstance(date_added, date):
         date_added = date_added.toPyDateTime().date()
     s.insert_plant(plantid, date_added)
     # db.execute_command("INSERT INTO SLOTS VALUES (?, ?, ?, ?)", panel, slotnum , plantid, s.date_planted)
@@ -149,8 +150,8 @@ def syncdb():
 
 def renew_nutrient_days(days):
     day_diff = 15 - days
-    date_added = datetime.date.today()
-    date_added -= datetime.timedelta(day_diff)
+    date_added = date.today()
+    date_added -= timedelta(day_diff)
     db.store_slots_info({"nutrient_last_added":date_added})
     check_nutrient() #this will trigger nutrient days signal
 
@@ -158,7 +159,7 @@ def check_nutrient():
     last_added = db.get_slots_info()["nutrient_last_added"]
     days = 0
     if last_added is not None:
-        delta = datetime.date.today() - last_added
+        delta = date.today() - last_added
         days = 15 - delta.days
         if days < 0:
             days = 0
@@ -191,7 +192,7 @@ def clear_notified():
     check_slots()
 
 def json_seriel(obj):
-    if isinstance(obj, (datetime.datetime, datetime.date)):
+    if isinstance(obj, (datetime, date)):
         return obj.strftime('%m/%d/%Y')
     return obj.__dict__
 
