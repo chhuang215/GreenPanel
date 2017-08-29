@@ -3,8 +3,8 @@
 import sys
 
 import RPi.GPIO as GPIO
-from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtGui import QFont, QGuiApplication
+# from PyQt5.QtWidgets import QApplication
 
 import db
 
@@ -62,7 +62,7 @@ def main():
     try:
         # start QT UI
         sargv = sys.argv + ['-style', 'material']
-        app = QApplication(sargv)
+        app = QGuiApplication(sargv)
         font = QFont()
         font.setFamily("Ariel")
 

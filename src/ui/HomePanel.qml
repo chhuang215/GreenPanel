@@ -5,17 +5,14 @@ import QtQuick.Controls.Material 2.0
 Item{
   
     id:"panelHome"
-    // property alias btnRobot : btnRobot
 
-    signal rotateMotor(int d)
-    signal stopMotor()
     signal unitChanged(var unit)
     signal clearNotify()
 
     property bool waterGood : false 
     property int nutrientDays : -1
     property alias temperatureUnit : tempDisplay.unit
-    
+
     function updateTemperature(c, f, s){
         tempDisplay.tempC = c + " \u00B0C";
         tempDisplay.tempF = f + " \u00B0F";
@@ -27,15 +24,17 @@ Item{
     }
 
     Column{
-        anchors.horizontalCenter: parent.horizontalCenter
+        // anchors.horizontalCenter: parent.horizontalCenter
+        anchors.right:parent.right
+        anchors.left:parent.left
         anchors.bottom: parent.bottom
         anchors.bottomMargin:60
         // anchors.topMargin: 10
-        width: parent.width
+        
         spacing:50
 
         Row {
-            x: 119
+            anchors.horizontalCenter:parent.horizontalCenter
             spacing: 60
             
              Button {
@@ -86,7 +85,7 @@ Item{
         }
 
         Row {
-            x: 30
+            anchors.horizontalCenter:parent.horizontalCenter
             spacing: 30
             
             Button {
