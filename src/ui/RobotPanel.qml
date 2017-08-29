@@ -45,7 +45,7 @@ Item{
                 popup.slotPos = [slotPane, slotNum]
                 if(plant) {
                     popup.plantName = plant.name
-                    popup.datePlanted = s.date_planted
+                    popup.datePlanted = new Date(s.date_planted)
                     popup.dateReady = s.date_ready
                     popup.days = s.days
                     popup.description = "Description for " + plant.name
@@ -169,7 +169,7 @@ Item{
                 height: 40
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: popup.datePlanted
+                    text: popup.datePlanted.toLocaleDateString(Qt.locale(), "dd/MM/yyyy")
                     font.pointSize: 12; font.bold: false
                 }
             }
@@ -243,10 +243,19 @@ Item{
         Button{
             anchors.bottom: parent.bottom
             anchors.right: parent.right
+            anchors.bottomMargin: 130
+            anchors.rightMargin: 15
+            text:"Change date planted"
+            objectName: "btnEditPlantDate"
+            onClicked: popup2.open()
+        }
+
+        Button{
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
             anchors.bottomMargin: 15
             anchors.rightMargin: 15
             text:"Remove this plant"
-
         }
 
         // Item{
@@ -280,5 +289,152 @@ Item{
            
         // }
 
+                Popup {
+                        id: popup2
+                        x: parent.width/2
+                        y: 0
+                        width: parent.width/2 -50
+                        height: parent.height/2
+                        modal: true
+                        focus: true
+                        padding : 3
+                        leftPadding : 10
+                        dim: false
+                        enter: null
+                        exit: null
+                        Row{
+                            spacing: 10
+                            
+                            Column{
+                                width: 75
+                                
+                                Button{
+                                    width: 75
+                                    height: 35
+                                    text: "\u25B2"
+                                    onClicked: {
+                                        //var s = slotData
+                                        //var d = popup.datePlanted
+                                        //d.setFullYear(d.getFullYear() + 1)
+                                        //s.date_planted = d
+                                    }
+                                }
+
+                                Text{
+                                    id: txtSetYear
+                                    width: parent.width
+                                    text: popup.datePlanted.getFullYear()
+                                    font.pointSize: 16
+                                    horizontalAlignment : Text.AlignHCenter
+                                }
+
+                                Button{
+                                    width: 75
+                                    height: 35
+                                    text: "\u25BC"
+                                    onClicked: {
+                                        var d = slots[slotP][slotN].date_planted
+                                        d.setFullYear(d.getFullYear() - 1)
+                                        // slots[slotP][slotN].date_planted = d
+                                        dateAdded = d
+                                    }
+                                }
+                            }
+
+                            Column{
+                                width: 75
+                                Button{
+                                    width: 75
+                                    height: 35
+                                    text: "\u25B2"
+                                    onClicked: {
+                                        var d = slots[slotP][slotN].date_planted
+                                        d.setMonth((d.getMonth() + 1) % 12)
+                                        // slots[slotP][slotN].date_planted = d
+                                        dateAdded = d
+                                    }
+                                }
+
+                                Text{
+                                    id: txtSetMonth
+                                    width: parent.width
+                                    text: {
+                                        var dateString = popup.datePlanted.toLocaleDateString(Qt.locale(), "MMM")
+                                        return dateString
+                                    }
+                                    font.pointSize: 16
+                                    horizontalAlignment : Text.AlignHCenter
+                                }
+
+                                Button{
+                                    width: 75
+                                    height: 35
+                                    text: "\u25BC"
+                                    onClicked: {
+                                        var d = slots[slotP][slotN].date_planted
+                                        var m = d.getMonth()
+                                        d.setMonth(m == 0 ? 11 : (m - 1))
+                                        // slots[slotP][slotN].date_planted = d
+                                        dateAdded = d
+                                    }
+                                }
+                            }
+
+                            
+                            Column{
+                                width: 75
+                                Button{
+                                    width: 75
+                                    height: 35
+                                    text: "\u25B2"
+                                    onClicked: {
+                                        var d = slots[slotP][slotN].date_planted
+                                        d.setDate(d.getDate() + 1)
+                                        // slots[slotP][slotN].date_planted = d
+                                        dateAdded = d
+                                    }
+                                }
+
+                                Text{
+                                    id: txtSetDate
+                                    width: parent.width
+                                    text: popup.datePlanted.getDate()
+                                    font.pointSize: 16
+                                    horizontalAlignment : Text.AlignHCenter
+                                }
+
+                                Button{
+                                    width: 75
+                                    height: 35
+                                    text: "\u25BC"
+                                    onClicked: {
+                                        var d = slots[slotP][slotN].date_planted
+                                        d.setDate(d.getDate() - 1)
+                                        // slots[slotP][slotN].date_planted = d
+                                        dateAdded = d
+                                    }
+                                }
+                            }
+                        }
+
+                        Button{
+                            id: btnDateOk
+                            anchors.right: parent.right
+                            anchors.bottom: parent.bottom
+                            text: "ok"
+                            onClicked: {
+                                popup2.close()
+                            }
+                        }
+                        Button{
+                            id: btnDateToday
+                            anchors.right: btnDateOk.left
+                            anchors.bottom: parent.bottom
+                            text: "today"
+                            onClicked: {
+                            popup.datePlanted = new Date()
+                            }
+                        }
+                }/* end Popup2 */
     }/* end Popup */
 }
