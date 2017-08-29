@@ -31,13 +31,16 @@ class Lid:
         print("Lid GPIO input: " + str(GPIO.input(self.pin)))
 
         if GPIO.input(self.pin) == GPIO.HIGH:
-            print("LID closed")
+            # print("LID closed")
+            controller.SIGNALER.LID_SWITCH.emit(False)
             self.status = Lid.CLOSED
             blue_led.resume()
             yellow_led.resume()
             motr.timer.activate()
+            
         else:
-            print("LID is open")
+            # print("LID is open")
+            controller.SIGNALER.LID_SWITCH.emit(True)
             self.status = Lid.OPENED
             blue_led.turn_on_temporary()
             yellow_led.turn_off_temporary()
