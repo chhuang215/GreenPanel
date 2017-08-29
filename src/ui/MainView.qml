@@ -9,7 +9,7 @@ ApplicationWindow {
     width: 800; height: 480
     maximumWidth : 800
     maximumHeight : 480
-    flags: Qt.FramelessWindowHint
+    flags: Qt.FramelessWindowHint | Qt.WindowSystemMenuHint | Qt.WindowMinimizeButtonHint | Qt.Window
     signal quit()
     signal rotateMotor(int dir)
     signal stopMotor()
@@ -36,6 +36,10 @@ ApplicationWindow {
             st[p] = sl
         }
         return st
+    }
+
+    function enableMotorRotate(enable){
+        motorRotateButtons.enabled = enable
     }
 
     Rectangle{
@@ -94,8 +98,10 @@ ApplicationWindow {
         }
 
         Row{
+            id: motorRotateButtons
             anchors.right: parent.right
             spacing: 5
+            enabled:false
             Button{
                 id:"btnRotateLeft"
                 objectName:"btnRotateLeft"
@@ -116,7 +122,6 @@ ApplicationWindow {
                 onReleased: stopMotor()
                 onCanceled: stopMotor()
                 visible: panelHome.visible || panelRobot.visible || panelRobotSelect.visible
-
             }
         }
         
@@ -126,8 +131,6 @@ ApplicationWindow {
         id: "panelHome"
         objectName:"panelHome"
         anchors.fill: parent
-        onRotateMotor: parent.rotateMotor(d)
-        onStopMotor: parent.stopMotor()
         nutrientDays: main.nutrientDays
         waterGood: waterLevelIsGood
     }
