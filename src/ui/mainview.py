@@ -126,6 +126,7 @@ class MainWindow(QObject):
         self.panel_robot.addButtonClicked.connect(lambda: self.__panel_nav(self.panel_robot_select_plant))
         self.panel_robot.removeButtonClicked.connect(lambda: self.__panel_nav(self.panel_robot_select))
         self.panel_robot.editPlantDate.connect(slots.edit_plant_date)
+        self.panel_robot.removeOnePlant.connect(slots.remove_plant)
         self.panel_robot_select_plant.plantSelected.connect(lambda: self.__panel_nav(self.panel_robot_select))
         self.panel_robot_select.slotsSelectedDone.connect(lambda: self.__panel_nav(self.panel_robot_confirm))
         self.panel_robot_confirm.addConfirm.connect(self.add_plant_confirm)
@@ -193,7 +194,7 @@ class MainWindow(QObject):
                     slots.remove_plant(pane, i)
         
         self.__panel_nav_back(layers=2)
-
+    
     @pyqtSlot()
     def display_water_status(self):
         status = GPIOCtrler.get_component(PIN.WATER_LEVEL_SENSOR).has_enough_water()

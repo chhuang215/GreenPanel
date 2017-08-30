@@ -7,6 +7,7 @@ Item{
     visible: false
     signal addButtonClicked()
     signal removeButtonClicked()
+    signal removeOnePlant(string p, int n)
     signal editPlantDate(string p, int n, var d)
     property var slots : {}
     property string selectedP: 'A'
@@ -18,7 +19,9 @@ Item{
         id:btnAddPlant
         anchors.right: parent.right
         anchors.top: parent.top
+        anchors.rightMargin: 5
         anchors.topMargin: 100
+
         text: "Add Plant"
         objectName: "btnAddPlant"
         onClicked: parent.addButtonClicked()
@@ -27,6 +30,7 @@ Item{
     Button {
         anchors.right: parent.right
         anchors.top : btnAddPlant.bottom
+        anchors.rightMargin: 5
         anchors.topMargin : 5
         text: "Remove Plant"
         objectName: "btnRemovePlant"
@@ -258,13 +262,45 @@ Item{
             anchors.bottomMargin: 15
             anchors.rightMargin: 15
             text:"Remove this plant"
+            onClicked: {
+                popupConfirmRemove.open()
+                // popup.close()
+                // removeOnePlant(selectedP, selectedN)
+            }
+        
         }
-
+        Popup{
+            id: popupConfirmRemove
+            width: 210
+            height: 110
+            x : parent.width/2 - width/2
+            y : parent.height/2 - height/2
+            enter: null
+            exit: null
+            Row{
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing:10
+                Button{
+                    width: 85
+                    text: "OK"
+                    onClicked: {
+                        popupConfirmRemove.close()
+                        popup.close()
+                        removeOnePlant(selectedP, selectedN)
+                    }
+                }
+                Button{
+                    width: 85
+                    text:"Cancel"
+                    onClicked: popupConfirmRemove.close()
+                }
+            }
+        }
         Popup {
             id: popup2
             x: parent.width/2
             y: 0
-            width: parent.width/2 -50
+            width: parent.width/2 
             height: parent.height/2
             modal: true
             focus: true
