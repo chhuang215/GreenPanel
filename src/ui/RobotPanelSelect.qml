@@ -10,7 +10,7 @@ Item{
     property int mode: 0 // 0 is AddMode, 1 is RemoveMode
 
     property var slots : {}
-
+    property int updateCount: 0
     property alias currLeft : robotSlots.currLeft
     property alias currRight : robotSlots.currRight
 
@@ -33,7 +33,20 @@ Item{
 
         property int center: width/2
         property int radius: width/2
+        transform: Rotation { 
+            id: miniRotation
+            origin.x: mini.center; origin.y: mini.center; 
+            angle: {
+                var angleOffset = currLeft.charCodeAt(0) - 65
+                var a = 45 * angleOffset
+                return 45 * angleOffset
+            }
 
+            Behavior on angle {
+                id:miniAngleBehavior
+                NumberAnimation { duration: 150 }
+            }
+        }
         Canvas{
             anchors.fill:parent
             onPaint: {
@@ -96,27 +109,39 @@ Item{
                 model: 8
                 Item{
                     id: miniPane
-                    property var capsuleLabel: String.fromCharCode((((currLeft.charCodeAt(0) - 65) + index) % 8 + 65))
+                    // property string capsuleLabel: String.fromCharCode((((currLeft.charCodeAt(0) - 65) + index) % 8 + 65))
+                    property string capsuleLabel: String.fromCharCode(((("A".charCodeAt(0) - 65) + index) % 8 + 65))
                     property real angle: (112.5 - 45 * index) * Math.PI/180
                     Repeater{
                         model: slots[capsuleLabel].length
                         Loader { 
                             sourceComponent: miniSlot
                             onLoaded:{
+                                
                                 var distance = 0.8 - 0.25 * index
                                 var centerX = mini.center - item.width/2
                                 var centerY = mini.center - item.height/2
                                 item.x = centerX + mini.radius * Math.cos(miniPane.angle) * distance
                                 item.y = centerY + mini.radius * Math.sin(miniPane.angle) * distance
-                                item.slotData = Qt.binding(function(){ return slots[miniPane.capsuleLabel][index]})
+                                item.slotData = Qt.binding(function(){var u = updateCount; return slots[miniPane.capsuleLabel][index]})
                             }
                         }
                     }
 
                     Text{
+                        id:txtCapsuleLabel
                         text:capsuleLabel
                         x: mini.center - width/2 + mini.radius * Math.cos(miniPane.angle) * 1.05
                         y: mini.center - height/2 + mini.radius * Math.sin(miniPane.angle) * 1.05
+                        transform: Rotation { 
+                            origin.x: txtCapsuleLabel.width/2; origin.y: txtCapsuleLabel.height/2; 
+                            angle: {
+                                return - miniRotation.angle
+                            }
+                            Behavior on angle {
+                                NumberAnimation { duration: 50 }
+                            }
+                        }
                     }
                 }                
             }
@@ -149,7 +174,8 @@ Item{
                     // slots[slotPane][slotNum].selected = !slots[slotPane][slotNum].selected
                     slotData.selected = !slotData.selected
                     slotDataChanged()
-                    currLeftChanged() // Reevaluate purpose
+                    updateCount ^= 1
+                    // updateChanged() // Reevaluate purpose
                 }
             }
         }

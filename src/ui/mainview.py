@@ -48,7 +48,7 @@ class MainWindow(QObject):
         self.panel_water = self.root.findChild(QQuickItem, "panelWater")
         self.panel_nutrient = self.root.findChild(QQuickItem, "panelNutrient")
         self.panel_setting = self.root.findChild(QQuickItem, "panelSetting")
-        self.time_picker = self.root.findChild(QQuickItem, "timePicker")
+        self.time_picker = self.root.findChild(QQuickItem, "panelSettingTime")
         self.date_picker = self.root.findChild(QQuickItem, "datePicker")
         
         self.panel_robot = self.root.findChild(QQuickItem, "panelRobot")
