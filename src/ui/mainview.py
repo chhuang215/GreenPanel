@@ -21,6 +21,8 @@ class MainWindow(QObject):
     def __init__(self):
         super().__init__()
         engine = QQmlApplicationEngine(self)
+        # pslot = slots.PlantSlot()
+        # engine.rootContext().setContextProperty('aPlantSlot', pslot)
         # self.setSource(QUrl.fromLocalFile('ui/MainView.qml'))
         engine.load(QUrl.fromLocalFile('ui/MainView.qml'))
         self.__nav_stack = []
@@ -123,6 +125,7 @@ class MainWindow(QObject):
         # Robot Plant Add / Remove
         self.panel_robot.addButtonClicked.connect(lambda: self.__panel_nav(self.panel_robot_select_plant))
         self.panel_robot.removeButtonClicked.connect(lambda: self.__panel_nav(self.panel_robot_select))
+        self.panel_robot.editPlantDate.connect(slots.edit_plant_date)
         self.panel_robot_select_plant.plantSelected.connect(lambda: self.__panel_nav(self.panel_robot_select))
         self.panel_robot_select.slotsSelectedDone.connect(lambda: self.__panel_nav(self.panel_robot_confirm))
         self.panel_robot_confirm.addConfirm.connect(self.add_plant_confirm)
