@@ -21,6 +21,8 @@ class MainWindow(QObject):
     def __init__(self):
         super().__init__()
         engine = QQmlApplicationEngine(self)
+        # pslot = slots.PlantSlot()
+        # engine.rootContext().setContextProperty('aPlantSlot', pslot)
         # self.setSource(QUrl.fromLocalFile('ui/MainView.qml'))
         engine.load(QUrl.fromLocalFile('ui/MainView.qml'))
         self.__nav_stack = []
@@ -48,7 +50,7 @@ class MainWindow(QObject):
         self.panel_water = self.root.findChild(QQuickItem, "panelWater")
         self.panel_nutrient = self.root.findChild(QQuickItem, "panelNutrient")
         self.panel_setting = self.root.findChild(QQuickItem, "panelSetting")
-        self.time_picker = self.root.findChild(QQuickItem, "timePicker")
+        self.time_picker = self.root.findChild(QQuickItem, "panelSettingTime")
         self.date_picker = self.root.findChild(QQuickItem, "datePicker")
         
         self.panel_robot = self.root.findChild(QQuickItem, "panelRobot")
@@ -123,6 +125,7 @@ class MainWindow(QObject):
         # Robot Plant Add / Remove
         self.panel_robot.addButtonClicked.connect(lambda: self.__panel_nav(self.panel_robot_select_plant))
         self.panel_robot.removeButtonClicked.connect(lambda: self.__panel_nav(self.panel_robot_select))
+        self.panel_robot.editPlantDate.connect(slots.edit_plant_date)
         self.panel_robot_select_plant.plantSelected.connect(lambda: self.__panel_nav(self.panel_robot_select))
         self.panel_robot_select.slotsSelectedDone.connect(lambda: self.__panel_nav(self.panel_robot_confirm))
         self.panel_robot_confirm.addConfirm.connect(self.add_plant_confirm)

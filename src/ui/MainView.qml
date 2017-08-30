@@ -101,7 +101,7 @@ ApplicationWindow {
             id: motorRotateButtons
             anchors.right: parent.right
             spacing: 5
-            enabled:false
+            // enabled:false
             Button{
                 id:"btnRotateLeft"
                 objectName:"btnRotateLeft"
@@ -176,6 +176,7 @@ ApplicationWindow {
 
     SetTime{
         id: "timePicker"
+        objectName: "panelSettingTime"
         anchors.fill: parent
     }
 
@@ -243,6 +244,34 @@ ApplicationWindow {
         }
     }
     
+    // SwipeView {
+    //     id:swipe
+    //     width:45
+    //     height:45
+    //     x:200
+    //     y:70
+    //     Rectangle{
+    //         width:45
+    //         height:45
+    //         border.width:1
+    //     }
+    //     Rectangle{
+
+    //         width:45
+    //         height:45
+    //         border.width:2
+    //     }
+    // }
+    // Button{
+    //     x:300
+    //     y:70
+    //     onClicked:{swipe.setCurrentIndex(1)}
+    // }
+    // Button{
+    //     x:400
+    //     y:70
+    //     onClicked:{swipe.setCurrentIndex(0)}
+    // }
 
     // Grid {
     //     id: grid

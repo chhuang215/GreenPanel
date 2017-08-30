@@ -8,17 +8,10 @@ class UIController:
 
     MAIN_UI = None
     @staticmethod
-    def init_ui():
-        import ui
-        """Instantiate the UI"""
-        print("UI inited")
-        UIController.MAIN_UI = ui.MainWindow()
-
-    @staticmethod
     def get_ui():
         """Returns the main window, instantiate the UI if not instantiated yet"""
         if UIController.MAIN_UI is None:
-            UIController.init_ui()
+            raise Exception("UI not initialized")
 
         return UIController.MAIN_UI
 

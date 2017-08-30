@@ -9,9 +9,68 @@ import datetime
 from datetime import datetime, date, timedelta
 import threading
 
+from PyQt5.QtCore import QObject, QDateTime, pyqtProperty, pyqtSignal
+from PyQt5.QtQml import QQmlListProperty
+
 import controller
 import db
 import plants
+
+# class AllPlantSlots(QObject):
+#     plantSlotsChanged = pyqtSignal()
+#     def __init__(self):
+#         super().__init__(self)
+#         self._slots = {}
+
+        
+#     @pyqtProperty(QQmlListProperty, notify=plantSlotsChanged)
+#     def slots(self):
+#         return self._slots
+
+#     @slots.setter
+#     def slots(self, s):
+#         self._slots = s
+#         self.plantSlotsChanged.emit()
+
+#     def modify_slot(self, p, n, data):
+#         self._slots[p][n] = data
+#         self.plantSlotsChanged.emit()
+
+
+class PlantSlot(QObject):
+    '''
+        stores basic information of a plant slot
+    '''
+    EMPTY = -1
+    OCCUPIED = 0
+    READY = 1
+
+    def __init__(self, status=EMPTY):
+        super().__init__()
+        self._status = status
+        
+    @pyqtProperty(int)
+    def empty(self):
+        return -1
+
+    @pyqtProperty(int)
+    def occupied(self):
+        return 0
+
+    @pyqtProperty(int)
+    def ready(self):
+        return 1
+
+    @pyqtProperty(int)
+    def status(self):
+        return self._status
+
+    @status.setter
+    def status(self, status):
+        self._status = status
+    
+    def a_function(self):
+        print("call from a function")
 
 class Slot:
     '''
@@ -53,13 +112,13 @@ class Slot:
         self.notify = True
         self.status = Slot.EMPTY
 
-    def set_date_planted(self, date):
+    def set_date_planted(self, d):
         """
         Set the date of when the plant is planted
         
         :param date: 
         """
-        self.date_planted = date
+        self.date_planted = d
         self.date_ready = self.date_planted + timedelta(days=self.plant.days_harvest)
 
     def check_and_update_status(self):
@@ -131,6 +190,7 @@ NOTIFIED_SLOTS = []
 def insert_plant(panel, slotnum, plantid, date_added=date.today()):
     s = SLOTS[panel][slotnum]
     if not isinstance(date_added, date):
+        print(type(date_added))
         date_added = date_added.toPyDateTime().date()
     s.insert_plant(plantid, date_added)
     # db.execute_command("INSERT INTO SLOTS VALUES (?, ?, ?, ?)", panel, slotnum , plantid, s.date_planted)
@@ -141,6 +201,13 @@ def remove_plant(panel, slotnum):
     s = SLOTS[panel][slotnum]
     s.remove_plant()
     # db.execute_command("DELETE FROM SLOTS WHERE PANEL=? AND SLOT=?", panel, slotnum)
+    check_slots()
+    db.store_slots_info({"slots": SLOTS})
+
+def edit_plant_date(panel, slotnum, date_planted):
+    if not isinstance(date_planted, date):
+        date_planted = date_planted.toPyDateTime().date()
+    SLOTS[panel][slotnum].set_date_planted(date_planted)
     check_slots()
     db.store_slots_info({"slots": SLOTS})
 

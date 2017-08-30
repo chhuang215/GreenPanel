@@ -5,9 +5,12 @@ import Qt.labs.calendar 1.0
 Item{
     id: "panelRobot"
     visible: false
-    signal addButtonClicked
-    signal removeButtonClicked
+    signal addButtonClicked()
+    signal removeButtonClicked()
+    signal editPlantDate(string p, int n, var d)
     property var slots : {}
+    property string selectedP: 'A'
+    property int selectedN: 0
     property alias currLeft : robotSlots.currLeft
     property alias currRight : robotSlots.currRight
 
@@ -40,16 +43,20 @@ Item{
             status: slotData.status
             label: slotNum + 1
             onClicked: {
+                if(status == -1) return
                 var s = slotData
                 var plant = s.plant
-                popup.slotPos = [slotPane, slotNum]
-                if(plant) {
-                    popup.plantName = plant.name
-                    popup.datePlanted = s.date_planted
-                    popup.dateReady = s.date_ready
-                    popup.days = s.days
-                    popup.description = "Description for " + plant.name
-                }
+                // popup.slotP = slotPane
+                // popup.slotN = slotNum
+                selectedP = slotPane
+                selectedN = slotNum
+                // if(plant) {
+                //     popup.plantName = plant.name
+                //     popup.datePlanted = s.date_planted
+                //     popup.dateReady = s.date_ready
+                //     popup.days = s.days
+                //     popup.description = "Description for " + plant.name
+                // }
                 popup.open()
             }
         }
@@ -76,27 +83,23 @@ Item{
         dim: false
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside	
 
-        property int days: 0
-        property var slotPos: {}
-        property var plantName: ""
-        property var description: ""
-        property var imgSource: "images/placeholder.png"
-        property var datePlanted: "dd/mm/yy"
-        property var dateReady: "dd/mm/yy"
-        
-        // enter:Transition {
-        //     NumberAnimation { property: "width"; from: 0; to: 640 ; duration: 100}
-        // }
+        property var slotData: slots[selectedP][selectedN]
+        property int days: slotData.days ? slotData.days : 0
+        property string plantName: slotData.plant ? slotData.plant.name : ""
+        property string description: ""
+        property string imgSource: "images/placeholder.png"
+        property var datePlanted: slotData.date_planted ? slotData.date_planted : ""
+        property var dateReady: slotData.date_ready ? slotData.date_ready : ""
+
         enter: null
         exit: null
-        onClosed: {
-            days = 0
-            plantName = ""
-            description = ""
-            datePlanted = "dd/mm/yy"
-            dateReady = "dd/mm/yy"
-            slotPos: {}
-        }
+        // onClosed: {
+        //     days = 0
+        //     plantName = ""
+        //     description = ""
+        //     datePlanted = ""
+        //     dateReady = ""
+        // }
 
         Rectangle{ // X Button
             width:30
@@ -133,7 +136,7 @@ Item{
                 id: plantNameTxt1
                 anchors.verticalCenter: parent.verticalCenter
                 font.pointSize: 18; font.bold: true
-                text:popup.plantName + " @" + popup.slotPos
+                text:popup.plantName /*+ " @" + popup.slotP + popup.slotN*/
             }
         }
 
@@ -243,13 +246,169 @@ Item{
         Button{
             anchors.bottom: parent.bottom
             anchors.right: parent.right
+            anchors.bottomMargin: 130
+            anchors.rightMargin: 15
+            text:"Change date planted"
+            onClicked: popup2.open()
+        }
+
+        Button{
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
             anchors.bottomMargin: 15
             anchors.rightMargin: 15
             text:"Remove this plant"
-
         }
 
-        // Item{
+        Popup {
+            id: popup2
+            x: parent.width/2
+            y: 0
+            width: parent.width/2 -50
+            height: parent.height/2
+            modal: true
+            focus: true
+            padding : 3
+            leftPadding : 10
+            dim: false
+            enter: null
+            exit: null
+
+            property var datePlanted: { return new Date(popup.datePlanted)}
+
+            Row{
+                spacing: 10
+                
+                Column{
+                    width: 75
+                    
+                    Button{
+                        width: 75
+                        height: 35
+                        text: "\u25B2"
+                        onClicked: {
+                            var d = popup2.datePlanted 
+                            d.setFullYear(d.getFullYear() + 1)
+                            editPlantDate(selectedP, selectedN, d)
+                        }
+                    }
+
+                    Text{
+                        id: txtSetYear
+                        width: parent.width
+                        text: popup2.datePlanted.getFullYear()
+                        font.pointSize: 16
+                        horizontalAlignment : Text.AlignHCenter
+                    }
+
+                    Button{
+                        width: 75
+                        height: 35
+                        text: "\u25BC"
+                        onClicked: {
+                            var d = popup2.datePlanted 
+                            d.setFullYear(d.getFullYear() - 1)
+                            editPlantDate(selectedP, selectedN, d)
+                        }
+                    }
+                }
+
+                Column{
+                    width: 75
+                    Button{
+                        width: 75
+                        height: 35
+                        text: "\u25B2"
+                        onClicked: {
+                            var d = popup2.datePlanted 
+                            d.setMonth((d.getMonth() + 1) % 12)
+                            editPlantDate(selectedP, selectedN, d)
+                        }
+                    }
+
+                    Text{
+                        id: txtSetMonth
+                        width: parent.width
+                        text: {
+                            var dateString = popup2.datePlanted.toLocaleDateString(Qt.locale(), "MMM")
+                            return dateString
+                        }
+                        font.pointSize: 16
+                        horizontalAlignment : Text.AlignHCenter
+                    }
+
+                    Button{
+                        width: 75
+                        height: 35
+                        text: "\u25BC"
+                        onClicked: {
+                            var d = popup2.datePlanted 
+                            var m = d.getMonth()
+                            d.setMonth(m == 0 ? 11 : (m - 1))
+                            editPlantDate(selectedP, selectedN, d)
+                        }
+                    }
+                }
+
+                
+                Column{
+                    width: 75
+                    Button{
+                        width: 75
+                        height: 35
+                        text: "\u25B2"
+                        onClicked: {
+                            var d = popup2.datePlanted 
+                            d.setDate(d.getDate() + 1)
+                            editPlantDate(selectedP, selectedN, d)
+                        }
+                    }
+
+                    Text{
+                        id: txtSetDate
+                        width: parent.width
+                        text: popup2.datePlanted.getDate()
+                        font.pointSize: 16
+                        horizontalAlignment : Text.AlignHCenter
+                    }
+
+                    Button{
+                        width: 75
+                        height: 35
+                        text: "\u25BC"
+                        onClicked: {
+                            var d = popup2.datePlanted 
+                            d.setDate(d.getDate() - 1)
+                            editPlantDate(selectedP, selectedN, d)
+                        }
+                    }
+                }
+            }
+
+            Button{
+                id: btnDateOk
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                text: "ok"
+                onClicked: {
+                    popup2.close()
+                }
+            }
+            Button{
+                id: btnDateToday
+                anchors.right: btnDateOk.left
+                anchors.bottom: parent.bottom
+                text: "today"
+                onClicked: {
+                popup.datePlanted = new Date()
+                }
+            }
+        }/* end Popup2 */
+    }/* end Popup */
+}
+
+
+      // Item{
         //     x: 300
         //     y: 140
         //     width:280
@@ -279,6 +438,3 @@ Item{
         //     }
            
         // }
-
-    }/* end Popup */
-}

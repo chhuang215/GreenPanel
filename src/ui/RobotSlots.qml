@@ -122,8 +122,7 @@ Item{
         onPaint: {
             var ctx = getContext("2d")
             ctx.lineWidth = 4
-            ctx.strokeStyle = "green"
-            ctx.fillStyle = "lightgreen"
+            ctx.strokeStyle = "black"
             // ctx.resetTransform()
 
             // frame
@@ -131,6 +130,8 @@ Item{
             ctx.arc(capsulesCenter, -480 - anchors.topMargin, 600, 0.4 * Math.PI, 0.6 * Math.PI)
             ctx.arc(capsulesCenter, -500 - anchors.topMargin, 900, 0.6 * Math.PI, 0.4 * Math.PI, true);
             ctx.closePath()
+            ctx.fillStyle = "#f2f2f2"
+            ctx.fill()
             ctx.stroke();
 
             //A
@@ -138,6 +139,7 @@ Item{
             ctx.arc(capsuleAX, capsuleY, capsuleRadius, Math.PI, 0)
             ctx.arc(capsuleAX - capsuleXDisplacement, capsuleY + capsuleHeight, capsuleRadius, 0, Math.PI)
             ctx.closePath()
+            ctx.fillStyle = "#cecece"
             ctx.fill()
             ctx.stroke()
             

@@ -9,7 +9,7 @@ from PyQt5.QtGui import QFont, QGuiApplication
 import db
 
 from controller import GPIOController, UIController
-
+import ui
 import water
 import temperature
 import pump
@@ -72,9 +72,11 @@ def main():
 
         slots.syncdb()
 
-        ui_view = UIController.get_ui()
-        ui_view.root.show()
-        ui_view.root.showFullScreen()
+        # Instantiate the UI
+        UIController.MAIN_UI = ui.MainWindow()
+        print("UI inited")
+        UIController.MAIN_UI.root.show()
+        # ui_view.root.showFullScreen()
 
         # Start threads and timers
         tsensor.start()
