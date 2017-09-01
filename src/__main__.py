@@ -1,7 +1,7 @@
 """main.py"""
 # pylint: disable=E0611, C0111
 import sys
-
+import os
 import RPi.GPIO as GPIO
 from PyQt5.QtGui import QFont, QGuiApplication
 # from PyQt5.QtWidgets import QApplication
@@ -76,7 +76,8 @@ def main():
         UIController.MAIN_UI = ui.MainWindow()
         print("UI inited")
         UIController.MAIN_UI.root.show()
-        UIController.MAIN_UI.root.showFullScreen()
+        if os.name == "posix" and os.uname().nodename.startswith("raspberrypi"):
+            UIController.MAIN_UI.root.showFullScreen()
 
         # Start threads and timers
         tsensor.start()
