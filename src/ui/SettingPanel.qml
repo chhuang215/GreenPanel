@@ -6,6 +6,9 @@ Item{
     id:"panelSetting"
     objectName:"panelSetting"
     visible: false
+
+    signal scanWifi()
+
     Column{
         anchors.top: parent.top
         anchors.topMargin: 40
@@ -224,11 +227,10 @@ Item{
                 }
             }
 
-            Rectangle {
+            Item {
                 x: 30
                 width: 300
                 height: 80
-                color: "transparent"
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
                     objectName: "wifiLabel"
@@ -236,11 +238,16 @@ Item{
                     font.pointSize: 30; font.bold: true
                 }
             }
+
+            Button{
+                text: "scan"
+                onClicked: scanWifi()
+            }
         }
     }
     Row {
         x: 600
-        y: 330
+        y: 350
         Button {
                 id:"btnConfirm"
                 objectName:"btnConfirm"
