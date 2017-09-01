@@ -54,7 +54,7 @@ def main():
     wpump = GPIOController.add_component(pump.WaterPump, PIN.WATER_PUMP)
 
     # Motor
-    motr = GPIOController.add_component(motor.Motor, PIN.MOTOR, enable_timer=False)
+    motr = GPIOController.add_component(motor.Motor, PIN.MOTOR, enable_timer=True)
 
     # Lid open/close event listen
     GPIO.add_event_detect(lid.pin, GPIO.BOTH, callback=lid.open_close)
@@ -72,13 +72,11 @@ def main():
 
         slots.syncdb()
 
-
-
         # Instantiate the UI
         UIController.MAIN_UI = ui.MainWindow()
         print("UI inited")
         UIController.MAIN_UI.root.show()
-        # ui_view.root.showFullScreen()
+        UIController.MAIN_UI.root.showFullScreen()
 
         # Start threads and timers
         tsensor.start()

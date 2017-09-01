@@ -108,8 +108,8 @@ class MainWindow(QObject):
         self.btn_setting_confirm.clicked.connect(self.__panel_nav_back)
 
         # Time picker
-        self.btn_time_picker = self.root.findChild(QQuickItem, "btnSetTime")
-        self.btn_time_picker.clicked.connect(lambda: self.__panel_nav(self.time_picker))
+        # self.btn_time_picker = self.root.findChild(QQuickItem, "btnSetTime")
+        # self.btn_time_picker.clicked.connect(lambda: self.__panel_nav(self.time_picker))
 
         # When confirm button is clicked in time picker
         self.btn_time_confirm = self.root.findChild(QQuickItem, "btnTimeConfirm")
@@ -251,3 +251,4 @@ class MainWindow(QObject):
 
 class RobotGuy(QObject):
     pass
+

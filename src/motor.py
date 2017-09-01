@@ -8,7 +8,7 @@ class Motor:
     '''Motor class'''
     
     PWM_FREQ = 75
-    PWM_DC = 45
+    PWM_DC = 75
     PWM_DC_FAST = 75
 
     DIR_CW = RIGHT = 1
@@ -76,9 +76,22 @@ class MotorRotateTimer:
         self.check_timer()
         now = datetime.datetime.now()
         print("MOTOR TIMER loop", now)
-        next_check_time = now.replace(second=0, microsecond=0)
-        tt = 5 - (now.minute % 5)
-        next_check_time += datetime.timedelta(minutes=tt)
+        next_check_time = None
+        hour = now.hour
+        minute = now.minute      
+        if hour >= 0 and hour < 7:
+            next_check_time = now.replace(hour=7, minute=0, second=0, microsecond=0)
+
+        elif minute >= 0 and minute < 5:
+            
+            next_check_time = now.replace(second=0, microsecond=0)
+        
+            tt = 5 - (now.minute % 5)
+            next_check_time += datetime.timedelta(minutes=tt)
+        else:
+            next_check_time = now.replace(minute=0, second=0, microsecond=0)
+            next_check_time += datetime.timedelta(hours=1)
+    
         interval = next_check_time - now
         print("MOTOR next check time", next_check_time)
         self._timer = threading.Timer(interval.total_seconds(), self.__check_timer_loop)
