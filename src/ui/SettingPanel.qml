@@ -2,10 +2,13 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 
 Item{
-
     id:"panelSetting"
     objectName:"panelSetting"
     visible: false
+
+    property int hour: 00
+    property int min: 00
+
     Column{
         anchors.top: parent.top
         anchors.topMargin: 40
@@ -185,6 +188,10 @@ Item{
                     width:100
                     height:50
                     text: "Set Time"
+
+                    onClicked: {
+                        timePopup.open()
+                    }
                 }
             }
 
@@ -247,6 +254,109 @@ Item{
                 width:100
                 height:50
                 text: "Confirm"
+        }
+    }
+
+    Popup {
+        id: timePopup
+        x: 300
+        y: 120
+        width: 320
+        height: 180
+        modal: true
+        focus: true
+        dim: false
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+        Row{
+            spacing: 10
+            
+            Column{
+                width: 100
+                
+                Button{
+                    width: 100
+                    height: 45
+                    text: "\u25B2"
+                    onClicked: {
+                        
+                    }
+                }
+
+                Text{
+                    id: txtSetHour
+                    width: parent.width
+                    text: {
+                        if (hour == 0){
+                            var original = hour;
+                            var pad = "0"
+                            var result = pad.concat(original);
+                            return result;
+                        }
+                        else
+                            return hour;
+                    }
+                    font.pointSize: 36
+                    horizontalAlignment : Text.AlignHCenter
+                }
+
+                Button{
+                    width: 100
+                    height: 45
+                    text: "\u25BC"
+                    onClicked: {
+                        
+                    }
+                }
+            }
+
+            Column{
+                width: 100
+                Button{
+                    width: 100
+                    height: 45
+                    text: "\u25B2"
+                    onClicked: {
+                        
+                    }
+                }
+
+                Text{
+                    id: txtSetMinute
+                    width: parent.width
+                    text: {
+                        if (min == 0){
+                            var original = min;
+                            var pad = "0"
+                            var result = pad.concat(original);
+                            return result;
+                        }
+                        else
+                            return hour;
+                    }
+                    font.pointSize: 36
+                    horizontalAlignment : Text.AlignHCenter
+                }
+
+                Button{
+                    width: 100
+                    height: 45
+                    text: "\u25BC"
+                    onClicked: {
+                        
+                    }
+                }
+            }
+        }
+
+        Button{
+            id: btnDateOk
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            text: "ok"
+            onClicked: {
+                timePopup.close()
+            }
         }
     }
 }
