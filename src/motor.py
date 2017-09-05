@@ -15,6 +15,7 @@ class Motor:
     DIR_CCW = LEFT = 2
 
     def __init__(self, inp1, inp2, inppwm, enable_timer=True):
+        self.pin = (inp1, inp2, inppwm)
         self.inp1 = inp1
         self.inp2 = inp2
         self.pwm = GPIO.PWM(inppwm, self.PWM_FREQ)
@@ -55,42 +56,45 @@ class MotorRotateTimer:
         self.is_activated = False
         self.enabled = False
 
-    def check_timer(self):
+    # def check_timer(self):
 
-        curr_dt = datetime.datetime.now()
-        print("!MOTOR Check_Timer %s %s" % (self.motor.__class__.__name__, curr_dt), end='')
-        minute = curr_dt.minute
-        hour = curr_dt.hour
-        #if minute % 30 >= 0 and minute % 30 < 15:
-        if hour >= 7 and hour < 24 and (minute >= 0 and minute < 5):
-            self.motor.rotate(direction=Motor.DIR_CCW)
-            print(" ! MOTOR_ROTATING")
-        else:
-            self.motor.stop()
-            print(" ! MOTOR_STOPPED")
+    #     curr_dt = datetime.datetime.now()
+    #     print("!MOTOR Check_Timer %s %s" % (self.motor.__class__.__name__, curr_dt), end='')
+    #     minute = curr_dt.minute
+    #     hour = curr_dt.hour
+    #     #if minute % 30 >= 0 and minute % 30 < 15:
+    #     if hour >= 7 and hour < 24 and (minute >= 0 and minute < 5):
+            
+    #     else:
+            
 
     def __check_timer_loop(self):
         if not self.is_activated:
             return
 
-        self.check_timer()
+        # self.check_timer()
         now = datetime.datetime.now()
-        print("MOTOR TIMER loop", now)
+        print("!MOTOR Check_Timer %s %s" % (self.motor.__class__.__name__, now), end='')
         next_check_time = None
         hour = now.hour
-        minute = now.minute      
+        minute = now.minute
         if hour >= 0 and hour < 7:
+            self.motor.stop()
+            print(" ! MOTOR_STOPPED")
             next_check_time = now.replace(hour=7, minute=0, second=0, microsecond=0)
-
-        elif minute >= 0 and minute < 5:
             
-            next_check_time = now.replace(second=0, microsecond=0)
-        
-            tt = 5 - (now.minute % 5)
-            next_check_time += datetime.timedelta(minutes=tt)
+        elif minute >= 0 and minute < 5:
+            self.motor.rotate(direction=Motor.DIR_CCW)
+            print(" ! MOTOR_ROTATING")
+            next_check_time = now.replace(minute=5, second=0, microsecond=0)
+            # tt = 5 - (now.minute % 5)
+            # next_check_time += datetime.timedelta(minutes=tt)
         else:
+            self.motor.stop()
+            print(" ! MOTOR_STOPPED")
             next_check_time = now.replace(minute=0, second=0, microsecond=0)
             next_check_time += datetime.timedelta(hours=1)
+            
     
         interval = next_check_time - now
         print("MOTOR next check time", next_check_time)
