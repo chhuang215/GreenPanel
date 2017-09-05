@@ -29,11 +29,12 @@ class PumpTimer():
         self.pump = pump
         self.is_activated = False
 
-    def check_timer(self):
+    def check_timer(self, dtime=None):
+        if not dtime:
+            dtime = datetime.datetime.now()
 
-        curr_dt = datetime.datetime.now()
-        print("!Check_Timer %s pin:%d %s" % (self.pump.__class__.__name__, self.pump.pin, curr_dt), end="")
-        minute = curr_dt.minute
+        print("!PUMP Check_Timer %s pin:%d %s" % (self.pump.__class__.__name__, self.pump.pin, dtime), end="")
+        minute = dtime.minute
         if minute >= 0 and minute < 5:
             wsensor = GPIOController.get_component(GPIOController.PIN.WATER_LEVEL_SENSOR)
 
@@ -51,16 +52,20 @@ class PumpTimer():
         if not self.is_activated:
             return
 
-        self.check_timer()
         now = datetime.datetime.now()
 
-        print("PUMP TIMER loop", self.pump.pin, now)
-        next_check_time = now.replace(microsecond=0)
-        next_check_time += datetime.timedelta(seconds=1)
-        if now.minute >= 5:
+        self.check_timer(dtime=now)
+
+        print("!PUMP TimerLoop pin:%d %s" % (self.pump.pin, now))
+
+        minute = now.minute
+        if minute >= 0 and minute < 5:
+            next_check_time = now
+            next_check_time += datetime.timedelta(seconds=1.5)
+        else:
             next_check_time = now.replace(minute=0, second=0, microsecond=0)
             next_check_time += datetime.timedelta(hours=1)
-            
+
         interval = next_check_time - now
         print("PUMP check time", next_check_time)
         self._timer = threading.Timer(interval.total_seconds(), self.__check_timer_loop)

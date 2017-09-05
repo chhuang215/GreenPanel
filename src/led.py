@@ -15,7 +15,7 @@ class LED():
     ON = 1
     OFF = 0
 
-    def __init__(self, gpio_pin, status):
+    def __init__(self, gpio_pin, status=OFF):
  
         self.status = status
         self.pin = gpio_pin
@@ -98,35 +98,55 @@ class LightTimer():
             self.deactivate()
             self.activate()
 
-    def check_timer(self):
+    def check_timer(self, dtime=None):
 
-        curr_dt = datetime.datetime.now()
-        print("!LED Check_Timer %s" % self.led.__class__.__name__, "pin:%d" % self.led.pin, curr_dt)
-        hour = curr_dt.hour
+        if not dtime:
+            dtime = datetime.datetime.now()
+
+        print("!LED Check_Timer %s" % self.led.__class__.__name__, "pin:%d" % self.led.pin, dtime, end='')
+        hour = dtime.hour
         if (
                 (self.begin_hour < self.end_hour and
                  hour >= self.begin_hour and hour < self.end_hour) or
                 (self.begin_hour >= self.end_hour and
                  (hour >= self.begin_hour or hour < self.end_hour))
         ):
-            print("ON")
+            print(" ! LED ON")
             self.led.turn_on()
 
         else:
-            print("OFF")
+            print(" ! LED OFF")
             self.led.turn_off()
 
     def __check_timer_loop(self):
         if not self.is_activated:
             return
 
-        self.check_timer()
         now = datetime.datetime.now()
-        print("LED TIMER loop", self.led.pin, now)
+        self.check_timer(dtime=now)
+        hour = now.hour
+        print("!LED TimerLoop pin:%d %s" % (self.led.pin, now))
+
         next_check_time = now.replace(minute=0, second=0, microsecond=0)
-        next_check_time += datetime.timedelta(hours=1)
+
+        if self.begin_hour < self.end_hour and hour >= self.begin_hour and hour < self.end_hour:
+            next_check_time = next_check_time.replace(hour=self.end_hour)
+
+        elif self.begin_hour >= self.end_hour:
+            next_check_time = next_check_time.replace(hour=self.end_hour)
+            if hour >= self.begin_hour:
+                next_check_time += datetime.timedelta(days=1)
+            elif hour < self.end_hour:
+                pass
+            else:
+                next_check_time = next_check_time.replace(hour=self.begin_hour)
+        else:
+            next_check_time = next_check_time.replace(hour=self.begin_hour)
+            if hour >= self.begin_hour:
+                next_check_time += datetime.timedelta(days=1)
+
         interval = next_check_time - now
-        print("LED NEXT check time", next_check_time)
+        print("!LED NEXT check time", next_check_time)
         self._timer = threading.Timer(interval.total_seconds(), self.__check_timer_loop)
         self._timer.start()
 
