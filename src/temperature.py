@@ -9,6 +9,7 @@ class TemperatureSensor(threading.Thread):
     
     def __init__(self, pin):
         super().__init__(daemon=True)
+        self.pin = pin
         self.__device_file = None
         self.temperature_c = self.temperature_f = 0
         if os.name == "posix" and os.uname().nodename.startswith("raspberrypi"):
@@ -49,10 +50,11 @@ class TemperatureSensor(threading.Thread):
             temp_c = round(temp_c, 1)
             temp_f = round(temp_f, 1)
         except Exception:
-            print("Temperature Sensor Not Found, value mocked")
+            
             import random
-            temp_c = round(random.choice([19.333, 20.444, 21.555, 22.666, 23.777, 24.111]), 1)
+            temp_c = round(random.choice([39.333, 38.444, 37.555, 1.666, -1.777, 49.111]), 1)
             temp_f = round(temp_c * (9/5) + 32, 1)
+            print("Temperature Sensor Not Found, value mocked %s" % temp_c)
         self.temperature_c, self.temperature_f = temp_c, temp_f
         SIGNALER.TEMPERATURE_UPDATE.emit(self.temperature_c, self.temperature_f)
 
