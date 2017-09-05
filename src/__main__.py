@@ -37,24 +37,32 @@ def main():
     settings = db.get_setting() #user settings
 
     # Lid
-    lid = GPIOController.add_component(Lid, PIN.PUSH_BUTTON)
+    lid = Lid(PIN.PUSH_BUTTON)
+    GPIOController.add_component(lid)
 
     # Lights
-    main_light = GPIOController.add_component(LED, PIN.YELLOW_LED, LED.ON)
+    main_light = LED(PIN.YELLOW_LED)
     main_light.timer = LightTimer(main_light, settings["light_hour"], settings["light_duration"])
-    GPIOController.add_component(LED, PIN.BLUE_LED, LED.OFF)
+    GPIOController.add_component(main_light)
+
+    secondary_light = LED(PIN.BLUE_LED)
+    GPIOController.add_component(secondary_light)
 
     # Temperature Sensor
-    tsensor = GPIOController.add_component(temperature.TemperatureSensor, PIN.TEMPERATURE_SENSOR)
+    tsensor = temperature.TemperatureSensor(PIN.TEMPERATURE_SENSOR)
+    GPIOController.add_component(tsensor)
 
     # Water Sensor
-    GPIOController.add_component(water.WaterSensor, PIN.WATER_LEVEL_SENSOR)
+    wsensor = water.WaterSensor(PIN.WATER_LEVEL_SENSOR)
+    GPIOController.add_component(wsensor)
 
     # Pump
-    wpump = GPIOController.add_component(pump.WaterPump, PIN.WATER_PUMP)
+    wpump = pump.WaterPump(PIN.WATER_PUMP)
+    GPIOController.add_component(wpump)
 
     # Motor
-    motr = GPIOController.add_component(motor.Motor, PIN.MOTOR, enable_timer=True)
+    motr = motor.Motor(*PIN.MOTOR, enable_timer=True)
+    GPIOController.add_component(motr)
 
     # Lid open/close event listen
     GPIO.add_event_detect(lid.pin, GPIO.BOTH, callback=lid.open_close)

@@ -18,6 +18,10 @@ class UIController:
 class GPIOController:
     '''Hardware Controller'''
 
+    class GPIOComponent:
+        def __init__(self, gpio_pin):
+            self.pin = gpio_pin
+
     class PIN:
         '''Pin enum from representing hardware's corresponding GPIO pin number'''
         YELLOW_LED = 27
@@ -31,21 +35,17 @@ class GPIOController:
     GPIO_COMPONENTS = {}
 
     @staticmethod
-    def add_component(component, pin, *argv, **kwargs):
+    def add_component(component):
         '''add gpio component to component list'''
-
+        pin = component.pin
         if not isinstance(pin, collections.Iterable):
             pin = (pin,)
 
-        cmpont = component(*pin, *argv, **kwargs)
-
         for p in pin:
-            GPIOController.GPIO_COMPONENTS[str(p)] = cmpont
+            GPIOController.GPIO_COMPONENTS[str(p)] = component
 
-        print("\t %s %s added to component list" % (component.__name__, pin))
+        print("\t %s %s added to component list" % (component.__class__.__name__, pin))
 
-        return cmpont
- 
     @staticmethod
     def get_component(pin):
 
@@ -61,6 +61,7 @@ class Signaler(QObject):
     TEMPERATURE_UPDATE = pyqtSignal(float, float)
     SLOTS_REFRESH = pyqtSignal(object, object)
     NUTRIENT_REFRESH = pyqtSignal(int)
+    WIFI_REFRESH = pyqtSignal(object)
     LIGHT_SWITCH = pyqtSignal(bool)
     LID_SWITCH = pyqtSignal(int)
     # def __init__(self):
