@@ -3,10 +3,11 @@ import QtQuick.Controls 1.4
 import QtQuick.Controls 2.0
 
 Item{
+    visible: false
     Calendar{
         id: datePicker
         objectName:"datePicker"
-        visible: false
+        
         width: 400
         height: 400
         weekNumbersVisible: true

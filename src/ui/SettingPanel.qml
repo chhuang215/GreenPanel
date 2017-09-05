@@ -3,7 +3,6 @@ import QtQuick.Controls 2.0
 
 Item{
     id:"panelSetting"
-    objectName:"panelSetting"
     visible: false
 
     signal scanWifi()
@@ -19,11 +18,10 @@ Item{
             width:parent.width
             rows: 4; columns: 2; spacing: 10
 
-            Rectangle {
+            Item {
                 x: 30
                 width: 300
                 height: 80
-                color: "transparent"
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
                     objectName: "languageLabel"
@@ -49,12 +47,11 @@ Item{
                 }
             }*/
 
-            Rectangle {
+            Item {
                 width:300
                 height: 80
-                color: "transparent"
 
-                Rectangle {
+                Item {
                     id:comboBox
                     property variant items: ["English", "French", "Chinese"]
                     property alias selectedItem: chosenItemText.text;
@@ -62,7 +59,6 @@ Item{
                     signal comboClicked;
                     width: 150;
                     height: 50;
-                    color: "transparent"
                     z: 100;
                     smooth:true;
 
@@ -156,11 +152,10 @@ Item{
                 }
             }
             
-            Rectangle {
+            Item {
                 x: 30
                 width: 300
                 height: 80
-                color: "transparent"
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
                     objectName: "timeLabel"
@@ -196,11 +191,10 @@ Item{
                 }
             }
 
-            Rectangle {
+            Item {
                 x: 30
                 width: 300
                 height: 80
-                color: "transparent"
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
                     objectName: "dateLabel"

@@ -16,8 +16,6 @@ class QWifiList(QObject):
 
 
 def scan_wifi():
-    # ssid = {}
-    # ssids = []
     wifilist = []
     if platform.system() == 'Windows':
         with subprocess.Popen("netsh wlan show networks mode=BSSID",
@@ -33,36 +31,11 @@ def scan_wifi():
                 if line.startswith("SSID"):
                     wifilist.append({"BSSID":[]})
                     current_index = wifilist[-1]
-                    # print()
-                    # if ssid:
-                    #     ssids.append(ssid)
-                    # ssid = {}
-                    # ssid[key] = val
                 if line.startswith("BSSID"):
                     wifilist[-1]["BSSID"].append({})
                     current_index = wifilist[-1]["BSSID"][-1]
                 if current_index is not None:
                     current_index[key] = val
-            #     print(key + " : " + val)
-            # ssids.append(ssid)
-
-            # print(ssids)
-
-    #     networkfound = False
-    #     current_index = wifilist[-1]
-    #     for elem in result:
-    #         if ("SSID" in elem and "BSSID" not in elem):
-    #             wifilist.append({})
-    #             networkfound = True
-    #             current_index = wifilist[-1]
-    #         if networkfound:
-    #             if("BSSID" in elem):
-    #                 current_index.append
-    #             key = elem.split(":")
-    #             key = elem[:elem.index(":")].strip()
-    #             val = elem[elem.index(":")+1:].strip()
-    #             current_index[key] = val
-    #     # pp.pprint(wifilist)
     elif platform.system() == 'Linux':
         subprocess.call("iwlist wlan0 scan")
     controller.SIGNALER.WIFI_REFRESH.emit(wifilist)
