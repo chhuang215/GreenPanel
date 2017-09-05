@@ -29,19 +29,19 @@ class TestLid(unittest.TestCase):
         hwc = controller.GPIOController
         pins = hwc.PIN
         
-        hwc.add_component(lid.Lid, pins.PUSH_BUTTON)
-        self.lid = hwc.get_component(pins.PUSH_BUTTON)
+        self.lid = lid.Lid(pins.PUSH_BUTTON)
+        hwc.add_component(self.lid)
         self.assertEqual(self.lid.status, self.lid.CLOSED)        
-
-        hwc.add_component(led.LED, pins.YELLOW_LED, led.LED.ON)
-        self.led_yellow = hwc.get_component(pins.YELLOW_LED)
+        
+        self.led_yellow = led.LED(pins.YELLOW_LED, led.LED.ON)
+        hwc.add_component(self.led_yellow)
         RPi.GPIO.output.assert_called_with(self.led_yellow.pin, RPi.GPIO.HIGH)
         
-        hwc.add_component(led.LED, pins.BLUE_LED, led.LED.OFF)
-        self.led_blue = hwc.get_component(pins.BLUE_LED)
+        self.led_blue = led.LED(pins.BLUE_LED, led.LED.OFF)
+        hwc.add_component(self.led_blue)
         RPi.GPIO.output.assert_called_with(self.led_blue.pin, RPi.GPIO.LOW)
 
-        hwc.add_component(motor.Motor, pins.MOTOR, enable_timer=False)
+        hwc.add_component(motor.Motor(*pins.MOTOR, enable_timer=False))
         # RPi.GPIO.output.assert_has_calls([call(self.led_yellow.pin, RPi.GPIO.HIGH), call(self.led_blue.pin, RPi.GPIO.LOW)])
 
     def test_trigger_open_lid(self):
