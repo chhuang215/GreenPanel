@@ -26,7 +26,7 @@ Item{
                     slots[p][i].date_planted = new Date()
                 }
                 else{
-                    pn = slots[p][i].plant.name + " (id:" +slots[p][i].plant.plant_id+")" 
+                    pn = slots[p][i].plant._name + " (id:" +slots[p][i].plant._plant_id+")" 
                     slots[p][i].date_planted = new Date(slots[p][i].date_planted)
                 }
 

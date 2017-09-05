@@ -89,7 +89,7 @@ Item{
 
         property var slotData: slots[selectedP][selectedN]
         property int days: slotData.days ? slotData.days : 0
-        property string plantName: slotData.plant ? slotData.plant.name : ""
+        property string plantName: slotData.plant ? slotData.plant._name : ""
         property string description: ""
         property string imgSource: "images/placeholder.png"
         property var datePlanted: slotData.date_planted ? slotData.date_planted : ""
