@@ -2,7 +2,7 @@
 # import time
 import datetime
 import sip
-from PyQt5.QtCore import (QObject, Qt, QUrl, QCoreApplication, QVariant, QTimer, QMetaObject,
+from PyQt5.QtCore import (QObject, Qt, QUrl, QCoreApplication, QVariant, QTimer,
                           Q_ARG, pyqtSlot, QT_VERSION_STR, PYQT_VERSION_STR)
 # from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQuick import QQuickView, QQuickItem
@@ -25,9 +25,9 @@ class MainWindow(QObject):
               % (QT_VERSION_STR, PYQT_VERSION_STR, sip.SIP_VERSION_STR))
 
         engine = QQmlApplicationEngine(self)
-        listofnum = [1,2,3]
+        # self.listofnum = [1,2,3]
         # self.pslot = slots.PlantSlot()
-        # engine.rootContext().setContextProperty('thePlantSlot', self.pslot)
+        # engine.rootContext().setContextProperty('coolobj', self.coolobj)
         # self.setSource(QUrl.fromLocalFile('ui/MainView.qml'))
         engine.load(QUrl.fromLocalFile('ui/MainView.qml'))
         self.__nav_stack = []
@@ -46,18 +46,25 @@ class MainWindow(QObject):
         self.root.quit.connect(QCoreApplication.instance().quit)
         self.root.navTo.connect(self.__panel_nav)
         self.root.navBack.connect(self.__panel_nav_back)
-
+        # listofrootchildren = self.root.children()
+        # for child in listofrootchildren:
+        #     print(child.objectName())
         # Get panels
         self.panel_home = self.root.findChild(QQuickItem, "panelHome")
         self.panel_home.setProperty("temperatureUnit", db.get_setting()["temperature_unit"])
+        
+        led = GPIOCtrler.get_component(PIN.YELLOW_LED)
         self.panel_light = self.root.findChild(QQuickItem, "panelLight")
+        self.panel_light.setProperty("lightHr", led.timer.begin_hour)
+        self.panel_light.setProperty("lightDuration", led.timer.duration)
+
         self.panel_water = self.root.findChild(QQuickItem, "panelWater")
         self.panel_nutrient = self.root.findChild(QQuickItem, "panelNutrient")
         self.panel_setting = self.root.findChild(QQuickItem, "panelSetting")
         self.time_picker = self.root.findChild(QQuickItem, "panelSettingTime")
-        self.date_picker = self.root.findChild(QQuickItem, "datePicker")
+        self.date_picker = self.root.findChild(QQuickItem, "panelSettingDate")
         self.panel_setting_wifi = self.root.findChild(QQuickItem, "panelSettingWifi")
-        
+
         self.panel_robot = self.root.findChild(QQuickItem, "panelRobot")
         self.panel_robot_select_plant = self.root.findChild(QQuickItem, "panelRobotSelectPlant")
         self.panel_robot_select_plant.setProperty('plantList', plants.PLANTS_LIST)
@@ -66,7 +73,6 @@ class MainWindow(QObject):
         self.panel_robot_confirm = self.root.findChild(QQuickItem, "panelRobotConfirm")
 
         #### Home Panel's child elements ####
-        
         self.btn_light = self.panel_home.findChild(QQuickItem, "btnLight")
         self.btn_water = self.panel_home.findChild(QQuickItem, "btnWater")
         self.btn_nutrient = self.panel_home.findChild(QQuickItem, "btnNutrient")
@@ -82,13 +88,6 @@ class MainWindow(QObject):
         self.btn_nutrient.clicked.connect(lambda: self.__panel_nav(self.panel_nutrient))
         self.btn_setting.clicked.connect(lambda: self.__panel_nav(self.panel_setting))
 
-        #### Light Panel's child elements ####
-        led = GPIOCtrler.get_component(PIN.YELLOW_LED)
-        text_light_hr = self.panel_light.findChild(QQuickItem, "txtHour")
-        text_light_hr.setProperty("text", led.timer.begin_hour)
-        text_dur_hr = self.panel_light.findChild(QQuickItem, "txtDuration")
-        text_dur_hr.setProperty("text", led.timer.duration)
-
         # light panel signals / events
         self.panel_light.lightTimerChanged.connect(led.timer.set_timer)
         self.panel_light.lightSwitched.connect(led.switch)
@@ -98,9 +97,7 @@ class MainWindow(QObject):
 
         #### Setting Panel
 
-        self.panel_setting.scanWifi.connect(lambda: self.__panel_nav(self.panel_setting_wifi))
-
-        self.panel_setting_wifi.refreshWifiList.connect(wifi.scan_wifi)
+        # self.panel_setting.scanWifi.connect(lambda: self.__panel_nav(self.panel_setting_wifi))
 
         # When confirm button is clicked in settings, nav back to main panel
         self.btn_setting_confirm = self.root.findChild(QQuickItem, "btnConfirm")
@@ -181,15 +178,15 @@ class MainWindow(QObject):
     def refresh_slots_status(self, sjson, status_msg):
         if self.root.property("busySlots") is False:
             self.root.setProperty("plantSlots", sjson)
-        QMetaObject.invokeMethod(self.panel_home, "notifyRobot", 
-                                 Qt.QueuedConnection, Q_ARG(QVariant, status_msg))
+        self.panel_home.notifyRobot(status_msg)
 
     def add_plant_confirm(self, plant_id, s):
         selected_slots = s.toVariant()
 
         for pane, lst in selected_slots.items():
-            for i in range(0, len(lst)):
-                slotdata = lst[i]
+            for i, slotdata in enumerate(lst):
+            # for i in range(0, len(lst)):
+            #     slotdata = lst[i]
                 if slotdata["selected"]:
                     slots.insert_plant(pane, i, plant_id, date_added=slotdata["date_planted"])
 
@@ -199,8 +196,9 @@ class MainWindow(QObject):
         selected_slots = s.toVariant()
 
         for pane, lst in selected_slots.items():
-            for i in range(0, len(lst)):
-                if lst[i]["selected"]:
+            for i, slotdata in enumerate(lst):
+            # for i in range(0, len(lst)):
+                if slotdata["selected"]:
                     slots.remove_plant(pane, i)
         
         self.__panel_nav_back(layers=2)
@@ -212,7 +210,7 @@ class MainWindow(QObject):
     
     @pyqtSlot()
     def display_update_clock(self):
-        self.root.updateClockText.emit(datetime.datetime.now().strftime('%I:%M %p'))
+        self.root.updateClockText(datetime.datetime.now().strftime('%I:%M %p'))
 
     @pyqtSlot(float, float)
     def display_update_temperature(self, tc, tf):
@@ -221,8 +219,7 @@ class MainWindow(QObject):
             status = 1
         elif tc < 1:
             status = -1
-        QMetaObject.invokeMethod(self.panel_home, "updateTemperature", Qt.QueuedConnection,
-                                 Q_ARG(QVariant, tc), Q_ARG(QVariant, tf), Q_ARG(QVariant, status))
+        self.panel_home.updateTemperature(tc, tf, status)
 
     @pyqtSlot()
     def refresh_wifi_list(self, wlist):
@@ -243,7 +240,7 @@ class MainWindow(QObject):
         print("minute is: " + minute)
 
     def date_confirm(self):
-        date = self.root.findChild(QQuickItem, "datePicker")
+        date = self.date_picker.findChild(QQuickItem, "datePicker")
         year = str(date.property("selectedDate").year())
         month = str(date.property("selectedDate").month())
         day = str(date.property("selectedDate").day())

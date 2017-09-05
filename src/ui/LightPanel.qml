@@ -3,6 +3,8 @@ import QtQuick.Controls 2.0
 
 Item{
     
+    property int lightHr: 7
+    property int lightDuration: 17
     property int buttonHeight: 100
     property int buttonWidth: 100
     signal lightTimerChanged(var hr, var dur)
@@ -34,7 +36,7 @@ Item{
                         anchors.verticalCenter: parent.verticalCenter
                         id: "txtHour"
                         objectName: "txtHour"
-                        text: "7"
+                        text: lightHr
                         font.pointSize: 40; font.bold: true
                     }
                 }
@@ -46,8 +48,8 @@ Item{
                     text: "+"
                     onClicked: {
                         
-                        txtHour.text = (txtHour.text*1 + 1) % 24;
-                        panelLight.lightTimerChanged(txtHour.text, txtDuration.text)
+                        lightHr = (lightHr + 1) % 24;
+                        panelLight.lightTimerChanged(lightHr, lightDuration)
                     }   
                 }
                 Button {
@@ -58,8 +60,8 @@ Item{
                     
                     onClicked: {
                         
-                        txtHour.text = (txtHour.text*1 - 1) % 24   
-                        panelLight.lightTimerChanged(txtHour.text, txtDuration.text)
+                        lightHr = lightHr <= 0 ? 23 : (lightHr - 1)
+                        panelLight.lightTimerChanged(lightHr, lightDuration)
                     }
                     
                 }
@@ -68,12 +70,8 @@ Item{
                     spacing: 30
                     
                     Text {
-                        
                         anchors.verticalCenter: parent.verticalCenter
-                        
-                        objectName: "txtDurationLabel"
                         text: "Duration:"
-
                         font.pointSize: 40; font.bold: true
                     }
 
@@ -82,35 +80,33 @@ Item{
                         anchors.verticalCenter: parent.verticalCenter
                         id: "txtDuration"
                         objectName: "txtDuration"
-                        text: "17"
+                        text: lightDuration
 
                         font.pointSize: 40; font.bold: true
 
                     }
                 }
                 Button {
-                    objectName:"btnIncDuration"
                     width:buttonWidth
                     height:buttonHeight
                     text: "+"
                     onClicked: {
-                        if (txtDuration.text < 23){
-                            txtDuration.text = txtDuration.text*1 + 1     
-                            panelLight.lightTimerChanged(txtHour.text, txtDuration.text)
+                        if (lightDuration < 23){
+                            lightDuration = lightDuration + 1     
+                            panelLight.lightTimerChanged(lightHr, lightDuration)
                         }
                         
                     }
                 }
                 Button {
-                    objectName:"btnDecDuration"
                     width:buttonWidth
                     height:buttonHeight
                     text: "-"
                     
                     onClicked: {
-                        if (txtDuration.text > 1){
-                            txtDuration.text = txtDuration.text*1 - 1     
-                            panelLight.lightTimerChanged(txtHour.text, txtDuration.text)
+                        if (lightDuration > 1){
+                            lightDuration = lightDuration - 1     
+                            panelLight.lightTimerChanged(lightHr, lightDuration)
                         }
                         
                     }   

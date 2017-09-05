@@ -20,6 +20,10 @@ ApplicationWindow {
     property bool waterLevelIsGood: false
     property bool busySlots: panelRobotSelect.visible || panelRobotSelectPlant.visible || panelRobotConfirm.visible
 
+    function updateClockText(clocktime){
+        txtClock.text = clocktime
+    }
+
     function initSlot(){
         var initData = {"status" : -1, "selected" : false}
         var st = {} 
@@ -158,19 +162,20 @@ ApplicationWindow {
     /* SETTING */
     SettingPanel{
         id: "panelSetting"
+        objectName: "panelSetting"
         anchors.fill: parent
 
         Button{
-        anchors.bottom:parent.bottom
-        anchors.right:parent.right
-        anchors.rightMargin: 10
-        anchors.bottomMargin: 10
-        text:"quit"
-        objectName:"btnQuit"
-        onClicked:{
-            main.quit()
+            anchors.bottom:parent.bottom
+            anchors.right:parent.right
+            anchors.rightMargin: 10
+            anchors.bottomMargin: 10
+            text:"quit"
+            objectName:"btnQuit"
+            onClicked:{
+                main.quit()
+            }
         }
-    }
 
     }
 
@@ -182,6 +187,12 @@ ApplicationWindow {
 
     SetDate{
         id: "datePicker"
+        objectName: "panelSettingDate"
+        anchors.fill: parent
+    }
+
+    SettingWifi{
+        objectName: "panelSettingWifi"
         anchors.fill: parent
     }
 
@@ -243,7 +254,7 @@ ApplicationWindow {
             panelRobotSelect.slotsChanged()
         }
     }
-    
+
     // SwipeView {
     //     id:swipe
     //     width:45
