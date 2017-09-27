@@ -9,7 +9,8 @@ import datetime
 from datetime import datetime, date, timedelta
 import threading
 
-from PyQt5.QtCore import QObject, QDateTime, pyqtProperty, pyqtSignal
+from PyQt5.QtCore import QObject, QDateTime, pyqtProperty, pyqtSignal, pyqtSlot
+from PyQt5.QtQuick import QQuickItem
 from PyQt5.QtQml import QQmlListProperty
 
 import controller
@@ -32,9 +33,13 @@ import plants
 #         self._slots = s
 #         self.plantSlotsChanged.emit()
 
+#     def reset_selection(self):
+#         pass
+
 #     def modify_slot(self, p, n, data):
 #         self._slots[p][n] = data
 #         self.plantSlotsChanged.emit()
+     
 
 
 class PlantSlot(QObject):
@@ -45,32 +50,102 @@ class PlantSlot(QObject):
     OCCUPIED = 0
     READY = 1
 
+    statusChanged = pyqtSignal()
+    datePlantedChanged = pyqtSignal()
+    selectedChanged = pyqtSignal()
     def __init__(self, status=EMPTY):
         super().__init__()
+        self._position = ('A', 0)
         self._status = status
-        
-    @pyqtProperty(int)
-    def empty(self):
-        return -1
+        self._plant = None
+        self._date_planted = None
+        self._days = 0
+        self._selected = False
+        self._noti = True
 
-    @pyqtProperty(int)
-    def occupied(self):
-        return 0
+    @pyqtProperty(QObject)
+    def plant(self):
+        return self._plant
 
-    @pyqtProperty(int)
-    def ready(self):
-        return 1
-
-    @pyqtProperty(int)
+    @pyqtProperty(int, notify=statusChanged)
     def status(self):
         return self._status
-
-    @status.setter
-    def status(self, status):
-        self._status = status
     
+    @pyqtProperty(int, notify=datePlantedChanged)
+    def datePlanted(self):
+        return self._date_planted
+
+    @datePlanted.setter
+    def datePlanted(self, d):
+        """
+        Set the date of when the plant is planted
+
+        :param date:
+        """
+        self._date_planted = d
+        self.datePlantedChanged.emit()
+
+    @pyqtProperty(int, notify=datePlantedChanged)
+    def dateReady(self):
+        return self._date_planted + timedelta(days=self._plant.days_harvest)
+
+    @pyqtProperty(int)
+    def daysPassed(self):
+        if self._date_planted is None:
+            return 0
+        now = date.today()
+        delta = now - self._date_planted
+        return delta.days
+
+    @pyqtProperty(int, notify=selectedChanged)
+    def selected(self):
+        return self._selected
+
+    @selected.setter
+    def selected(self, is_selected):
+        self._selected = is_selected
+        self.selectedChanged.emit()
+
+    @pyqtSlot()
     def a_function(self):
         print("call from a function")
+
+    def insert_plant(self, plant_id, date_planted):
+        """
+        Insert Plant obj
+
+        param:
+
+        plant_id -- (int) ID of a plant
+        """
+        pname, pdays = plants.get_plant_data(plant_id)
+        self._plant = plants.Plant(plant_id, name=pname, days_harvest=pdays)
+        # self.datePlanted = date_planted
+        self._date_planted = date_planted
+        self.update_and_refresh_data()
+        self.datePlantedChanged.emit()
+
+    def remove_plant(self):
+        self._plant = None
+        self.datePlanted = None
+        self._noti = True
+        self.update_and_refresh_data()
+
+    def update_and_refresh_data(self):
+        if self._plant is None:
+            self._status = PlantSlot.EMPTY
+        elif self.daysPassed >= self._plant.days_harvest:
+            self._status = PlantSlot.READY
+        else:
+            self._status = PlantSlot.OCCUPIED
+
+        self.statusChanged.emit()
+
+    def __getstate__(self):
+        return self.__dict__
+
+    def __setstate__(self, dic):
+        self.__dict__ = dic
 
 class Slot:
     '''
@@ -127,8 +202,12 @@ class Slot:
         
         :returns: Slot.Ready=1 or Slot.Occupied=0 or Slot.Empty=-1
         """
-        if self.plant is not None and self.days_passed >= self.plant.days_harvest:
+        if self.plant is None:
+            self.status = Slot.EMPTY
+        elif self.days_passed >= self.plant.days_harvest:
             self.status = Slot.READY
+        else:
+            self.status = Slot.OCCUPIED
 
         return self.status
 
@@ -184,6 +263,8 @@ class RefreshTimer():
 REFRESH_TIMER = RefreshTimer()
 
 SLOTS = None
+
+QPLANTSLOTS = None
 
 NOTIFIED_SLOTS = []
 

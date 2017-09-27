@@ -43,7 +43,13 @@ def reset_setting():
         "light_hour" : 7,
         "light_duration": 17,
         "temperature_unit": "c",
-        "language": "en"
+        "language": "en",
+        "year_offset": 0,
+        "month_offset": 0,
+        "day_offset": 0,
+        "hour_offset": 0,
+        "minute_offset": 0,
+        "second_offset": 0,
     }
     with open('db/setting.pickle', 'w+b') as setting_file:
         pickle.dump(init_setting, setting_file, protocol=pickle.HIGHEST_PROTOCOL)
