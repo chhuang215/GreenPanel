@@ -6,8 +6,43 @@ Item{
     visible: false
 
     signal scanWifi()
-    property int hour: 00
-    property int min: 00
+    signal timeChange(int a, int b)
+    property int hour: 0
+    property int min: 0
+
+    function getCurrentTime() {
+        var date = new Date;
+        hour = date.getHours()
+        min = date.getMinutes()
+    }
+
+    function incHour() {
+        if(hour == 24)
+            hour = 0;
+        else
+            hour++;
+    }
+
+    function decHour() {
+        if(hour == 0)
+            hour = 24;
+        else
+            hour--;
+    }
+
+    function incMin() {
+        if(min == 59)
+            min = 0;
+        else
+            min++;
+    }
+
+    function decMin() {
+        if(min == 0)
+            min = 59;
+        else
+            min--;
+    }
 
     Column{
         anchors.top: parent.top
@@ -187,6 +222,7 @@ Item{
 
                     onClicked: {
                         timePopup.open()
+                        getCurrentTime()
                     }
                 }
             }
@@ -278,7 +314,7 @@ Item{
                     height: 45
                     text: "\u25B2"
                     onClicked: {
-                        
+                        incHour();
                     }
                 }
 
@@ -286,7 +322,7 @@ Item{
                     id: txtSetHour
                     width: parent.width
                     text: {
-                        if (hour == 0){
+                        if (hour <= 9){
                             var original = hour;
                             var pad = "0"
                             var result = pad.concat(original);
@@ -304,7 +340,7 @@ Item{
                     height: 45
                     text: "\u25BC"
                     onClicked: {
-                        
+                        decHour();
                     }
                 }
             }
@@ -316,7 +352,7 @@ Item{
                     height: 45
                     text: "\u25B2"
                     onClicked: {
-                        
+                        incMin();
                     }
                 }
 
@@ -324,14 +360,14 @@ Item{
                     id: txtSetMinute
                     width: parent.width
                     text: {
-                        if (min == 0){
+                        if (min <= 9){
                             var original = min;
                             var pad = "0"
                             var result = pad.concat(original);
                             return result;
                         }
                         else
-                            return hour;
+                            return min;
                     }
                     font.pointSize: 36
                     horizontalAlignment : Text.AlignHCenter
@@ -342,7 +378,7 @@ Item{
                     height: 45
                     text: "\u25BC"
                     onClicked: {
-                        
+                        decMin();
                     }
                 }
             }
@@ -354,6 +390,7 @@ Item{
             anchors.bottom: parent.bottom
             text: "ok"
             onClicked: {
+                timeChange(hour, min)
                 timePopup.close()
             }
         }

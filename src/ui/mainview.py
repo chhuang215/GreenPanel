@@ -99,19 +99,22 @@ class MainWindow(QObject):
 
         # self.panel_setting.scanWifi.connect(lambda: self.__panel_nav(self.panel_setting_wifi))
 
+        # When OK button is pressent in the time change popup
+        self.panel_setting.timeChange.connect(self.time_update)
+
         # When confirm button is clicked in settings, nav back to main panel
         self.btn_setting_confirm = self.root.findChild(QQuickItem, "btnConfirm")
         self.btn_setting_confirm.clicked.connect(self.settings_confirm)
         self.btn_setting_confirm.clicked.connect(self.__panel_nav_back)
 
-        # Time picker
+        # Time picker (retired code)
         # self.btn_time_picker = self.root.findChild(QQuickItem, "btnSetTime")
         # self.btn_time_picker.clicked.connect(lambda: self.__panel_nav(self.time_picker))
 
-        # When confirm button is clicked in time picker
-        self.btn_time_confirm = self.root.findChild(QQuickItem, "btnTimeConfirm")
-        self.btn_time_confirm.clicked.connect(self.time_confirm)
-        self.btn_time_confirm.clicked.connect(self.__panel_nav_back)
+        # When confirm button is clicked in time picker (retired code)
+        # self.btn_time_confirm = self.root.findChild(QQuickItem, "btnTimeConfirm")
+        # self.btn_time_confirm.clicked.connect(self.time_confirm)
+        # self.btn_time_confirm.clicked.connect(self.__panel_nav_back)
 
         # Date picker
         self.btn_date_picker = self.root.findChild(QQuickItem, "btnSetDate")
@@ -203,6 +206,10 @@ class MainWindow(QObject):
         
         self.__panel_nav_back(layers=2)
     
+    def time_update(self, hour, minute):
+        print("Hour: " + str(hour))
+        print("Minute: " + str(minute))
+
     @pyqtSlot()
     def display_water_status(self):
         status = GPIOCtrler.get_component(PIN.WATER_LEVEL_SENSOR).has_enough_water()
