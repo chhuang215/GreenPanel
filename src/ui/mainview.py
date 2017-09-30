@@ -29,7 +29,8 @@ class MainWindow(QObject):
         # self.pslot = slots.PlantSlot()
         # engine.rootContext().setContextProperty('coolobj', self.coolobj)
         # self.setSource(QUrl.fromLocalFile('ui/MainView.qml'))
-        engine.load(QUrl.fromLocalFile('ui/MainView.qml'))
+        # engine.load(QUrl.fromLocalFile('ui/MainView.qml'))
+        engine.load(QUrl('ui/MainView.qml'))
         self.__nav_stack = []
 
         # Get root
