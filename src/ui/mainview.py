@@ -27,7 +27,7 @@ class MainWindow(QObject):
         engine = QQmlApplicationEngine(self)
         # self.listofnum = [1,2,3]
         # self.pslot = slots.PlantSlot()
-        # engine.rootContext().setContextProperty('coolobj', self.coolobj)
+        engine.rootContext().setContextProperty('theplantslots', slots.QPLANTSLOTS)
         # self.setSource(QUrl.fromLocalFile('ui/MainView.qml'))
         # engine.load(QUrl.fromLocalFile('ui/MainView.qml'))
         engine.load(QUrl('ui/MainView.qml'))

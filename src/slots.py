@@ -54,6 +54,7 @@ class PlantSlot(QObject):
     datePlantedChanged = pyqtSignal()
     selectedChanged = pyqtSignal()
     def __init__(self, status=EMPTY):
+        
         super().__init__()
         self._position = ('A', 0)
         self._status = status
@@ -62,6 +63,14 @@ class PlantSlot(QObject):
         self._days = 0
         self._selected = False
         self._noti = True
+
+        # self.status = status
+        # self.plant = None
+        # self.date_planted = None
+        # self.date_ready = None
+        # self.days = self.days_passed
+        # self.selected = False
+        # self.notify = True
 
     @pyqtProperty(QObject)
     def plant(self):
@@ -264,7 +273,16 @@ REFRESH_TIMER = RefreshTimer()
 
 SLOTS = None
 
-QPLANTSLOTS = None
+QPLANTSLOTS = {
+    "A": [PlantSlot(), PlantSlot(), PlantSlot()],
+    "B": [PlantSlot(), PlantSlot()],
+    "C": [PlantSlot(), PlantSlot(), PlantSlot()],
+    "D": [PlantSlot(), PlantSlot()],
+    "E": [PlantSlot(), PlantSlot(), PlantSlot()],
+    "F": [PlantSlot(), PlantSlot()],
+    "G": [PlantSlot(), PlantSlot(), PlantSlot()],
+    "H": [PlantSlot(), PlantSlot()]
+}
 
 NOTIFIED_SLOTS = []
 
