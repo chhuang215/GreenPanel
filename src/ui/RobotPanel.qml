@@ -9,7 +9,7 @@ Item{
     signal removeButtonClicked()
     signal removeOnePlant(string p, int n)
     signal editPlantDate(string p, int n, var d)
-    property var slots : {}
+    // property var slots : {}
     property string selectedP: 'A'
     property int selectedN: 0
     property alias currLeft : robotSlots.currLeft
@@ -43,11 +43,12 @@ Item{
         RoundMouseArea {
             property string slotPane : ""
             property int slotNum : -1
-            property var slotData: slots[slotPane][slotNum]
+            property var slotData: plantSlots[slotPane][slotNum]
+            // property var slotData: slots[slotPane][slotNum]
             status: slotData.status
             label: slotNum + 1
             onClicked: {
-                if(status == -1) return
+                // if(status == -1) return
                 var s = slotData
                 var plant = s.plant
                 // popup.slotP = slotPane
@@ -71,8 +72,8 @@ Item{
         id: robotSlots
         anchors.fill: parent
         slotComponent: slotHole
-        leftSlotsQuantity: slots[currLeft].length
-        rightSlotsQuantity: slots[currRight].length
+        leftSlotsQuantity: plantSlots[currLeft].length
+        rightSlotsQuantity: plantSlots[currRight].length
     }
 
     /* Popup */
@@ -87,13 +88,14 @@ Item{
         dim: false
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside	
 
-        property var slotData: slots[selectedP][selectedN]
+        property var slotData: plantSlots[selectedP][selectedN]
+        // property var slotData: slots[selectedP][selectedN]
         property int days: slotData.days ? slotData.days : 0
-        property string plantName: slotData.plant ? slotData.plant._name : ""
+        property string plantName: slotData.plant ? slotData.plant.name : "NO plant"
         property string description: ""
         property string imgSource: "images/placeholder.png"
-        property var datePlanted: slotData.date_planted ? slotData.date_planted : ""
-        property var dateReady: slotData.date_ready ? slotData.date_ready : ""
+        property var datePlanted: slotData.datePlanted ? slotData.datePlanted : "NO plant"
+        property var dateReady: slotData.dateReady ? slotData.dateReady : "NO plant"
 
         enter: null
         exit: null

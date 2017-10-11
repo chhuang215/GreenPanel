@@ -27,7 +27,7 @@ class MainWindow(QObject):
         engine = QQmlApplicationEngine(self)
         # self.listofnum = [1,2,3]
         # self.pslot = slots.PlantSlot()
-        engine.rootContext().setContextProperty('theplantslots', slots.QPLANTSLOTS)
+        engine.rootContext().setContextProperty('plantSlots', slots.QPLANTSLOTS)
         # self.setSource(QUrl.fromLocalFile('ui/MainView.qml'))
         # engine.load(QUrl.fromLocalFile('ui/MainView.qml'))
         engine.load(QUrl('ui/MainView.qml'))
@@ -180,19 +180,20 @@ class MainWindow(QObject):
         self.__nav_stack[-1].setVisible(True)
 
     def refresh_slots_status(self, sjson, status_msg):
-        if self.root.property("busySlots") is False:
-            self.root.setProperty("plantSlots", sjson)
+        # if self.root.property("busySlots") is False:
+        #     self.root.setProperty("plantSlots", sjson)
         self.panel_home.notifyRobot(status_msg)
 
     def add_plant_confirm(self, plant_id, s):
-        selected_slots = s.toVariant()
+        # selected_slots = s.toVariant()
 
-        for pane, lst in selected_slots.items():
+        for pane, lst in slots.QPLANTSLOTS.items():
             for i, slotdata in enumerate(lst):
             # for i in range(0, len(lst)):
             #     slotdata = lst[i]
-                if slotdata["selected"]:
-                    slots.insert_plant(pane, i, plant_id, date_added=slotdata["date_planted"])
+                if slotdata.selected:
+                    slots.insert_plant(pane, i, plant_id, date_added=slotdata.datePlanted)
+                    slotdata.selected = False
 
         self.__panel_nav_back(layers=3)
     

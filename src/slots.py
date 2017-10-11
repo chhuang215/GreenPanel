@@ -9,7 +9,7 @@ import datetime
 from datetime import datetime, date, timedelta
 import threading
 
-from PyQt5.QtCore import QObject, QDateTime, pyqtProperty, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import QObject, QDateTime, QDate, pyqtProperty, pyqtSignal, pyqtSlot
 from PyQt5.QtQuick import QQuickItem
 from PyQt5.QtQml import QQmlListProperty
 
@@ -49,20 +49,23 @@ class PlantSlot(QObject):
     EMPTY = -1
     OCCUPIED = 0
     READY = 1
-
+    
     statusChanged = pyqtSignal()
     datePlantedChanged = pyqtSignal()
     selectedChanged = pyqtSignal()
+    plantChanged = pyqtSignal()
     def __init__(self, status=EMPTY):
         
         super().__init__()
+
         self._position = ('A', 0)
         self._status = status
         self._plant = None
-        self._date_planted = None
+        self._date_planted = QDateTime()
         self._days = 0
         self._selected = False
         self._noti = True
+        
 
         # self.status = status
         # self.plant = None
@@ -72,7 +75,7 @@ class PlantSlot(QObject):
         # self.selected = False
         # self.notify = True
 
-    @pyqtProperty(QObject)
+    @pyqtProperty(QObject, notify=plantChanged)
     def plant(self):
         return self._plant
 
@@ -80,8 +83,9 @@ class PlantSlot(QObject):
     def status(self):
         return self._status
     
-    @pyqtProperty(int, notify=datePlantedChanged)
+    @pyqtProperty(QDateTime, notify=datePlantedChanged)
     def datePlanted(self):
+        
         return self._date_planted
 
     @datePlanted.setter
@@ -91,19 +95,25 @@ class PlantSlot(QObject):
 
         :param date:
         """
+        print(type(d))
+        # if not isinstance(d, date):
+    #     print(type(date_added))
+    #     date_added = date_added.toPyDateTime().date()
+            # print(type(date_added))
         self._date_planted = d
         self.datePlantedChanged.emit()
 
-    @pyqtProperty(int, notify=datePlantedChanged)
+    @pyqtProperty(QDateTime, notify=datePlantedChanged)
     def dateReady(self):
-        return self._date_planted + timedelta(days=self._plant.days_harvest)
+        # return self._date_planted + timedelta(days=self._plant.days_harvest)
+        return self._date_planted
 
     @pyqtProperty(int)
     def daysPassed(self):
         if self._date_planted is None:
             return 0
         now = date.today()
-        delta = now - self._date_planted
+        delta = now - self._date_planted.toPyDateTime().date()
         return delta.days
 
     @pyqtProperty(int, notify=selectedChanged)
@@ -113,6 +123,7 @@ class PlantSlot(QObject):
     @selected.setter
     def selected(self, is_selected):
         self._selected = is_selected
+        print("cool")
         self.selectedChanged.emit()
 
     @pyqtSlot()
@@ -136,6 +147,7 @@ class PlantSlot(QObject):
 
     def remove_plant(self):
         self._plant = None
+        self.plantChanged.emit()
         self.datePlanted = None
         self._noti = True
         self.update_and_refresh_data()
@@ -155,6 +167,7 @@ class PlantSlot(QObject):
 
     def __setstate__(self, dic):
         self.__dict__ = dic
+        
 
 class Slot:
     '''
@@ -271,7 +284,7 @@ class RefreshTimer():
 
 REFRESH_TIMER = RefreshTimer()
 
-SLOTS = None
+# SLOTS = None
 
 QPLANTSLOTS = {
     "A": [PlantSlot(), PlantSlot(), PlantSlot()],
@@ -287,32 +300,45 @@ QPLANTSLOTS = {
 NOTIFIED_SLOTS = []
 
 def insert_plant(panel, slotnum, plantid, date_added=date.today()):
-    s = SLOTS[panel][slotnum]
-    if not isinstance(date_added, date):
-        print(type(date_added))
-        date_added = date_added.toPyDateTime().date()
+    s = QPLANTSLOTS[panel][slotnum]
+    # if not isinstance(date_added, date):
+    #     print(type(date_added))
+    #     date_added = date_added.toPyDateTime().date()
     s.insert_plant(plantid, date_added)
-    # db.execute_command("INSERT INTO SLOTS VALUES (?, ?, ?, ?)", panel, slotnum , plantid, s.date_planted)
     check_slots()
-    db.store_slots_info({"slots": SLOTS})
+    # db.store_slots_info({"slots": SLOTS})
+    db.store_slots_info({"q_plant_slots": QPLANTSLOTS})
 
 def remove_plant(panel, slotnum):
-    s = SLOTS[panel][slotnum]
+    s = QPLANTSLOTS[panel][slotnum]
     s.remove_plant()
     # db.execute_command("DELETE FROM SLOTS WHERE PANEL=? AND SLOT=?", panel, slotnum)
     check_slots()
-    db.store_slots_info({"slots": SLOTS})
+    # db.store_slots_info({"slots": SLOTS})
+    db.store_slots_info({"q_plant_slots": QPLANTSLOTS})
 
 def edit_plant_date(panel, slotnum, date_planted):
     if not isinstance(date_planted, date):
         date_planted = date_planted.toPyDateTime().date()
-    SLOTS[panel][slotnum].set_date_planted(date_planted)
+    QPLANTSLOTS[panel][slotnum].set_date_planted(date_planted)
     check_slots()
-    db.store_slots_info({"slots": SLOTS})
+    # db.store_slots_info({"slots": SLOTS})
+    db.store_slots_info({"q_plant_slots": QPLANTSLOTS})
 
 def syncdb():
-    global SLOTS
-    SLOTS = db.get_slots_info()["slots"]
+    # global SLOTS
+    global QPLANTSLOTS
+    # SLOTS = db.get_slots_info()["slots"]
+    psdict = db.get_slots_info()["q_plant_slots"]
+    print(psdict)
+    for s_pane, s_row in psdict.items():
+        # print(s_pane, s_row)
+        for index, item in enumerate(s_row):
+
+            QPLANTSLOTS[s_pane][index].__dict__ = item.__dict__
+            print(type(QPLANTSLOTS[s_pane][index].plant))
+    # print(QPLANTSLOTS['A'][1].a_function())
+    
 
 def renew_nutrient_days(days):
     day_diff = 15 - days
@@ -334,10 +360,20 @@ def check_nutrient():
 def check_slots():
     msg = ""
     ready_counter = 0
-    for s_pane, s_row in SLOTS.items():
+    # for s_pane, s_row in SLOTS.items():
+    #     for s in s_row:
+    #         stat = s.check_and_update_status()
+    #         if stat == Slot.READY and s.notify:
+    #             ready_counter += 1
+    #             msg += s_pane + str(s_row.index(s)+1) + " "
+    #             if s not in NOTIFIED_SLOTS:
+    #                 NOTIFIED_SLOTS.append(s)
+
+    for s_pane, s_row in QPLANTSLOTS.items():
         for s in s_row:
-            stat = s.check_and_update_status()
-            if stat == Slot.READY and s.notify:
+            s.update_and_refresh_data()
+
+            if s._status == Slot.READY and s._noti:
                 ready_counter += 1
                 msg += s_pane + str(s_row.index(s)+1) + " "
                 if s not in NOTIFIED_SLOTS:
@@ -348,19 +384,19 @@ def check_slots():
     elif ready_counter > 1:
         msg += "ARE READY!"
 
-    controller.SIGNALER.SLOTS_REFRESH.emit(get_slots_json_format(), msg)
+    # controller.SIGNALER.SLOTS_REFRESH.emit(get_slots_json_format(), msg)
 
 def clear_notified():
     for s in NOTIFIED_SLOTS:
-        s.notify = False
+        s._noti = False
 
     NOTIFIED_SLOTS.clear()
     check_slots()
 
-def json_seriel(obj):
-    if isinstance(obj, (datetime, date)):
-        return obj.strftime('%m/%d/%Y')
-    return obj.__dict__
+# def json_seriel(obj):
+#     if isinstance(obj, (datetime, date)):
+#         return obj.strftime('%m/%d/%Y')
+#     return obj.__dict__
 
-def get_slots_json_format():
-    return json.loads(json.dumps(SLOTS, default=json_seriel))
+# def get_slots_json_format():
+#     return json.loads(json.dumps(SLOTS, default=json_seriel))

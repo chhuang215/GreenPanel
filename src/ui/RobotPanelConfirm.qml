@@ -8,33 +8,33 @@ Item{
     signal removeConfirm(var s)
     signal removeSelection(var slotP, int slotN)
     property var plantData: {} // "{id, name}"
-    property var slots: {}
+    // property var slots: {}
     property int mode: 0 // 0 is AddMode, 1 is RemoveMode
 
-    onSlotsChanged:{
+    onVisibleChanged:{
         listModel.clear()
         // console.log(JSON.stringify(slots))
-        for (var p in slots) {
+        for (var p in plantSlots) {
             //  console.log(p)
-            for (var i = 0 ; i < slots[p].length; i ++){
+            for (var i = 0 ; i < plantSlots[p].length; i ++){
                 // console.log(p + " " + i + " ")
-                if(!slots[p][i].selected) continue
+                if(!plantSlots[p][i].selected) continue
                 // console.log(JSON.stringify(slots[p][i]))
                 var pn = ""
                 if (mode == 0){
                     pn = plantData["name"]+ " (id:"+ plantData["id"] + ")" 
-                    slots[p][i].date_planted = new Date()
+                    plantSlots[p][i].datePlanted = new Date()
                 }
                 else{
-                    pn = slots[p][i].plant._name + " (id:" +slots[p][i].plant._plant_id+")" 
-                    slots[p][i].date_planted = new Date(slots[p][i].date_planted)
+                    pn = plantSlots[p][i].plant._name + " (id:" +plantSlots[p][i].plant._plant_id+")" 
+                    plantSlots[p][i].datePlanted = new Date(plantSlots[p][i].datePlanted)
                 }
 
                 var listData = {
                     "plantName" : pn,
                     "slotP" : p,
                     "slotN" : i,
-                    "dateAdded": slots[p][i].date_planted
+                    "dateAdded": plantSlots[p][i].datePlanted
                 }
                 
                 listModel.append(listData)
@@ -140,7 +140,7 @@ Item{
                                     height: 35
                                     text: "\u25B2"
                                     onClicked: {
-                                        var d = slots[slotP][slotN].date_planted
+                                        var d = plantSlots[slotP][slotN].datePlanted
                                         d.setFullYear(d.getFullYear() + 1)
                                         // slots[slotP][slotN].date_planted = d
                                         dateAdded = d
@@ -160,7 +160,7 @@ Item{
                                     height: 35
                                     text: "\u25BC"
                                     onClicked: {
-                                        var d = slots[slotP][slotN].date_planted
+                                        var d = plantSlots[slotP][slotN].datePlanted
                                         d.setFullYear(d.getFullYear() - 1)
                                         // slots[slotP][slotN].date_planted = d
                                         dateAdded = d
@@ -175,7 +175,7 @@ Item{
                                     height: 35
                                     text: "\u25B2"
                                     onClicked: {
-                                        var d = slots[slotP][slotN].date_planted
+                                        var d = plantSlots[slotP][slotN].datePlanted
                                         d.setMonth((d.getMonth() + 1) % 12)
                                         // slots[slotP][slotN].date_planted = d
                                         dateAdded = d
@@ -198,7 +198,7 @@ Item{
                                     height: 35
                                     text: "\u25BC"
                                     onClicked: {
-                                        var d = slots[slotP][slotN].date_planted
+                                        var d = plantSlots[slotP][slotN].datePlanted
                                         var m = d.getMonth()
                                         d.setMonth(m == 0 ? 11 : (m - 1))
                                         // slots[slotP][slotN].date_planted = d
@@ -215,7 +215,7 @@ Item{
                                     height: 35
                                     text: "\u25B2"
                                     onClicked: {
-                                        var d = slots[slotP][slotN].date_planted
+                                        var d = plantSlots[slotP][slotN].datePlanted
                                         d.setDate(d.getDate() + 1)
                                         // slots[slotP][slotN].date_planted = d
                                         dateAdded = d
@@ -235,7 +235,7 @@ Item{
                                     height: 35
                                     text: "\u25BC"
                                     onClicked: {
-                                        var d = slots[slotP][slotN].date_planted
+                                        var d = plantSlots[slotP][slotN].datePlanted
                                         d.setDate(d.getDate() - 1)
                                         // slots[slotP][slotN].date_planted = d
                                         dateAdded = d
@@ -274,8 +274,8 @@ Item{
                         anchors.centerIn: parent
                         text:"\u00D7"
                         onClicked:{
-                            removeSelection(slotP, slotN)
-
+                            //removeSelection(slotP, slotN)
+                            plantSlots[slotP][slotN].selected = false
                         }
                     }
                 }
@@ -300,7 +300,7 @@ Item{
         anchors.bottomMargin: 15
         text:"CONFIRM"
         onClicked:{
-            mode == 0 ? parent.addConfirm(plantData["id"], slots) : removeConfirm(slots)
+            mode == 0 ? parent.addConfirm(plantData["id"], plantSlots) : removeConfirm(plantSlots)
         }
     }
 }

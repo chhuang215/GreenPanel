@@ -9,14 +9,14 @@ Item{
 
     property int mode: 0 // 0 is AddMode, 1 is RemoveMode
 
-    property var slots : {}
+    // property var slots : {}
     property int updateCount: 0
     property alias currLeft : robotSlots.currLeft
     property alias currRight : robotSlots.currRight
 
-    onVisibleChanged:{
-        slotsChanged()
-    }
+    // onVisibleChanged:{
+    //     slotsChanged()
+    // }
 
     // onSlotsChanged:{
     //     console.log(JSON.stringify(slots))
@@ -113,7 +113,8 @@ Item{
                     property string capsuleLabel: String.fromCharCode(((("A".charCodeAt(0) - 65) + index) % 8 + 65))
                     property real angle: (112.5 - 45 * index) * Math.PI/180
                     Repeater{
-                        model: slots[capsuleLabel].length
+                        // model: slots[capsuleLabel].length
+                        model: plantSlots[capsuleLabel].length
                         Loader { 
                             sourceComponent: miniSlot
                             onLoaded:{
@@ -123,7 +124,7 @@ Item{
                                 var centerY = mini.center - item.height/2
                                 item.x = centerX + mini.radius * Math.cos(miniPane.angle) * distance
                                 item.y = centerY + mini.radius * Math.sin(miniPane.angle) * distance
-                                item.slotData = Qt.binding(function(){var u = updateCount; return slots[miniPane.capsuleLabel][index]})
+                                item.slotData = Qt.binding(function(){var u = updateCount; return plantSlots[miniPane.capsuleLabel][index]})
                             }
                         }
                     }
@@ -163,7 +164,7 @@ Item{
         RoundMouseArea {
             property var slotPane : {}
             property int slotNum : -1
-            property var slotData: slots[slotPane][slotNum]
+            property var slotData: plantSlots[slotPane][slotNum]
             label: slotNum + 1
             status: slotData.status
             selected: slotData.selected
@@ -173,7 +174,7 @@ Item{
                 if(!disabled){
                     // slots[slotPane][slotNum].selected = !slots[slotPane][slotNum].selected
                     slotData.selected = !slotData.selected
-                    slotDataChanged()
+                    // slotDataChanged()
                     updateCount ^= 1
                     // updateChanged() // Reevaluate purpose
                 }
@@ -186,8 +187,8 @@ Item{
         id: robotSlots
         anchors.fill: parent
         slotComponent: slotHoleComponent
-        leftSlotsQuantity: slots[currLeft].length
-        rightSlotsQuantity: slots[currRight].length
+        leftSlotsQuantity: plantSlots[currLeft].length
+        rightSlotsQuantity: plantSlots[currRight].length
     }
 
     Button{

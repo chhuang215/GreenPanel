@@ -3,6 +3,9 @@ from PyQt5.QtCore import QObject, QDateTime, pyqtProperty, pyqtSignal, pyqtSlot
 PLANTS_LIST = db.get_plants_data()
 
 class Plant(QObject):
+
+    nameChanged = pyqtSignal()
+
     def __init__(self, plant_id, name="Plant", days_harvest=21):
         super().__init__()
         self._plant_id = plant_id
@@ -18,7 +21,7 @@ class Plant(QObject):
     def plant_id(self, pid):
         self._plant_id = pid
     
-    @pyqtProperty(str)
+    @pyqtProperty(str, notify=nameChanged)
     def name(self):
         return self._name
 
@@ -48,13 +51,6 @@ class Plant(QObject):
     def __setstate__(self, d):
         self.__dict__ = d
 
-# class Plant:
-#     def __init__(self, plant_id, name="Plant", days_harvest=21):
-#         self.plant_id = plant_id
-#         self.name = name
-#         self.days_harvest = days_harvest
-#         self.description = "This is " + name
-
 # print("new plant test")
 # aPlant = Plant(0)
 # aPlant.__st
@@ -65,10 +61,6 @@ class Plant(QObject):
 # aPlant.plant_id = 1
 
 # print(aPlantDic)
-
-
-
-
 
 def get_plant_data(plant_id):
     data = PLANTS_LIST[plant_id]

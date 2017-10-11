@@ -14,7 +14,7 @@ ApplicationWindow {
     signal stopMotor()
     signal navBack()
     signal navTo(var p)
-    property var plantSlots: initSlot()
+    // property var plantSlots: initSlot()
     property var nutrientDays: -1
     property bool waterLevelIsGood: false
     property bool busySlots: panelRobotSelect.visible || panelRobotSelectPlant.visible || panelRobotConfirm.visible
@@ -202,7 +202,7 @@ ApplicationWindow {
         id: "panelRobot"
         objectName: "panelRobot"
         anchors.fill: parent
-        slots: main.plantSlots
+        // slots: main.plantSlots
         onAddButtonClicked: {
             panelRobotSelect.mode = 0
         }
@@ -233,7 +233,7 @@ ApplicationWindow {
         id: "panelRobotSelect"
         objectName: "panelRobotSelect"
         anchors.fill: parent
-        slots: main.plantSlots
+        // slots: main.plantSlots
         onVisibleChanged:{ 
             // if leaves panel, sync robot panel's view
             if(!visible) {
@@ -246,12 +246,12 @@ ApplicationWindow {
         id: "panelRobotConfirm"
         objectName: "panelRobotConfirm"
         anchors.fill: parent
-        slots: panelRobotSelect.slots
+        // slots: panelRobotSelect.slots
         mode: panelRobotSelect.mode
-        onRemoveSelection:{
-            panelRobotSelect.slots[slotP][slotN].selected = false
-            panelRobotSelect.slotsChanged()
-        }
+        // onRemoveSelection:{
+        //     panelRobotSelect.slots[slotP][slotN].selected = false
+        //     panelRobotSelect.slotsChanged()
+        // }
     }
 
     // SwipeView {
