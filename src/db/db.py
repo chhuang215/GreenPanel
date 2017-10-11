@@ -95,8 +95,9 @@ def reset_plants_data():
 def reset_all():
     '''Reset all db and setting'''
     reset_setting()
-    reset_slots()
     reset_plants_data()
+    reset_slots()
+    
     with open('db/setting.pickle', 'rb') as setting_file, open('db/plantslots.pickle', 'rb') as ps_file, open('db/plants.pickle', 'rb') as plants_file:
         settings = pickle.load(setting_file)
         pslots = pickle.load(ps_file)
