@@ -192,8 +192,8 @@ class MainWindow(QObject):
             # for i in range(0, len(lst)):
             #     slotdata = lst[i]
                 if slotdata.selected:
-                    slots.insert_plant(pane, i, plant_id, date_added=slotdata.datePlanted)
                     slotdata.selected = False
+                    slots.insert_plant(pane, i, plant_id, date_planted=slotdata.datePlanted)
 
         self.__panel_nav_back(layers=3)
     

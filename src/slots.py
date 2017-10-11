@@ -95,11 +95,12 @@ class PlantSlot(QObject):
 
         :param date:
         """
-        print(type(d))
+
         # if not isinstance(d, date):
     #     print(type(date_added))
     #     date_added = date_added.toPyDateTime().date()
             # print(type(date_added))
+        print(type(d))
         self._date_planted = d
         self.datePlantedChanged.emit()
 
@@ -130,6 +131,10 @@ class PlantSlot(QObject):
     def a_function(self):
         print("call from a function")
 
+    @pyqtSlot()
+    def clearDatePlanted(self):
+        self.datePlanted = QDateTime()
+
     def insert_plant(self, plant_id, date_planted):
         """
         Insert Plant obj
@@ -141,14 +146,15 @@ class PlantSlot(QObject):
         pname, pdays = plants.get_plant_data(plant_id)
         self._plant = plants.Plant(plant_id, name=pname, days_harvest=pdays)
         # self.datePlanted = date_planted
-        self._date_planted = date_planted
+        self.datePlanted = date_planted
+        
         self.update_and_refresh_data()
-        self.datePlantedChanged.emit()
+        # self.datePlantedChanged.emit()
 
     def remove_plant(self):
         self._plant = None
         self.plantChanged.emit()
-        self.datePlanted = None
+        self.clearDatePlanted()
         self._noti = True
         self.update_and_refresh_data()
 
@@ -186,7 +192,7 @@ class Slot:
         self.selected = False
         self.notify = True
 
-    def insert_plant(self, plant_id, date_added=date.today()):
+    def insert_plant(self, plant_id, date_planted=date.today()):
         """
         Insert Plant obj
 
@@ -196,7 +202,7 @@ class Slot:
         """
         pname, pdays = plants.get_plant_data(plant_id)
         self.plant = plants.Plant(plant_id, name=pname, days_harvest=pdays)
-        self.set_date_planted(date_added)
+        self.set_date_planted(date_planted)
         self.status = Slot.OCCUPIED
 
     def remove_plant(self):
@@ -299,12 +305,12 @@ QPLANTSLOTS = {
 
 NOTIFIED_SLOTS = []
 
-def insert_plant(panel, slotnum, plantid, date_added=date.today()):
+def insert_plant(panel, slotnum, plantid, date_planted=date.today()):
     s = QPLANTSLOTS[panel][slotnum]
     # if not isinstance(date_added, date):
     #     print(type(date_added))
     #     date_added = date_added.toPyDateTime().date()
-    s.insert_plant(plantid, date_added)
+    s.insert_plant(plantid, date_planted)
     check_slots()
     # db.store_slots_info({"slots": SLOTS})
     db.store_slots_info({"q_plant_slots": QPLANTSLOTS})
@@ -336,7 +342,8 @@ def syncdb():
         for index, item in enumerate(s_row):
 
             QPLANTSLOTS[s_pane][index].__dict__ = item.__dict__
-            print(type(QPLANTSLOTS[s_pane][index].plant))
+            print(type(QPLANTSLOTS[s_pane][index].plant), end='')
+            print(QPLANTSLOTS[s_pane][index].plant is not None)
     # print(QPLANTSLOTS['A'][1].a_function())
     
 
