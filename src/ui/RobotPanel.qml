@@ -8,12 +8,16 @@ Item{
     signal addButtonClicked()
     signal removeButtonClicked()
     signal removeOnePlant(string p, int n)
-    signal editPlantDate(string p, int n, var d)
+    // signal editPlantDate(string p, int n, var d)
     // property var slots : {}
     property string selectedP: 'A'
     property int selectedN: 0
     property alias currLeft : robotSlots.currLeft
     property alias currRight : robotSlots.currRight
+
+    function editPlantDate(p, n, d) {
+        plantSlots[p][n].datePlanted = d
+    }
 
     Button {
         id:btnAddPlant

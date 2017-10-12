@@ -136,7 +136,7 @@ class MainWindow(QObject):
         # Robot Plant Add / Remove
         self.panel_robot.addButtonClicked.connect(lambda: self.__panel_nav(self.panel_robot_select_plant))
         self.panel_robot.removeButtonClicked.connect(lambda: self.__panel_nav(self.panel_robot_select))
-        self.panel_robot.editPlantDate.connect(slots.edit_plant_date)
+        # self.panel_robot.editPlantDate.connect(slots.edit_plant_date)
         self.panel_robot.removeOnePlant.connect(slots.remove_plant)
         self.panel_robot_select_plant.plantSelected.connect(lambda: self.__panel_nav(self.panel_robot_select))
         self.panel_robot_select.slotsSelectedDone.connect(lambda: self.__panel_nav(self.panel_robot_confirm))
