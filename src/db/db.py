@@ -56,20 +56,20 @@ def reset_setting():
 
 def reset_slots():
     import slots
-    Slot = slots.Slot
+    # Slot = slots.Slot
     PlantSlot = slots.PlantSlot
     plant_slots = {
         "nutrient_last_added": None,
-        "slots": {
-            "A": [Slot(), Slot(), Slot()],
-            "B": [Slot(), Slot()],
-            "C": [Slot(), Slot(), Slot()],
-            "D": [Slot(), Slot()],
-            "E": [Slot(), Slot(), Slot()],
-            "F": [Slot(), Slot()],
-            "G": [Slot(), Slot(), Slot()],
-            "H": [Slot(), Slot()]
-        },
+        # "slots": {
+        #     "A": [Slot(), Slot(), Slot()],
+        #     "B": [Slot(), Slot()],
+        #     "C": [Slot(), Slot(), Slot()],
+        #     "D": [Slot(), Slot()],
+        #     "E": [Slot(), Slot(), Slot()],
+        #     "F": [Slot(), Slot()],
+        #     "G": [Slot(), Slot(), Slot()],
+        #     "H": [Slot(), Slot()]
+        # },
         "q_plant_slots": {
             "A": [PlantSlot(), PlantSlot(), PlantSlot()],
             "B": [PlantSlot(), PlantSlot()],

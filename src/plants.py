@@ -49,6 +49,7 @@ class Plant(QObject):
         return self.__dict__
 
     def __setstate__(self, d):
+        super().__init__()
         self.__dict__ = d
 
 # print("new plant test")

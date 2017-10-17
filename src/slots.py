@@ -166,6 +166,7 @@ class PlantSlot(QObject):
         return self.__dict__
 
     def __setstate__(self, dic):
+        super().__init__()
         self.__dict__ = dic
         
 
@@ -286,18 +287,34 @@ REFRESH_TIMER = RefreshTimer()
 
 # SLOTS = None
 
-QPLANTSLOTS = {
-    "A": [PlantSlot(), PlantSlot(), PlantSlot()],
-    "B": [PlantSlot(), PlantSlot()],
-    "C": [PlantSlot(), PlantSlot(), PlantSlot()],
-    "D": [PlantSlot(), PlantSlot()],
-    "E": [PlantSlot(), PlantSlot(), PlantSlot()],
-    "F": [PlantSlot(), PlantSlot()],
-    "G": [PlantSlot(), PlantSlot(), PlantSlot()],
-    "H": [PlantSlot(), PlantSlot()]
-}
+QPLANTSLOTS = {}
+#     "A": [PlantSlot(), PlantSlot(), PlantSlot()],
+#     "B": [PlantSlot(), PlantSlot()],
+#     "C": [PlantSlot(), PlantSlot(), PlantSlot()],
+#     "D": [PlantSlot(), PlantSlot()],
+#     "E": [PlantSlot(), PlantSlot(), PlantSlot()],
+#     "F": [PlantSlot(), PlantSlot()],
+#     "G": [PlantSlot(), PlantSlot(), PlantSlot()],
+#     "H": [PlantSlot(), PlantSlot()]
+# }
 
 NOTIFIED_SLOTS = []
+
+
+def syncdb():
+    # global SLOTS
+    global QPLANTSLOTS
+    # SLOTS = db.get_slots_info()["slots"]
+    psdict = db.get_slots_info()["q_plant_slots"]
+    print(psdict)
+    QPLANTSLOTS = psdict
+    # for s_pane, s_row in psdict.items():
+    #     # print(s_pane, s_row)
+    #     for index, item in enumerate(s_row):
+
+    #         QPLANTSLOTS[s_pane][index].__dict__ = item.__dict__
+    #         print(type(QPLANTSLOTS[s_pane][index].plant))
+    # print(QPLANTSLOTS['A'][1].a_function())
 
 def insert_plant(panel, slotnum, plantid, date_added=date.today()):
     s = QPLANTSLOTS[panel][slotnum]
@@ -325,19 +342,6 @@ def edit_plant_date(panel, slotnum, date_planted):
     # db.store_slots_info({"slots": SLOTS})
     db.store_slots_info({"q_plant_slots": QPLANTSLOTS})
 
-def syncdb():
-    # global SLOTS
-    global QPLANTSLOTS
-    # SLOTS = db.get_slots_info()["slots"]
-    psdict = db.get_slots_info()["q_plant_slots"]
-    print(psdict)
-    for s_pane, s_row in psdict.items():
-        # print(s_pane, s_row)
-        for index, item in enumerate(s_row):
-
-            QPLANTSLOTS[s_pane][index].__dict__ = item.__dict__
-            print(type(QPLANTSLOTS[s_pane][index].plant))
-    # print(QPLANTSLOTS['A'][1].a_function())
     
 
 def renew_nutrient_days(days):
