@@ -21,13 +21,15 @@ Item{
                 if(!plantSlots[p][i].selected) continue
                 // console.log(JSON.stringify(slots[p][i]))
                 var pn = ""
+                // var datePlanted = new Date()
                 if (mode == 0){
                     pn = plantData["name"]+ " (id:"+ plantData["id"] + ")" 
                     plantSlots[p][i].datePlanted = new Date()
                 }
                 else{
-                    pn = plantSlots[p][i].plant._name + " (id:" +plantSlots[p][i].plant._plant_id+")" 
+                    pn = plantSlots[p][i].plant.name + " (id:" +plantSlots[p][i].plant.plant_id+")" 
                     plantSlots[p][i].datePlanted = new Date(plantSlots[p][i].datePlanted)
+                    // datePlanted = plantSlots[p][i].datePlanted
                 }
 
                 var listData = {
@@ -276,6 +278,7 @@ Item{
                         onClicked:{
                             //removeSelection(slotP, slotN)
                             plantSlots[slotP][slotN].selected = false
+                            plantSlots[slotP][slotN].clearDatePlanted()
                         }
                     }
                 }

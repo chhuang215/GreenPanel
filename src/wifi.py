@@ -38,7 +38,7 @@ def scan_wifi():
                     current_index[key] = val
     elif platform.system() == 'Linux':
         subprocess.call("iwlist wlan0 scan")
-    controller.SIGNALER.WIFI_REFRESH.emit(wifilist)
+    # controller.SIGNALER.WIFI_REFRESH.emit(wifilist)
     return wifilist
 
 if __name__ == "__main__":
