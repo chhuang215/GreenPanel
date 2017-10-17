@@ -70,7 +70,7 @@ def reset_slots():
         #     "G": [Slot(), Slot(), Slot()],
         #     "H": [Slot(), Slot()]
         # },
-        "q_plant_slots": {
+        "plant_slots": {
             "A": [PlantSlot(), PlantSlot(), PlantSlot()],
             "B": [PlantSlot(), PlantSlot()],
             "C": [PlantSlot(), PlantSlot(), PlantSlot()],

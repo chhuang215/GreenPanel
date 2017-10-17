@@ -177,80 +177,80 @@ class PlantSlot(QObject):
         self.__dict__ = dic
         
 
-class Slot:
-    '''
-        stores basic information of a plant slot
-    '''
-    EMPTY = -1
-    OCCUPIED = 0
-    READY = 1
+# class Slot:
+#     '''
+#         stores basic information of a plant slot
+#     '''
+#     EMPTY = -1
+#     OCCUPIED = 0
+#     READY = 1
 
-    def __init__(self, status=EMPTY):
-        self.status = status
-        self.plant = None
-        self.date_planted = None
-        self.date_ready = None
-        self.days = self.days_passed
-        self.selected = False
-        self.notify = True
+#     def __init__(self, status=EMPTY):
+#         self.status = status
+#         self.plant = None
+#         self.date_planted = None
+#         self.date_ready = None
+#         self.days = self.days_passed
+#         self.selected = False
+#         self.notify = True
 
-    def insert_plant(self, plant_id, date_planted=date.today()):
-        """
-        Insert Plant obj
+#     def insert_plant(self, plant_id, date_planted=date.today()):
+#         """
+#         Insert Plant obj
 
-        param:
+#         param:
 
-        plant_id -- (int) ID of a plant
-        """
-        pname, pdays = plants.get_plant_data(plant_id)
-        self.plant = plants.Plant(plant_id, name=pname, days_harvest=pdays)
-        self.set_date_planted(date_planted)
-        self.status = Slot.OCCUPIED
+#         plant_id -- (int) ID of a plant
+#         """
+#         pname, pdays = plants.get_plant_data(plant_id)
+#         self.plant = plants.Plant(plant_id, name=pname, days_harvest=pdays)
+#         self.set_date_planted(date_planted)
+#         self.status = Slot.OCCUPIED
 
-    def remove_plant(self):
-        """
-        Remove plant from slot and reset every status
-        """
-        self.plant = None
-        self.date_planted = None
-        self.date_ready = None
-        self.notify = True
-        self.status = Slot.EMPTY
+#     def remove_plant(self):
+#         """
+#         Remove plant from slot and reset every status
+#         """
+#         self.plant = None
+#         self.date_planted = None
+#         self.date_ready = None
+#         self.notify = True
+#         self.status = Slot.EMPTY
 
-    def set_date_planted(self, d):
-        """
-        Set the date of when the plant is planted
+#     def set_date_planted(self, d):
+#         """
+#         Set the date of when the plant is planted
         
-        :param date: 
-        """
-        self.date_planted = d
-        self.date_ready = self.date_planted + timedelta(days=self.plant.days_harvest)
+#         :param date: 
+#         """
+#         self.date_planted = d
+#         self.date_ready = self.date_planted + timedelta(days=self.plant.days_harvest)
 
-    def check_and_update_status(self):
-        """
-        Check and return current slot status
+#     def check_and_update_status(self):
+#         """
+#         Check and return current slot status
         
-        :returns: Slot.Ready=1 or Slot.Occupied=0 or Slot.Empty=-1
-        """
-        if self.plant is None:
-            self.status = PlantSlot.EMPTY
-        elif self.days_passed >= self.plant.days_harvest:
-            self.status = PlantSlot.READY
-        else:
-            self.status = PlantSlot.OCCUPIED
+#         :returns: Slot.Ready=1 or Slot.Occupied=0 or Slot.Empty=-1
+#         """
+#         if self.plant is None:
+#             self.status = PlantSlot.EMPTY
+#         elif self.days_passed >= self.plant.days_harvest:
+#             self.status = PlantSlot.READY
+#         else:
+#             self.status = PlantSlot.OCCUPIED
 
-        return self.status
+#         return self.status
 
-    @property
-    def days_passed(self):
-        if self.date_planted is None:
-            self.days = 0
-            return 0
+#     @property
+#     def days_passed(self):
+#         if self.date_planted is None:
+#             self.days = 0
+#             return 0
 
-        now = date.today()
-        delta = now - self.date_planted
-        self.days = delta.days
-        return self.days 
+#         now = date.today()
+#         delta = now - self.date_planted
+#         self.days = delta.days
+#         return self.days 
 
 class RefreshTimer():
 
@@ -294,7 +294,7 @@ REFRESH_TIMER = RefreshTimer()
 
 # SLOTS = None
 
-QPLANTSLOTS = {}
+PLANTSLOTS = {}
 #     "A": [PlantSlot(), PlantSlot(), PlantSlot()],
 #     "B": [PlantSlot(), PlantSlot()],
 #     "C": [PlantSlot(), PlantSlot(), PlantSlot()],
@@ -309,30 +309,30 @@ NOTIFIED_SLOTS = []
 
 def syncdb():
     # global SLOTS
-    global QPLANTSLOTS
+    global PLANTSLOTS
     # SLOTS = db.get_slots_info()["slots"]
-    psdict = db.get_slots_info()["q_plant_slots"]
+    psdict = db.get_slots_info()["plant_slots"]
     print(psdict)
-    QPLANTSLOTS = psdict
+    PLANTSLOTS = psdict
     # for s_pane, s_row in psdict.items():
     #     # print(s_pane, s_row)
     #     for index, item in enumerate(s_row):
 
-    #         QPLANTSLOTS[s_pane][index].__dict__ = item.__dict__
-    #         print(type(QPLANTSLOTS[s_pane][index].plant))
-    # print(QPLANTSLOTS['A'][1].a_function())
+    #         PLANTSLOTS[s_pane][index].__dict__ = item.__dict__
+    #         print(type(PLANTSLOTS[s_pane][index].plant))
+    # print(PLANTSLOTS['A'][1].a_function())
 
-def insert_plant(panel, slotnum, plantid, date_planted=date.today()):
+# def insert_plant(panel, slotnum, plantid, date_planted=date.today()):
 
-    s = QPLANTSLOTS[panel][slotnum]
-    # if not isinstance(date_added, date):
-    #     print(type(date_added))
-    #     date_added = date_added.toPyDateTime().date()
-    s.insert_plant(plantid, date_planted)
-    save()
+#     s = PLANTSLOTS[panel][slotnum]
+#     # if not isinstance(date_added, date):
+#     #     print(type(date_added))
+#     #     date_added = date_added.toPyDateTime().date()
+#     s.insert_plant(plantid, date_planted)
+#     save()
 
 def remove_plant(panel, slotnum):
-    s = QPLANTSLOTS[panel][slotnum]
+    s = PLANTSLOTS[panel][slotnum]
     s.remove_plant()
     # db.execute_command("DELETE FROM SLOTS WHERE PANEL=? AND SLOT=?", panel, slotnum)
     save()
@@ -340,14 +340,14 @@ def remove_plant(panel, slotnum):
 # def edit_plant_date(panel, slotnum, date_planted):
 #     # if not isinstance(date_planted, date):
 #     #     date_planted = date_planted.toPyDateTime().date()
-#     QPLANTSLOTS[panel][slotnum].datePlanted = date_planted
+#     PLANTSLOTS[panel][slotnum].datePlanted = date_planted
 #     save()
 
 # TODO : AFTER EDITING DATE SHOULD INVOKE SAVE
 def save():
     check_slots()
     # db.store_slots_info({"slots": SLOTS})
-    db.store_slots_info({"q_plant_slots": QPLANTSLOTS})
+    db.store_slots_info({"plant_slots": PLANTSLOTS})
     
 
 def renew_nutrient_days(days):
@@ -380,7 +380,7 @@ def check_slots():
     #             if s not in NOTIFIED_SLOTS:
     #                 NOTIFIED_SLOTS.append(s)
 
-    for s_pane, s_row in QPLANTSLOTS.items():
+    for s_pane, s_row in PLANTSLOTS.items():
         for s in s_row:
             s.update_and_refresh_data()
 

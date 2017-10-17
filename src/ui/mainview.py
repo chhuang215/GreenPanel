@@ -27,7 +27,7 @@ class MainWindow(QObject):
         engine = QQmlApplicationEngine(self)
         # self.listofnum = [1,2,3]
         # self.pslot = slots.PlantSlot()
-        engine.rootContext().setContextProperty('plantSlots', slots.QPLANTSLOTS)
+        engine.rootContext().setContextProperty('plantSlots', slots.PLANTSLOTS)
         # self.setSource(QUrl.fromLocalFile('ui/MainView.qml'))
         # engine.load(QUrl.fromLocalFile('ui/MainView.qml'))
         engine.load(QUrl('ui/MainView.qml'))
@@ -187,14 +187,15 @@ class MainWindow(QObject):
     def add_plant_confirm(self, plant_id, s):
         # selected_slots = s.toVariant()
 
-        for pane, lst in slots.QPLANTSLOTS.items():
-            for i, slotdata in enumerate(lst):
+        for pane, lst in slots.PLANTSLOTS.items():
+            for i, a_slot in enumerate(lst):
             # for i in range(0, len(lst)):
             #     slotdata = lst[i]
-                if slotdata.selected:
-                    slotdata.selected = False
-                    slots.insert_plant(pane, i, plant_id, date_planted=slotdata.datePlanted)
+                if a_slot.selected:
+                    a_slot.selected = False
+                    a_slot.insert_plant(plant_id, date_planted=a_slot.datePlanted)
 
+        slots.save()
         self.__panel_nav_back(layers=3)
     
     def remove_plant_confirm(self, s):

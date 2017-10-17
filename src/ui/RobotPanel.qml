@@ -52,20 +52,12 @@ Item{
             status: slotData.status
             label: slotNum + 1
             onClicked: {
-                // if(status == -1) return
-                var s = slotData
-                var plant = s.plant
-                // popup.slotP = slotPane
-                // popup.slotN = slotNum
+                if(status == -1) return
+
                 selectedP = slotPane
                 selectedN = slotNum
-                // if(plant) {
-                //     popup.plantName = plant.name
-                //     popup.datePlanted = s.date_planted
-                //     popup.dateReady = s.date_ready
-                //     popup.days = s.days
-                //     popup.description = "Description for " + plant.name
-                // }
+                popup.slotData = slotData
+
                 popup.open()
             }
         }
@@ -96,7 +88,7 @@ Item{
         // property var slotData: slots[selectedP][selectedN]
         property int days: slotData.days ? slotData.days : 0
         property string plantName: slotData.plant ? slotData.plant.name : "NO plant"
-        property string description: ""
+        property string description: plant.description
         property string imgSource: "images/placeholder.png"
         property var datePlanted: slotData.datePlanted ? slotData.datePlanted : "NO plant"
         property var dateReady: slotData.dateReady ? slotData.dateReady : "NO plant"
