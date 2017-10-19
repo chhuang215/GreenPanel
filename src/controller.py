@@ -59,7 +59,7 @@ class GPIOController:
 class Signaler(QObject):
 
     TEMPERATURE_UPDATE = pyqtSignal(float, float)
-    SLOTS_REFRESH = pyqtSignal(object, object)
+    SLOTS_REFRESH = pyqtSignal(object)
     NUTRIENT_REFRESH = pyqtSignal(int)
     WIFI_REFRESH = pyqtSignal(object)
     LIGHT_SWITCH = pyqtSignal(bool)

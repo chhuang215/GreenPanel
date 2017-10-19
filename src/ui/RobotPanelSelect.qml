@@ -13,14 +13,6 @@ Item{
     property int updateCount: 0
     property alias currLeft : robotSlots.currLeft
     property alias currRight : robotSlots.currRight
-
-    // onVisibleChanged:{
-    //     slotsChanged()
-    // }
-
-    // onSlotsChanged:{
-    //     console.log(JSON.stringify(slots))
-    // }
     
     Item{
         id: mini
@@ -203,17 +195,5 @@ Item{
             parent.slotsSelectedDone()
         }
     }
-    // Button{
-    //     width:150
-    //     height:150
-        
-    //     anchors.right: parent.right
-    //     anchors.top: btnDoneAddSelect.bottom
-    //     text: "J"
-    //     onClicked:{
-    //         console.log(JSON.stringify(slotsSelected,  null, '\t') )
-
-    //     }
-    // }
 
 }

@@ -7,16 +7,14 @@ Item{
     visible: false
     signal addButtonClicked()
     signal removeButtonClicked()
-    signal removeOnePlant(string p, int n)
-    // signal editPlantDate(string p, int n, var d)
-    // property var slots : {}
     property string selectedP: 'A'
     property int selectedN: 0
     property alias currLeft : robotSlots.currLeft
     property alias currRight : robotSlots.currRight
 
-    function editPlantDate(p, n, d) {
-        plantSlots[p][n].datePlanted = d
+    function editDatePlanted(p, n, d) {
+        plantSlots[p][n].editDatePlanted(d)
+        // plantSlots[p][n].datePlanted = d
     }
 
     Button {
@@ -86,13 +84,13 @@ Item{
 
         property var slotData: plantSlots[selectedP][selectedN]
         // property var slotData: slots[selectedP][selectedN]
-        property int days: slotData.days ? slotData.days : 0
-        property string plantName: slotData.plant ? slotData.plant.name : "NO plant"
-        property string description: plant.description
+        property var plantData : slotData.plant
+        property string plantName: plantData ? plantData.name : "NO plant"
+        property string description: plantData ? plantData.description : "NO plant"
         property string imgSource: "images/placeholder.png"
         property var datePlanted: slotData.datePlanted ? slotData.datePlanted : "NO plant"
         property var dateReady: slotData.dateReady ? slotData.dateReady : "NO plant"
-
+        property var daysPassed: slotData.daysPassed
         enter: null
         exit: null
         // onClosed: {
@@ -174,7 +172,7 @@ Item{
                 height: 40
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: popup.datePlanted
+                    text: popup.datePlanted.toLocaleDateString(Qt.locale(), "yyyy-MMM-dd")
                     font.pointSize: 12; font.bold: false
                 }
             }
@@ -194,7 +192,7 @@ Item{
                 height: 40
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: popup.days + " Days"
+                    text: popup.daysPassed + " Days"
                     font.pointSize: 12; font.bold: false
                 }
             }
@@ -215,7 +213,7 @@ Item{
                 Text {
                     id: txtReady
                     anchors.verticalCenter: parent.verticalCenter
-                    text: popup.dateReady
+                    text: popup.dateReady.toLocaleDateString(Qt.locale(), "yyyy-MMM-dd")
                     font.pointSize: 12; font.bold: false
                 }
             }
@@ -263,7 +261,6 @@ Item{
             onClicked: {
                 popupConfirmRemove.open()
                 // popup.close()
-                // removeOnePlant(selectedP, selectedN)
             }
         
         }
@@ -284,7 +281,7 @@ Item{
                     onClicked: {
                         popupConfirmRemove.close()
                         popup.close()
-                        removeOnePlant(selectedP, selectedN)
+                        plantSlots[selectedP][selectedN].removePlant()
                     }
                 }
                 Button{
@@ -323,7 +320,7 @@ Item{
                         onClicked: {
                             var d = popup2.datePlanted 
                             d.setFullYear(d.getFullYear() + 1)
-                            editPlantDate(selectedP, selectedN, d)
+                            editDatePlanted(selectedP, selectedN, d)
                         }
                     }
 
@@ -342,7 +339,7 @@ Item{
                         onClicked: {
                             var d = popup2.datePlanted 
                             d.setFullYear(d.getFullYear() - 1)
-                            editPlantDate(selectedP, selectedN, d)
+                            editDatePlanted(selectedP, selectedN, d)
                         }
                     }
                 }
@@ -356,7 +353,7 @@ Item{
                         onClicked: {
                             var d = popup2.datePlanted 
                             d.setMonth((d.getMonth() + 1) % 12)
-                            editPlantDate(selectedP, selectedN, d)
+                            editDatePlanted(selectedP, selectedN, d)
                         }
                     }
 
@@ -379,7 +376,7 @@ Item{
                             var d = popup2.datePlanted 
                             var m = d.getMonth()
                             d.setMonth(m == 0 ? 11 : (m - 1))
-                            editPlantDate(selectedP, selectedN, d)
+                            editDatePlanted(selectedP, selectedN, d)
                         }
                     }
                 }
@@ -394,7 +391,7 @@ Item{
                         onClicked: {
                             var d = popup2.datePlanted 
                             d.setDate(d.getDate() + 1)
-                            editPlantDate(selectedP, selectedN, d)
+                            editDatePlanted(selectedP, selectedN, d)
                         }
                     }
 
@@ -413,7 +410,7 @@ Item{
                         onClicked: {
                             var d = popup2.datePlanted 
                             d.setDate(d.getDate() - 1)
-                            editPlantDate(selectedP, selectedN, d)
+                            editDatePlanted(selectedP, selectedN, d)
                         }
                     }
                 }
