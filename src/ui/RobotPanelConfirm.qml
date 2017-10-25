@@ -4,7 +4,7 @@ import QtQuick.Controls 2.0
 Item{
     id: "panelRobotConfirm"
     visible: false
-    signal addConfirm(int ptype, var s)
+    signal addConfirm(int ptype)
     signal removeConfirm(var s)
     signal removeSelection(var slotP, int slotN)
     property var plantData: {} // "{id, name}"
@@ -303,7 +303,7 @@ Item{
         anchors.bottomMargin: 15
         text:"CONFIRM"
         onClicked:{
-            mode == 0 ? parent.addConfirm(plantData["id"], plantSlots) : removeConfirm(plantSlots)
+            mode == 0 ? parent.addConfirm(plantData["id"]) : removeConfirm(plantSlots)
         }
     }
 }

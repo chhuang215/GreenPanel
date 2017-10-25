@@ -184,7 +184,7 @@ class MainWindow(QObject):
         #     self.root.setProperty("plantSlots", sjson)
         self.panel_home.notifyRobot(status_msg)
 
-    def add_plant_confirm(self, plant_id, s):
+    def add_plant_confirm(self, plant_id):
         # selected_slots = s.toVariant()
 
         for pane, lst in slots.PLANTSLOTS.items():
