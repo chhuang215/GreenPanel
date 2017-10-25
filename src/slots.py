@@ -55,9 +55,9 @@ class PlantSlot(QObject):
     daysPassedChanged = pyqtSignal()
     selectedChanged = pyqtSignal()
     plantChanged = pyqtSignal()
-    
+ 
     def __init__(self, status=EMPTY):
-        
+
         super().__init__()
 
         self._position = ('A', 0)
@@ -67,15 +67,6 @@ class PlantSlot(QObject):
         self._days = 0
         self._selected = False
         self._noti = True
-        
-
-        # self.status = status
-        # self.plant = None
-        # self.date_planted = None
-        # self.date_ready = None
-        # self.days = self.days_passed
-        # self.selected = False
-        # self.notify = True
 
     @pyqtProperty(QObject, notify=plantChanged)
     def plant(self):
@@ -196,17 +187,17 @@ class RefreshTimer():
 
         now = datetime.now()
 
-        print("SLOTs timer loop", now)
+        print("PLANTSLOTs timer loop", now)
         next_check_time = now.replace(hour=0, minute=0, second=0, microsecond=0)
         next_check_time += timedelta(days=1)
             
         interval = next_check_time - now
-        print("SLOTs timer next check time", next_check_time)
+        print("PLANTSLOTs timer next check time", next_check_time)
         self._timer = threading.Timer(interval.total_seconds(), self.__check_timer_loop)
         self._timer.start()
 
     def activate(self):
-        print("SLOTs timer ACTIVATED", datetime.now())
+        print("PLANTSLOTs timer ACTIVATED", datetime.now())
         if not self.is_activated:
             ### Activate timerv ###
             self.is_activated = True
@@ -214,7 +205,7 @@ class RefreshTimer():
             #######################
 
     def deactivate(self):
-        print("SLOTs timer DEACTIVATED", datetime.now())
+        print("PLANTSLOTs timer DEACTIVATED", datetime.now())
         if self._timer is not None:
             self._timer.cancel()
         self.is_activated = False
@@ -223,31 +214,14 @@ REFRESH_TIMER = RefreshTimer()
 
 # TODO need to remove all selected when cancel adding/remove etc
 PLANTSLOTS = {}
-#     "A": [PlantSlot(), PlantSlot(), PlantSlot()],
-#     "B": [PlantSlot(), PlantSlot()],
-#     "C": [PlantSlot(), PlantSlot(), PlantSlot()],
-#     "D": [PlantSlot(), PlantSlot()],
-#     "E": [PlantSlot(), PlantSlot(), PlantSlot()],
-#     "F": [PlantSlot(), PlantSlot()],
-#     "G": [PlantSlot(), PlantSlot(), PlantSlot()],
-#     "H": [PlantSlot(), PlantSlot()]
-
 NOTIFIED_SLOTS = []
 
 def syncdb():
-    # global SLOTS
+
     global PLANTSLOTS
-    # SLOTS = db.get_slots_info()["slots"]
     psdict = db.get_slots_info()["plant_slots"]
     print(psdict)
     PLANTSLOTS = psdict
-    # for s_pane, s_row in psdict.items():
-    #     # print(s_pane, s_row)
-    #     for index, item in enumerate(s_row):
-
-    #         PLANTSLOTS[s_pane][index].__dict__ = item.__dict__
-    #         print(type(PLANTSLOTS[s_pane][index].plant))
-    # print(PLANTSLOTS['A'][1].a_function())
 
 def save():
     check_slots()
@@ -275,28 +249,29 @@ def check_nutrient():
 def check_slots():
     print("[!CHECKING!]PLANTSLOTS")
     msg = ""
-    ready_counter = len(NOTIFIED_SLOTS)
 
     for s_pane, s_row in PLANTSLOTS.items():
         for s in s_row:
             s.update_and_refresh_data()
 
             if s._status == PlantSlot.READY and s._noti:
-                ready_counter += 1
+                # ready_counter += 1
                 msg += s_pane + str(s_row.index(s)+1) + " "
                 if s not in NOTIFIED_SLOTS:
                     NOTIFIED_SLOTS.append(s)
+            elif s in NOTIFIED_SLOTS:
+                NOTIFIED_SLOTS.remove(s)
 
-    if ready_counter == 1:
+    if len(NOTIFIED_SLOTS) == 1:
         msg += "IS READY!"
-    elif ready_counter > 1:
+    elif len(NOTIFIED_SLOTS) > 1:
         msg += "ARE READY!"
 
     controller.SIGNALER.SLOTS_REFRESH.emit(msg)
 
 def clear_notified():
-    for s in NOTIFIED_SLOTS:
-        s._noti = False
+    for aslot in NOTIFIED_SLOTS:
+        aslot._noti = False
 
     NOTIFIED_SLOTS.clear()
     check_slots()

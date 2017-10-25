@@ -5,13 +5,7 @@ Item{
     id: "panelRobotConfirm"
     visible: false
     signal addConfirm(int ptype)
-<<<<<<< HEAD
-    signal removeConfirm(var s)
-    signal removeSelection(var slotP, int slotN)
-=======
     signal removeConfirm()
-
->>>>>>> 0e5b61837726ee31cd26fd458f8472291e51343c
     property var plantData: {} // "{id, name}"
     property int mode: 0 // 0 is AddMode, 1 is RemoveMode
 
