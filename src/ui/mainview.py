@@ -137,7 +137,6 @@ class MainWindow(QObject):
         self.panel_robot.addButtonClicked.connect(lambda: self.__panel_nav(self.panel_robot_select_plant))
         self.panel_robot.removeButtonClicked.connect(lambda: self.__panel_nav(self.panel_robot_select))
         # self.panel_robot.editPlantDate.connect(slots.edit_plant_date)
-        self.panel_robot.removeOnePlant.connect(slots.remove_plant)
         self.panel_robot_select_plant.plantSelected.connect(lambda: self.__panel_nav(self.panel_robot_select))
         self.panel_robot_select.slotsSelectedDone.connect(lambda: self.__panel_nav(self.panel_robot_confirm))
         self.panel_robot_confirm.addConfirm.connect(self.add_plant_confirm)
@@ -179,34 +178,30 @@ class MainWindow(QObject):
         
         self.__nav_stack[-1].setVisible(True)
 
-    def refresh_slots_status(self, sjson, status_msg):
+    def refresh_slots_status(self, status_msg):
         # if self.root.property("busySlots") is False:
         #     self.root.setProperty("plantSlots", sjson)
         self.panel_home.notifyRobot(status_msg)
 
     def add_plant_confirm(self, plant_id):
-        # selected_slots = s.toVariant()
-
-        for pane, lst in slots.PLANTSLOTS.items():
-            for i, a_slot in enumerate(lst):
-            # for i in range(0, len(lst)):
-            #     slotdata = lst[i]
+        for lst in slots.PLANTSLOTS.values():
+            for a_slot in lst:
                 if a_slot.selected:
                     a_slot.selected = False
                     a_slot.insert_plant(plant_id, date_planted=a_slot.datePlanted)
 
         slots.save()
         self.__panel_nav_back(layers=3)
-    
-    def remove_plant_confirm(self, s):
-        selected_slots = s.toVariant()
 
-        for pane, lst in selected_slots.items():
-            for i, slotdata in enumerate(lst):
-            # for i in range(0, len(lst)):
-                if slotdata["selected"]:
-                    slots.remove_plant(pane, i)
+    def remove_plant_confirm(self):
+        print(slots.PLANTSLOTS.values())
+        for lst in slots.PLANTSLOTS.values():
+            for a_slot in lst:
+                if a_slot.selected:
+                    a_slot.selected = False
+                    a_slot.remove_plant()
         
+        slots.save()
         self.__panel_nav_back(layers=2)
     
     def time_update(self, hour, minute):

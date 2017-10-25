@@ -5,13 +5,15 @@ PLANTS_LIST = db.get_plants_data()
 class Plant(QObject):
 
     nameChanged = pyqtSignal()
+    descriptionChanged = pyqtSignal()
 
     def __init__(self, plant_id, name="Plant", days_harvest=21):
         super().__init__()
         self._plant_id = plant_id
         self._name = name
         self._days_harvest = days_harvest
-        self._description = "This is " + name
+        self._description = "This is " + name \
+                            + "\nShould be ready in " + str(days_harvest) + " days."
     
     @pyqtProperty(int)
     def plant_id(self):
@@ -37,7 +39,7 @@ class Plant(QObject):
     def days_harvest(self, val):
         self._days_harvest = val
 
-    @pyqtProperty(str)
+    @pyqtProperty(str, notify=descriptionChanged)
     def description(self):
         return self._description
 

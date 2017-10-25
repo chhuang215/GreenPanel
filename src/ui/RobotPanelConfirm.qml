@@ -5,21 +5,27 @@ Item{
     id: "panelRobotConfirm"
     visible: false
     signal addConfirm(int ptype)
+<<<<<<< HEAD
     signal removeConfirm(var s)
     signal removeSelection(var slotP, int slotN)
+=======
+    signal removeConfirm()
+
+>>>>>>> 0e5b61837726ee31cd26fd458f8472291e51343c
     property var plantData: {} // "{id, name}"
-    // property var slots: {}
     property int mode: 0 // 0 is AddMode, 1 is RemoveMode
 
     onVisibleChanged:{
+        rerenderList()
+    }
+
+    function rerenderList(){
         listModel.clear()
-        // console.log(JSON.stringify(slots))
         for (var p in plantSlots) {
             //  console.log(p)
             for (var i = 0 ; i < plantSlots[p].length; i ++){
                 // console.log(p + " " + i + " ")
                 if(!plantSlots[p][i].selected) continue
-                // console.log(JSON.stringify(slots[p][i]))
                 var pn = ""
                 // var datePlanted = new Date()
                 if (mode == 0){
@@ -28,7 +34,7 @@ Item{
                 }
                 else{
                     pn = plantSlots[p][i].plant.name + " (id:" +plantSlots[p][i].plant.plant_id+")" 
-                    plantSlots[p][i].datePlanted = new Date(plantSlots[p][i].datePlanted)
+                    // plantSlots[p][i].datePlanted = new Date(plantSlots[p][i].datePlanted)
                     // datePlanted = plantSlots[p][i].datePlanted
                 }
 
@@ -74,15 +80,15 @@ Item{
         }
         ListView {
             id: listView
-            
+            model: listModel
+
             anchors.top:listHeader.bottom
             anchors.bottom: parent.bottom
             anchors.right:parent.right
             anchors.left:parent.left
         
             anchors.topMargin: 5
-            model: listModel
-
+            
             delegate: Row{
                 width: listView.width
                 height: listView.height / 5
@@ -144,7 +150,7 @@ Item{
                                     onClicked: {
                                         var d = plantSlots[slotP][slotN].datePlanted
                                         d.setFullYear(d.getFullYear() + 1)
-                                        // slots[slotP][slotN].date_planted = d
+                                        plantSlots[slotP][slotN].datePlanted = d
                                         dateAdded = d
                                     }
                                 }
@@ -164,7 +170,7 @@ Item{
                                     onClicked: {
                                         var d = plantSlots[slotP][slotN].datePlanted
                                         d.setFullYear(d.getFullYear() - 1)
-                                        // slots[slotP][slotN].date_planted = d
+                                        plantSlots[slotP][slotN].datePlanted = d
                                         dateAdded = d
                                     }
                                 }
@@ -179,7 +185,7 @@ Item{
                                     onClicked: {
                                         var d = plantSlots[slotP][slotN].datePlanted
                                         d.setMonth((d.getMonth() + 1) % 12)
-                                        // slots[slotP][slotN].date_planted = d
+                                        plantSlots[slotP][slotN].datePlanted = d
                                         dateAdded = d
                                     }
                                 }
@@ -203,7 +209,7 @@ Item{
                                         var d = plantSlots[slotP][slotN].datePlanted
                                         var m = d.getMonth()
                                         d.setMonth(m == 0 ? 11 : (m - 1))
-                                        // slots[slotP][slotN].date_planted = d
+                                        plantSlots[slotP][slotN].datePlanted = d
                                         dateAdded = d
                                     }
                                 }
@@ -219,7 +225,7 @@ Item{
                                     onClicked: {
                                         var d = plantSlots[slotP][slotN].datePlanted
                                         d.setDate(d.getDate() + 1)
-                                        // slots[slotP][slotN].date_planted = d
+                                        plantSlots[slotP][slotN].datePlanted = d
                                         dateAdded = d
                                     }
                                 }
@@ -239,7 +245,7 @@ Item{
                                     onClicked: {
                                         var d = plantSlots[slotP][slotN].datePlanted
                                         d.setDate(d.getDate() - 1)
-                                        // slots[slotP][slotN].date_planted = d
+                                        plantSlots[slotP][slotN].datePlanted = d
                                         dateAdded = d
                                     }
                                 }
@@ -276,9 +282,10 @@ Item{
                         anchors.centerIn: parent
                         text:"\u00D7"
                         onClicked:{
-                            //removeSelection(slotP, slotN)
+                            
                             plantSlots[slotP][slotN].selected = false
                             plantSlots[slotP][slotN].clearDatePlanted()
+                            rerenderList()
                         }
                     }
                 }
@@ -303,7 +310,7 @@ Item{
         anchors.bottomMargin: 15
         text:"CONFIRM"
         onClicked:{
-            mode == 0 ? parent.addConfirm(plantData["id"]) : removeConfirm(plantSlots)
+            mode == 0 ? parent.addConfirm(plantData["id"]) : removeConfirm()
         }
     }
 }

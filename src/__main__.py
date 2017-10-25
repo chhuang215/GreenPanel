@@ -106,9 +106,11 @@ def main():
         main_light.timer.deactivate()
         motr.timer.deactivate()
         motr.pwm.stop()
-        
+
         GPIO.cleanup()
 
 
 if __name__ == '__main__':
+    if len(sys.argv) > 1 and sys.argv[1] == "resetdb":
+        db.reset_all()
     main()

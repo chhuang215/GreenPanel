@@ -14,31 +14,12 @@ ApplicationWindow {
     signal stopMotor()
     signal navBack()
     signal navTo(var p)
-    // property var plantSlots: initSlot()
     property var nutrientDays: -1
     property bool waterLevelIsGood: false
     property bool busySlots: panelRobotSelect.visible || panelRobotSelectPlant.visible || panelRobotConfirm.visible
 
     function updateClockText(clocktime){
         txtClock.text = clocktime
-    }
-
-    function initSlot(){
-        var initData = {"status" : -1, "selected" : false}
-        var st = {} 
-        for (var i = 65 ; i <= 72; i ++) {
-            var p = String.fromCharCode(i);
-            var sl = []
-            var sn = 2
-            if (i % 2){
-                sn = 3
-            }
-            for (var j = 0; j < sn; j++){
-                sl.push(initData)
-            }
-            st[p] = sl
-        }
-        return st
     }
 
     function enableMotorRotate(enable){
@@ -202,12 +183,11 @@ ApplicationWindow {
         id: "panelRobot"
         objectName: "panelRobot"
         anchors.fill: parent
-        // slots: main.plantSlots
         onAddButtonClicked: {
             panelRobotSelect.mode = 0
         }
         onRemoveButtonClicked:{
-             panelRobotSelect.mode = 1
+            panelRobotSelect.mode = 1
         }
         onVisibleChanged:{ 
             // if leaves panel, sync robot panel's view
@@ -233,7 +213,7 @@ ApplicationWindow {
         id: "panelRobotSelect"
         objectName: "panelRobotSelect"
         anchors.fill: parent
-        // slots: main.plantSlots
+
         onVisibleChanged:{ 
             // if leaves panel, sync robot panel's view
             if(!visible) {
@@ -246,12 +226,7 @@ ApplicationWindow {
         id: "panelRobotConfirm"
         objectName: "panelRobotConfirm"
         anchors.fill: parent
-        // slots: panelRobotSelect.slots
         mode: panelRobotSelect.mode
-        // onRemoveSelection:{
-        //     panelRobotSelect.slots[slotP][slotN].selected = false
-        //     panelRobotSelect.slotsChanged()
-        // }
     }
 
     // SwipeView {
