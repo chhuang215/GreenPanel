@@ -98,8 +98,8 @@ Item{
                 property var status: 0
                 property bool c: unit == "c"
 
-                width: 226
-                height: 130
+                width: 190
+                height: 140
                 anchors.verticalCenter: parent.verticalCenter
                 // anchors.horizontalCenter: parent.horizontalCenter
                 Image{

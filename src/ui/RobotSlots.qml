@@ -110,6 +110,9 @@ Item{
         font.pointSize: 26
     }
 
+  
+
+
     Canvas{
         id: capsules
 
@@ -175,6 +178,16 @@ Item{
         // }
     }
 
+    Image{
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.left:parent.left
+        anchors.top:parent.top
+        anchors.topMargin:-110
+        anchors.bottomMargin:-50
+        source: "images/inside.bmp"
+    }
+
     Repeater {
         model: [leftSlotsQuantity, rightSlotsQuantity]
         Repeater{
@@ -198,4 +211,5 @@ Item{
             }
         }
     }
+
 }
