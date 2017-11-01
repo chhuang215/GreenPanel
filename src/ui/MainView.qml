@@ -77,7 +77,7 @@ ApplicationWindow {
                 objectName:"txtClock"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                font.pointSize: 38
+                font.pointSize: 45
             }
         }
 

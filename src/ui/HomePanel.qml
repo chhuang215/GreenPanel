@@ -28,21 +28,19 @@ Item{
         anchors.right:parent.right
         anchors.left:parent.left
         anchors.bottom: parent.bottom
-        anchors.bottomMargin:60
+        anchors.bottomMargin:40
+        
         // anchors.topMargin: 10
         
-        spacing:50
+        spacing:20
 
         Row {
             anchors.horizontalCenter:parent.horizontalCenter
-            spacing: 60
+            spacing: 70
             
-             Button {
-                width:226
-                height:130
-                text: "water"
+            HomePanelButton {
                 objectName: "btnWater"
-
+                imgSource: "images/icon_wa.png"
                 Rectangle{
                     width: txtWaterNoti.width + 10
                     height: 36
@@ -60,12 +58,9 @@ Item{
                 }
             }
 
-            Button {
+            HomePanelButton {
                 objectName: "btnNutrient"
-                width:226
-                height:130
-                text: "nutrient"
-
+                imgSource: "images/icon_nu.png"
                 Rectangle{
                     width: 36
                     height: 36
@@ -88,13 +83,10 @@ Item{
             anchors.horizontalCenter:parent.horizontalCenter
             spacing: 30
             
-            Button {
+            HomePanelButton{
                 id:"btnLight"
                 objectName:"btnLight"
-                width:226
-                height:130
-                text: "Set Light Timer"
-
+                imgSource: "images/icon_li.png"
             }
 
             Item{
@@ -110,11 +102,21 @@ Item{
                 height: 130
                 anchors.verticalCenter: parent.verticalCenter
                 // anchors.horizontalCenter: parent.horizontalCenter
+                Image{
+                    anchors.right:parent.right
+                    anchors.rightMargin:30
+                    anchors.top:parent.top
+                    anchors.topMargin: 30
+                    fillMode: Image.PreserveAspectFit
+                    // width: 110
+                    height: 90
+                    source: "images/icon_te.png"
+                }
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: parent.c ? parent.tempC : parent.tempF
-                    font.pointSize: 40; font.bold: true
+                    font.pointSize: 35; font.bold: true
                 }
                 
                 MouseArea { 
@@ -143,22 +145,14 @@ Item{
                         font.pointSize:12
                     }
                 }
+
+                
             }
 
-            Button {
-                width:226
-                height:130
+            HomePanelButton{
                 id:"btnRobot"
                 objectName:"btnRobot"
                 text: qsTr("Robot Guy")    
-                // background: Rectangle {
-                //     implicitWidth: 100
-                //     implicitHeight: 40
-                //     color: parent.down ? "#d6d6d6" : "#f6f6f6"
-                //     border.color: "#26282a"
-                //     border.width: 1
-                //     radius: 100
-                // }
                 Item{
                     id: robotNotification
                     property alias text: txt.text
