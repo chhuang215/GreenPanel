@@ -183,8 +183,8 @@ Item{
         anchors.right: parent.right
         anchors.left:parent.left
         anchors.top:parent.top
-        anchors.topMargin:-110
-        anchors.bottomMargin:-50
+        anchors.topMargin:-200
+        anchors.bottomMargin:-70
         source: "images/inside.bmp"
     }
 
