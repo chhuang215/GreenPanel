@@ -22,6 +22,69 @@ Item{
     function notifyRobot(msg){
         robotNotification.text = msg 
     }
+    
+    Item{
+            id: "tempDisplay"
+            
+            property var unit: 'c'
+            property var tempC: 0
+            property var tempF: 0
+            property var status: 0
+            property bool c: unit == "c"
+
+            width: 170
+            height: 130
+            // anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.topMargin: 60
+            // anchors.horizontalCenter: parent.horizontalCenter
+            Image{
+                anchors.right:parent.right
+                anchors.rightMargin:30
+                anchors.top:parent.top
+                anchors.topMargin: 30
+                fillMode: Image.PreserveAspectFit
+                // width: 110
+                height: 80
+                source: "images/icon_te.png"
+            }
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: parent.c ? parent.tempC : parent.tempF
+                font.pointSize: 25; font.bold: true
+            }
+            
+            MouseArea { 
+                anchors.fill: parent 
+                onClicked: {
+                     parent.unit = parent.unit == 'c' ? 'f' : 'c'
+                     parent.c ? temperatureUnitChanged("c") : temperatureUnitChanged("f")
+                }
+            }
+            onUnitChanged:{
+                panelHome.unitChanged(unit)
+            }
+
+            Rectangle{
+                width: txtTempNotification.width + 10
+                height: txtTempNotification.height + 10
+                anchors.top: parent.top
+                anchors.right: parent.right
+                color: tempDisplay.status == 1 ? 'red' : tempDisplay.status == -1 ? 'lightblue' : 'green'
+                visible: tempDisplay.status != 0
+                Text{
+                    id: txtTempNotification
+                    anchors.centerIn: parent
+                    text: tempDisplay.status == 1 ? 'HOT' : tempDisplay.status == -1 ? 'COLD' : ''
+                    // color: "white"
+                    font.pointSize:12
+                }
+            }
+
+            
+        }
 
     Column{
         // anchors.horizontalCenter: parent.horizontalCenter
@@ -36,7 +99,7 @@ Item{
 
         Row {
             anchors.horizontalCenter:parent.horizontalCenter
-            spacing: 70
+            spacing: 65
             
             HomePanelButton {
                 objectName: "btnWater"
@@ -81,7 +144,7 @@ Item{
 
         Row {
             anchors.horizontalCenter:parent.horizontalCenter
-            spacing: 30
+            spacing: 65
             
             HomePanelButton{
                 id:"btnLight"
@@ -89,65 +152,6 @@ Item{
                 imgSource: "images/icon_li.png"
             }
 
-            Item{
-                id: "tempDisplay"
-                
-                property var unit: 'c'
-                property var tempC: 0
-                property var tempF: 0
-                property var status: 0
-                property bool c: unit == "c"
-
-                width: 190
-                height: 140
-                anchors.verticalCenter: parent.verticalCenter
-                // anchors.horizontalCenter: parent.horizontalCenter
-                Image{
-                    anchors.right:parent.right
-                    anchors.rightMargin:30
-                    anchors.top:parent.top
-                    anchors.topMargin: 30
-                    fillMode: Image.PreserveAspectFit
-                    // width: 110
-                    height: 90
-                    source: "images/icon_te.png"
-                }
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: parent.c ? parent.tempC : parent.tempF
-                    font.pointSize: 35; font.bold: true
-                }
-                
-                MouseArea { 
-                    anchors.fill: parent 
-                    onClicked: {
-                         parent.unit = parent.unit == 'c' ? 'f' : 'c'
-                         parent.c ? temperatureUnitChanged("c") : temperatureUnitChanged("f")
-                    }
-                }
-                onUnitChanged:{
-                    panelHome.unitChanged(unit)
-                }
-
-                Rectangle{
-                    width: txtTempNotification.width + 10
-                    height: txtTempNotification.height + 10
-                    anchors.top: parent.top
-                    anchors.right: parent.right
-                    color: tempDisplay.status == 1 ? 'red' : tempDisplay.status == -1 ? 'lightblue' : 'green'
-                    visible: tempDisplay.status != 0
-                    Text{
-                        id: txtTempNotification
-                        anchors.centerIn: parent
-                        text: tempDisplay.status == 1 ? 'HOT' : tempDisplay.status == -1 ? 'COLD' : ''
-                        // color: "white"
-                        font.pointSize:12
-                    }
-                }
-
-                
-            }
 
             HomePanelButton{
                 id:"btnRobot"
