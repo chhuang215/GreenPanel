@@ -11,7 +11,7 @@ Item{
 
     // property var slots : {}
     property int updateCount: 0
-    property alias currLeft : robotSlots.currLeft
+    property alias currCenter : robotSlots.currCenter
     property alias currRight : robotSlots.currRight
     
     Item{
@@ -29,7 +29,7 @@ Item{
             id: miniRotation
             origin.x: mini.center; origin.y: mini.center; 
             angle: {
-                var angleOffset = currLeft.charCodeAt(0) - 65
+                var angleOffset = currCenter.charCodeAt(0) - 65
                 var a = 45 * angleOffset
                 return 45 * angleOffset
             }
@@ -101,7 +101,7 @@ Item{
                 model: 8
                 Item{
                     id: miniPane
-                    // property string capsuleLabel: String.fromCharCode((((currLeft.charCodeAt(0) - 65) + index) % 8 + 65))
+                    // property string capsuleLabel: String.fromCharCode((((currCenter.charCodeAt(0) - 65) + index) % 8 + 65))
                     property string capsuleLabel: String.fromCharCode(((("A".charCodeAt(0) - 65) + index) % 8 + 65))
                     property real angle: (112.5 - 45 * index) * Math.PI/180
                     Repeater{
@@ -179,8 +179,6 @@ Item{
         id: robotSlots
         anchors.fill: parent
         slotComponent: slotHoleComponent
-        leftSlotsQuantity: plantSlots[currLeft].length
-        rightSlotsQuantity: plantSlots[currRight].length
     }
 
     Button{

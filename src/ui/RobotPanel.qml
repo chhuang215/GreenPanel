@@ -9,12 +9,19 @@ Item{
     signal removeButtonClicked()
     property string selectedP: 'A'
     property int selectedN: 0
-    property alias currLeft : robotSlots.currLeft
+    property alias currCenter : robotSlots.currCenter
     property alias currRight : robotSlots.currRight
 
     function editDatePlanted(p, n, d) {
         plantSlots[p][n].editDatePlanted(d)
         // plantSlots[p][n].datePlanted = d
+    }
+
+    // The UI slot base
+    RobotSlots{
+        id: robotSlots
+        anchors.fill: parent
+        slotComponent: slotHole
     }
 
     Button {
@@ -61,14 +68,7 @@ Item{
         }
     }
 
-    // The UI slot base
-    RobotSlots{
-        id: robotSlots
-        anchors.fill: parent
-        slotComponent: slotHole
-        leftSlotsQuantity: plantSlots[currLeft].length
-        rightSlotsQuantity: plantSlots[currRight].length
-    }
+    
 
     /* Popup */
     Popup {

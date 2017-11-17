@@ -32,85 +32,7 @@ ApplicationWindow {
     }
 
 
-    Item{
-        id: "topBar"
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottomMargin:10
-        anchors.topMargin: 5
-        width:parent.width - 30
-        height: 50
-
-        // Button{
-        //     text: "HUGE TEST NAV"
-        //     onClicked: navTo(panelLight)
-        // }
-        Item{
-            width:  Math.max(btnBack.width, btnSetting.width)
-            height: Math.max(btnBack.height, btnSetting.height)
-            anchors.verticalCenter: parent.verticalCenter
-
-
-            Button {
-                text: "<-Back"
-                id:"btnBack"
-                objectName: "btnBack"
-                visible: !panelHome.visible
-                onClicked: navBack()
-            }
-            Button{
-                id:"btnSetting"
-                objectName:"btnSetting"
-                text:"Setting"
-                anchors.verticalCenter: parent.verticalCenter
-                visible: panelHome.visible
-            }
-        }
-
-        Item{
-            id: clock
-            anchors.top: parent.top
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: txtClock.width
-            visible: panelHome.visible
-            Text{
-                id:"txtClock"
-                objectName:"txtClock"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                font.pointSize: 45
-            }
-        }
-
-        Row{
-            id: motorRotateButtons
-            anchors.right: parent.right
-            spacing: 5
-            // enabled:false
-            Button{
-                id:"btnRotateLeft"
-                objectName:"btnRotateLeft"
-                text:"<-"
-                anchors.verticalCenter: parent.verticalCenter
-                onPressed: rotateMotor(2)
-                onReleased: stopMotor()
-                onCanceled: stopMotor()
-                visible: panelHome.visible || panelRobot.visible || panelRobotSelect.visible
-            }
-
-            Button{
-                id:"btnRotateRight"
-                objectName:"btnRotateRight"
-                text:"->"
-                anchors.verticalCenter: parent.verticalCenter
-                onPressed: rotateMotor(1)
-                onReleased: stopMotor()
-                onCanceled: stopMotor()
-                visible: panelHome.visible || panelRobot.visible || panelRobotSelect.visible
-            }
-        }
-        
-    }
-
+   
     HomePanel{
         id: "panelHome"
         objectName:"panelHome"
@@ -192,7 +114,7 @@ ApplicationWindow {
         onVisibleChanged:{ 
             // if leaves panel, sync robot panel's view
             if(!visible) {
-                panelRobotSelect.currLeft = currLeft
+                panelRobotSelect.currCenter = currCenter
             }
         }
     }
@@ -217,7 +139,7 @@ ApplicationWindow {
         onVisibleChanged:{ 
             // if leaves panel, sync robot panel's view
             if(!visible) {
-                panelRobot.currLeft = currLeft
+                panelRobot.currCenter = currCenter
             }
         }
     }
@@ -228,6 +150,99 @@ ApplicationWindow {
         anchors.fill: parent
         mode: panelRobotSelect.mode
     }
+
+
+    Item{
+        id: "topBar"
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottomMargin:10
+        anchors.topMargin: 5
+        width:parent.width - 30
+        height: 50
+
+        // Button{
+        //     text: "HUGE TEST NAV"
+        //     onClicked: navTo(panelLight)
+        // }
+        Item{
+            width:  Math.max(btnBack.width, btnSetting.width)
+            height: Math.max(btnBack.height, btnSetting.height)
+            anchors.verticalCenter: parent.verticalCenter
+
+
+            Button {
+                text: "<-Back"
+                id:"btnBack"
+                objectName: "btnBack"
+                visible: !panelHome.visible
+                onClicked: navBack()
+            }
+            Button{
+                id:"btnSetting"
+                objectName:"btnSetting"
+                anchors.verticalCenter: parent.verticalCenter 
+                
+                height: 70
+                width: 70
+
+                Image{
+                    fillMode: Image.PreserveAspectFit
+                    // width: 110
+                    anchors.verticalCenter: parent.verticalCenter   
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    height: parent.height - 20
+
+                    source: "images/icon_se.png"
+                }
+                visible: panelHome.visible
+            }
+        }
+
+        Item{
+            id: clock
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: txtClock.width
+            visible: panelHome.visible
+            Text{
+                id:"txtClock"
+                objectName:"txtClock"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                font.pointSize: 45
+            }
+        }
+
+        Row{
+            id: motorRotateButtons
+            anchors.right: parent.right
+            spacing: 5
+            // enabled:false
+            Button{
+                id:"btnRotateLeft"
+                objectName:"btnRotateLeft"
+                text:"<-"
+                anchors.verticalCenter: parent.verticalCenter
+                onPressed: rotateMotor(2)
+                onReleased: stopMotor()
+                onCanceled: stopMotor()
+                visible: panelHome.visible || panelRobot.visible || panelRobotSelect.visible
+            }
+
+            Button{
+                id:"btnRotateRight"
+                objectName:"btnRotateRight"
+                text:"->"
+                anchors.verticalCenter: parent.verticalCenter
+                onPressed: rotateMotor(1)
+                onReleased: stopMotor()
+                onCanceled: stopMotor()
+                visible: panelHome.visible || panelRobot.visible || panelRobotSelect.visible
+            }
+        }
+        
+    }
+
 
     // SwipeView {
     //     id:swipe

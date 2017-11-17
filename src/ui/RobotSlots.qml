@@ -3,9 +3,11 @@ import QtQuick.Controls 2.0
 
 Item{
 
-    property string currLeft: 'A'
-    property string currRight:  'H' == currLeft ? 'A' : String.fromCharCode(currLeft.charCodeAt(0) + 1)
-    property string currLeftLeft: 'A' == currLeft ? 'H' : String.fromCharCode(currLeft.charCodeAt(0) - 1)
+
+    property string currLeft: 'B'
+    property string currCenter: 'A'
+    property string currRight:  'H' == currCenter ? 'A' : String.fromCharCode(currCenter.charCodeAt(0) + 1)
+    property string currLeftLeft: 'A' == currCenter ? 'H' : String.fromCharCode(currCenter.charCodeAt(0) - 1)
     property string currRightRight: 'H' == currRight ? 'A' : String.fromCharCode(currRight.charCodeAt(0) + 1)
     
     property int capsuleRadius: 50
@@ -29,8 +31,18 @@ Item{
     property int capsuleHX: capsulesCenter - capsuleXOffset2
 
     property var slotComponent: {}
-    property int leftSlotsQuantity: 0
-    property int rightSlotsQuantity: 0
+    property int leftSlotsQuantity: plantSlots[currCenter].length
+    property int rightSlotsQuantity: plantSlots[currRight].length
+
+    Image{
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.left:parent.left
+        anchors.top:parent.top
+        anchors.topMargin:-200
+        anchors.bottomMargin:-70
+        source: "images/inside.bmp"
+    }
 
     Button {
         anchors.left: capsules.horizontalCenter
@@ -42,8 +54,8 @@ Item{
         text: ">"
        
         onClicked : {
-            var a = (currLeft.charCodeAt(0) - 65 + 1) % 8
-            currLeft = String.fromCharCode(a + 65)
+            var a = (currCenter.charCodeAt(0) - 65 + 1) % 8
+            currCenter = String.fromCharCode(a + 65)
             // currRight = String.fromCharCode(((a + 1) % 8 ) + 65)
         }
     }
@@ -57,9 +69,9 @@ Item{
         y: 25
         text: "<"
         onClicked : {
-            var a = currLeft.charCodeAt(0) - 65 - 1
+            var a = currCenter.charCodeAt(0) - 65 - 1
             if (a < 0) a += 8
-            currLeft = String.fromCharCode(a + 65)
+            currCenter = String.fromCharCode(a + 65)
             // currRight = String.fromCharCode(((a + 1) % 8 ) + 65)
         }
     }
@@ -71,7 +83,7 @@ Item{
         anchors.right: capsules.horizontalCenter
         anchors.rightMargin: 57
 
-        text: currLeft
+        text: currCenter
         font.bold: true
         font.pointSize: 36
     }
@@ -178,27 +190,19 @@ Item{
         // }
     }
 
-    Image{
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        anchors.left:parent.left
-        anchors.top:parent.top
-        anchors.topMargin:-200
-        anchors.bottomMargin:-70
-        source: "images/inside.bmp"
-    }
+    
 
     Repeater {
         model: [leftSlotsQuantity, rightSlotsQuantity]
         Repeater{
             property int slotsQuantity: modelData
             property int capsuleX: index == 0 ? capsuleAX: capsuleBX
-            property var currLeftRight : index == 0 ? currLeft : currRight
+            property var currLeftRight : index == 0 ? currCenter : currRight
             model: modelData
             Loader { 
                 sourceComponent: slotComponent
                 onLoaded:{
-                    if(currLeftRight == currLeft){
+                    if(currLeftRight == currCenter){
                         item.x = capsuleX + capsuleRadius + item.width/2 - 5 - (5 * (slotsQuantity  - 1- index))
                     }
                     else{ 
