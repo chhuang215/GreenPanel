@@ -64,24 +64,7 @@ Item{
                     font.pointSize: 30; font.bold: true
                 }
             }
-
-            /*Rectangle {
-                z: 100
-                width: 300
-                height: 80
-                color: "transparent"
-                ComboBox {
-                    currentIndex: 0
-                    model: ListModel {
-                        id: cbItems
-                        ListElement { text: "English" }
-                        ListElement { text: "French" }
-                        ListElement { text: "Chinese" }
-                    }
-                    onCurrentIndexChanged: console.debug(cbItems.get(currentIndex).text + ", " + cbItems.get(currentIndex).color)
-                }
-            }*/
-
+            
             Item {
                 width:300
                 height: 80
