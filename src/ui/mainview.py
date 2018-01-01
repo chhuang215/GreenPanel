@@ -103,10 +103,11 @@ class MainWindow(QObject):
         # When OK button is pressent in the time change popup
         self.panel_setting.timeChange.connect(self.time_update)
 
+        # TODO Confirm Button
         # When confirm button is clicked in settings, nav back to main panel
-        self.btn_setting_confirm = self.root.findChild(QQuickItem, "btnConfirm")
-        self.btn_setting_confirm.clicked.connect(self.settings_confirm)
-        self.btn_setting_confirm.clicked.connect(self.__panel_nav_back)
+        # self.btn_setting_confirm = self.root.findChild(QQuickItem, "btnConfirm")
+        # self.btn_setting_confirm.clicked.connect(self.settings_confirm)
+        # self.btn_setting_confirm.clicked.connect(self.__panel_nav_back)
 
         # Time picker (retired code)
         # self.btn_time_picker = self.root.findChild(QQuickItem, "btnSetTime")

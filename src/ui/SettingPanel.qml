@@ -47,9 +47,9 @@ Item{
     Column{
         anchors.top: parent.top
         anchors.topMargin: 40
-
         Grid {
             id: grid
+     
             width:parent.width
             rows: 4; columns: 2; spacing: 10
 
@@ -261,20 +261,22 @@ Item{
                 text: "scan"
                 onClicked: scanWifi()
             }
-        }
+        } // END Grid
+        
     }
-    Row {
-        x: 600
-        y: 350
-        Button {
-                id:"btnConfirm"
-                objectName:"btnConfirm"
-                width:100
-                height:50
-                text: "Confirm"
-        }
-    }
+    // Row {
+    //     x: 600
+    //     y: 350
+    //     Button {
+    //             id:"btnConfirm"
+    //             objectName:"btnConfirm"
+    //             width:100
+    //             height:50
+    //             text: "Confirm"
+    //     }
+    // }
 
+    // TIME SETTING ADJUST POPUP
     Popup {
         id: timePopup
         x: 300
