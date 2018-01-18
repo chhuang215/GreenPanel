@@ -70,27 +70,29 @@ Item{
                 font.pointSize: 30; font.bold: true
             }
         }
+        
         Item{
+            x:30
             width: 300
             height: 80
             ButtonGroup {
-                buttons: column.children
+                buttons: rowBtns.children
             }
 
-            Column {
-                id: column
+            Row {
+                id: rowBtns
 
                 Button {
                     checked: true
-                    text: qsTr("DAB")
+                    text: qsTr("English")
                 }
 
                 Button {
-                    text: qsTr("FM")
+                    text: qsTr("French")
                 }
 
                 Button {
-                    text: qsTr("AM")
+                    text: qsTr("Chinese")
                 }
             }
 
