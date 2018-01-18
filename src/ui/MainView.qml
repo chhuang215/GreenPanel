@@ -21,6 +21,9 @@ ApplicationWindow {
     function updateClockText(clocktime){
         txtClock.text = clocktime
     }
+    // function updateDateText(date){
+    //     txtDate.text = date
+    // }
 
     function enableMotorRotate(enable){
         motorRotateButtons.enabled = enable
@@ -158,7 +161,7 @@ ApplicationWindow {
         anchors.bottomMargin:10
         anchors.topMargin: 5
         width:parent.width - 30
-        height: 50
+        height: 52
 
         // Button{
         //     text: "HUGE TEST NAV"
@@ -177,13 +180,18 @@ ApplicationWindow {
                 visible: !panelHome.visible
                 onClicked: navBack()
             }
+
+            // Button: navigate to setting page
             Button{
                 id:"btnSetting"
                 objectName:"btnSetting"
-                anchors.verticalCenter: parent.verticalCenter 
                 
-                height: 70
-                width: 70
+                anchors.top: parent.top
+                anchors.bottom:parent.bottom 
+                
+                
+                //height: 65
+                width: height
 
                 Image{
                     fillMode: Image.PreserveAspectFit
@@ -198,6 +206,7 @@ ApplicationWindow {
             }
         }
 
+        //Clock Item to display date and time
         Item{
             id: clock
             anchors.top: parent.top
@@ -209,7 +218,15 @@ ApplicationWindow {
                 objectName:"txtClock"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                font.pointSize: 45
+                font.pointSize: 33
+            }
+            Text{
+                id:"txtDate"
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: txtClock.bottom
+                
+                text:Qt.formatDateTime(new Date(), "dddd, MMMM dd, yyyy")
+                font.pointSize:18
             }
         }
 

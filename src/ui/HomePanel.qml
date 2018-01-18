@@ -43,7 +43,7 @@ Item{
                 anchors.right:parent.right
                 anchors.rightMargin:30
                 anchors.top:parent.top
-                anchors.topMargin: 30
+                anchors.topMargin: 35
                 fillMode: Image.PreserveAspectFit
                 // width: 110
                 height: 80
@@ -53,7 +53,7 @@ Item{
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: parent.c ? parent.tempC : parent.tempF
-                font.pointSize: 25; font.bold: true
+                font.pointSize: 23; font.bold: true
             }
             
             MouseArea { 
