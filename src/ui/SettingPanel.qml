@@ -81,6 +81,7 @@ Item{
 
             Row {
                 id: rowBtns
+                anchors.verticalCenter:parent.verticalCenter
 
                 Button {
                     checked: true
