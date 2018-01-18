@@ -16,10 +16,17 @@ ApplicationWindow {
     signal navTo(var p)
     property var nutrientDays: -1
     property bool waterLevelIsGood: false
+    property int mainLightStatus: 1
     property bool busySlots: panelRobotSelect.visible || panelRobotSelectPlant.visible || panelRobotConfirm.visible
 
     function updateClockText(clocktime){
         txtClock.text = clocktime
+    }
+
+    //TODO : Dynamically trigger when main light is switched
+    //          either manually or automatically
+    function setMainLightStatus(status){
+        mainLightStatus = status;
     }
     // function updateDateText(date){
     //     txtDate.text = date
@@ -45,6 +52,7 @@ ApplicationWindow {
     LightPanel{
         id: "panelLight"
         objectName:"panelLight"
+        lightStatus: mainLightStatus
         anchors.fill: parent
     }
 

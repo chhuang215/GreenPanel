@@ -8,11 +8,11 @@ Item{
 
     signal unitChanged(var unit)
     signal clearNotify()
-
+ 
     property bool waterGood : false 
     property int nutrientDays : -1
     property alias temperatureUnit : tempDisplay.unit
-
+    
     function updateTemperature(c, f, s){
         tempDisplay.tempC = c + " \u00B0C";
         tempDisplay.tempF = f + " \u00B0F";
@@ -20,7 +20,7 @@ Item{
 
     }
     function notifyRobot(msg){
-        robotNotification.text = msg 
+        robotNotification.text = msg ;
     }
     
     Item{
@@ -146,6 +146,7 @@ Item{
             anchors.horizontalCenter:parent.horizontalCenter
             spacing: 65
             
+            // Button to navigate to light setting page
             HomePanelButton{
                 id:"btnLight"
                 objectName:"btnLight"

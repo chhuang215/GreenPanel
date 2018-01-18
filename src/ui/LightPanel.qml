@@ -7,6 +7,7 @@ Item{
     property int lightDuration: 17
     property int buttonHeight: 100
     property int buttonWidth: 100
+    property int lightStatus: 1
     signal lightTimerChanged(var hr, var dur)
     signal lightSwitched
     id:"panelLight"
@@ -131,7 +132,7 @@ Item{
                     fillMode: Image.PreserveAspectFit
                     // width: 110
                     height: 80
-                    source: "images/icon_li.png"
+                    source: lightStatus ? "images/icon_li.png" : "images/icon_li_off.png"
                 }
                 objectName: "swtLight"            
                 // checked: true

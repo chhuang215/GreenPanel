@@ -91,7 +91,8 @@ class MainWindow(QObject):
 
         # light panel signals / events
         self.panel_light.lightTimerChanged.connect(main_led.timer.set_timer)
-        self.panel_light.lightSwitched.connect(main_led.switch)
+        self.panel_light.lightSwitched.connect(main_led.switch) #switch led gpio
+        self.panel_light.lightSwitched.connect(lambda: self.root.setMainLightStatus(main_led.status))
 
         # Nutrient Panel signals
         self.panel_nutrient.nutrientAdded.connect(slots.renew_nutrient_days)
@@ -151,6 +152,8 @@ class MainWindow(QObject):
         SIGNALER.NUTRIENT_REFRESH.connect(lambda days: self.root.setProperty("nutrientDays", days))
         SIGNALER.TEMPERATURE_UPDATE.connect(self.display_update_temperature)
         SIGNALER.WIFI_REFRESH.connect(self.refresh_wifi_list)
+
+
         # Display clock right away
         self.display_update_clock()
 
@@ -213,7 +216,7 @@ class MainWindow(QObject):
     def display_water_status(self):
         status = GPIOCtrler.get_component(PIN.WATER_LEVEL_SENSOR).has_enough_water()
         self.root.setProperty("waterLevelIsGood", status)
-    
+
     @pyqtSlot()
     def display_update_clock(self):
         self.root.updateClockText(datetime.datetime.now().strftime('%I:%M %p'))

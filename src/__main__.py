@@ -94,6 +94,9 @@ def main():
         wpump.timer.activate()
         motr.timer.activate()
 
+        # init UI data status for correct icon display
+        UIController.MAIN_UI.root.setMainLightStatus(main_light.status)
+
         ret = app.exec_()
 
         # Teminate
