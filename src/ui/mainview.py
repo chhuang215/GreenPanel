@@ -54,10 +54,10 @@ class MainWindow(QObject):
         self.panel_home = self.root.findChild(QQuickItem, "panelHome")
         self.panel_home.setProperty("temperatureUnit", db.get_setting()["temperature_unit"])
         
-        led = GPIOCtrler.get_component(PIN.YELLOW_LED)
+        main_led = GPIOCtrler.get_component(PIN.YELLOW_LED)
         self.panel_light = self.root.findChild(QQuickItem, "panelLight")
-        self.panel_light.setProperty("lightHr", led.timer.begin_hour)
-        self.panel_light.setProperty("lightDuration", led.timer.duration)
+        self.panel_light.setProperty("lightHr", main_led.timer.begin_hour)
+        self.panel_light.setProperty("lightDuration", main_led.timer.duration)
 
         self.panel_water = self.root.findChild(QQuickItem, "panelWater")
         self.panel_nutrient = self.root.findChild(QQuickItem, "panelNutrient")
@@ -90,8 +90,8 @@ class MainWindow(QObject):
         self.btn_setting.clicked.connect(lambda: self.__panel_nav(self.panel_setting))
 
         # light panel signals / events
-        self.panel_light.lightTimerChanged.connect(led.timer.set_timer)
-        self.panel_light.lightSwitched.connect(led.switch)
+        self.panel_light.lightTimerChanged.connect(main_led.timer.set_timer)
+        self.panel_light.lightSwitched.connect(main_led.switch)
 
         # Nutrient Panel signals
         self.panel_nutrient.nutrientAdded.connect(slots.renew_nutrient_days)

@@ -34,8 +34,6 @@ ApplicationWindow {
         border.width:1
     }
 
-
-   
     HomePanel{
         id: "panelHome"
         objectName:"panelHome"
@@ -163,15 +161,10 @@ ApplicationWindow {
         width:parent.width - 30
         height: 52
 
-        // Button{
-        //     text: "HUGE TEST NAV"
-        //     onClicked: navTo(panelLight)
-        // }
         Item{
             width:  Math.max(btnBack.width, btnSetting.width)
             height: Math.max(btnBack.height, btnSetting.height)
             anchors.verticalCenter: parent.verticalCenter
-
 
             Button {
                 text: "<-Back"
@@ -186,8 +179,8 @@ ApplicationWindow {
                 id:"btnSetting"
                 objectName:"btnSetting"
                 
-                anchors.top: parent.top
-                anchors.bottom:parent.bottom 
+                // anchors.top: parent.top
+                // anchors.bottom:parent.bottom 
                 
                 
                 //height: 65
@@ -198,7 +191,7 @@ ApplicationWindow {
                     // width: 110
                     anchors.verticalCenter: parent.verticalCenter   
                     anchors.horizontalCenter: parent.horizontalCenter
-                    height: parent.height - 20
+                    height: parent.height - 18
 
                     source: "images/icon_se.png"
                 }

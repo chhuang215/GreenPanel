@@ -15,12 +15,15 @@ Item{
         anchors.fill:parent
         anchors.topMargin:55
         anchors.centerIn: parent
+        anchors.leftMargin:25
+        anchors.rightMargin:25
         Column{
             width:parent.width / 2 
             Grid {
                 id: grid
                 width:parent.width
-                rows: 2; columns: 3; spacing: 3            
+                verticalItemAlignment:Grid.AlignVCenter
+                rows: 2; columns: 3; spacing: 20          
                 Row {
                     x: 30
                     spacing: 30
@@ -29,7 +32,7 @@ Item{
                         anchors.verticalCenter: parent.verticalCenter
                         objectName: "txtHourLabel"
                         text: "Hour:"
-                        font.pointSize: 40; font.bold: true
+                        font.pointSize: 25  ; font.bold: true
 
                     }
                     Text {
@@ -37,7 +40,7 @@ Item{
                         id: "txtHour"
                         objectName: "txtHour"
                         text: lightHr
-                        font.pointSize: 40; font.bold: true
+                        font.pointSize: 20; font.bold: true
                     }
                 }
                 Button {
@@ -72,7 +75,7 @@ Item{
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "Duration:"
-                        font.pointSize: 40; font.bold: true
+                        font.pointSize: 25; font.bold: true
                     }
 
                     Text {
@@ -82,7 +85,7 @@ Item{
                         objectName: "txtDuration"
                         text: lightDuration
 
-                        font.pointSize: 40; font.bold: true
+                        font.pointSize: 20; font.bold: true
 
                     }
                 }
@@ -120,9 +123,16 @@ Item{
             Button {
                 anchors.right: parent.right
                 anchors.rightMargin: 10
-                width:175
+                width:130
                 height:130
-                text: "Light Switch"
+                // text: "Light Switch"
+                Image{
+                    anchors.centerIn:parent
+                    fillMode: Image.PreserveAspectFit
+                    // width: 110
+                    height: 80
+                    source: "images/icon_li.png"
+                }
                 objectName: "swtLight"            
                 // checked: true
                 onClicked: lightSwitched()
