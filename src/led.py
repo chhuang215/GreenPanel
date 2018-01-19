@@ -6,6 +6,7 @@ import threading
 import datetime
 import RPi.GPIO as GPIO
 import db
+from PyQt5.QtCore import QObject, pyqtSignal
 from controller import GPIOController, SIGNALER
 '''
     LED class
@@ -39,7 +40,7 @@ class LED():
     def turn_on(self):
         self.status = LED.ON
 
-        SIGNALER.LIGHT_SWITCH.emit(True)
+        StatusSignal.LIGHT_SWITCH.emit(LED.ON)
 
         lid = GPIOController.get_component(GPIOController.PIN.PUSH_BUTTON)
         if lid.status == lid.OPENED:
@@ -50,7 +51,7 @@ class LED():
         
     def turn_off(self):
         self.status = LED.OFF
-        SIGNALER.LIGHT_SWITCH.emit(False)
+        StatusSignal.LIGHT_SWITCH.emit(LED.OFF)
         GPIO.output(self.pin, GPIO.LOW)
 
     def turn_on_temporary(self):
@@ -64,6 +65,9 @@ class LED():
             self.turn_on()
         else:
             self.turn_off()
+
+class StatusSignal(QObject):
+    LIGHT_SWITCH = pyqtSignal(int)
 
 class LightTimer():
 

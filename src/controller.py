@@ -62,7 +62,7 @@ class Signaler(QObject):
     SLOTS_REFRESH = pyqtSignal(object)
     NUTRIENT_REFRESH = pyqtSignal(int)
     WIFI_REFRESH = pyqtSignal(object)
-    LIGHT_SWITCH = pyqtSignal(bool)
+    # LIGHT_SWITCH = pyqtSignal(bool)
     LID_SWITCH = pyqtSignal(int)
     # def __init__(self):
     #     super().__init__()
