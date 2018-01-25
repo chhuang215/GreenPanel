@@ -40,7 +40,8 @@ class LED():
     def turn_on(self):
         self.status = LED.ON
 
-        StatusSignal.LIGHT_SWITCH.emit(LED.ON)
+        # TODO : change back to use universal signal and pass over the light id
+        # StatusSignal.LIGHT_SWITCH.emit(LED.ON)
 
         lid = GPIOController.get_component(GPIOController.PIN.PUSH_BUTTON)
         if lid.status == lid.OPENED:
@@ -51,7 +52,7 @@ class LED():
         
     def turn_off(self):
         self.status = LED.OFF
-        StatusSignal.LIGHT_SWITCH.emit(LED.OFF)
+        # StatusSignal.LIGHT_SWITCH.emit(LED.OFF)
         GPIO.output(self.pin, GPIO.LOW)
 
     def turn_on_temporary(self):

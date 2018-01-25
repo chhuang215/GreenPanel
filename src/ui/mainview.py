@@ -151,6 +151,7 @@ class MainWindow(QObject):
         SIGNALER.SLOTS_REFRESH.connect(self.refresh_slots_status)
         SIGNALER.NUTRIENT_REFRESH.connect(lambda days: self.root.setProperty("nutrientDays", days))
         SIGNALER.TEMPERATURE_UPDATE.connect(self.display_update_temperature)
+        SIGNALER.LIGHT_SWITCH.connect(self.handle_light_switch_signal)
         SIGNALER.WIFI_REFRESH.connect(self.refresh_wifi_list)
 
 
@@ -211,6 +212,10 @@ class MainWindow(QObject):
     def time_update(self, hour, minute):
         print("Hour: " + str(hour))
         print("Minute: " + str(minute))
+
+    @pyqtSlot(int, bool)
+    def handle_light_switch_signal(self, id, onoff):
+        pass
 
     @pyqtSlot()
     def display_water_status(self):
