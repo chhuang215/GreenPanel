@@ -41,7 +41,7 @@ class LED():
         self.status = LED.ON
 
         # TODO : change back to use universal signal and pass over the light id
-        # StatusSignal.LIGHT_SWITCH.emit(LED.ON)
+        SIGNALER.LIGHT_SWITCH.emit(self.pin, LED.ON)
 
         lid = GPIOController.get_component(GPIOController.PIN.PUSH_BUTTON)
         if lid.status == lid.OPENED:
@@ -52,7 +52,7 @@ class LED():
         
     def turn_off(self):
         self.status = LED.OFF
-        # StatusSignal.LIGHT_SWITCH.emit(LED.OFF)
+        SIGNALER.LIGHT_SWITCH.emit(self.pin, LED.OFF)
         GPIO.output(self.pin, GPIO.LOW)
 
     def turn_on_temporary(self):
@@ -66,9 +66,6 @@ class LED():
             self.turn_on()
         else:
             self.turn_off()
-
-class StatusSignal(QObject):
-    LIGHT_SWITCH = pyqtSignal(int)
 
 class LightTimer():
 

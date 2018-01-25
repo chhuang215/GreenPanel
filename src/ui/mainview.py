@@ -92,7 +92,7 @@ class MainWindow(QObject):
         # light panel signals / events
         self.panel_light.lightTimerChanged.connect(main_led.timer.set_timer)
         self.panel_light.lightSwitched.connect(main_led.switch) #switch led gpio
-        self.panel_light.lightSwitched.connect(lambda: self.root.setMainLightStatus(main_led.status))
+        # self.panel_light.lightSwitched.connect(lambda: self.root.setMainLightStatus(main_led.status))
 
         # Nutrient Panel signals
         self.panel_nutrient.nutrientAdded.connect(slots.renew_nutrient_days)
@@ -214,8 +214,10 @@ class MainWindow(QObject):
         print("Minute: " + str(minute))
 
     @pyqtSlot(int, bool)
-    def handle_light_switch_signal(self, id, onoff):
-        pass
+    def handle_light_switch_signal(self, light_pin, onoff):
+        if light_pin == PIN.YELLOW_LED:
+            self.root.setMainLightStatus(onoff)
+        
 
     @pyqtSlot()
     def display_water_status(self):
