@@ -54,17 +54,6 @@ class Plant(QObject):
         super().__init__()
         self.__dict__ = d
 
-# print("new plant test")
-# aPlant = Plant(0)
-# aPlant.__st
-# aPlantDic = aPlant.__dict__
-
-# print(aPlantDic)
-
-# aPlant.plant_id = 1
-
-# print(aPlantDic)
-
 def get_plant_data(plant_id):
     data = PLANTS_LIST[plant_id]
     return data["name"], data["days"]

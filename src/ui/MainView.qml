@@ -23,8 +23,6 @@ ApplicationWindow {
         txtClock.text = clocktime
     }
 
-    //TODO : Dynamically trigger when main light is switched
-    //          either manually or automatically
     function setMainLightStatus(status){
         mainLightStatus = status;
     }
