@@ -5,8 +5,8 @@ Item{
     
     property int lightHr: 7
     property int lightDuration: 17
-    property int buttonHeight: 100
-    property int buttonWidth: 100
+    property int buttonHeight: 80
+    property int buttonWidth: 80
     property int lightStatus: 1
     signal lightTimerChanged(var hr, var dur)
     signal lightSwitched
@@ -28,13 +28,12 @@ Item{
             
             horizontalItemAlignment:Grid.AlignHCenter
             verticalItemAlignment:Grid.AlignVCenter
-            rows: 2; columns: 3; spacing: 20    
+            rows: 2; columns: 3; spacing: 15
 
             Button {
                 width:buttonWidth
                 height:buttonHeight
                 text: "-"
-                
                 Material.background: "#7ccce7"
                 Material.elevation: 7
                 onClicked: {
@@ -65,20 +64,20 @@ Item{
             }
             
             Button {
-                // signal qmlSignal(var anObject)
                 Material.background: "#7ccce7"
                 Material.elevation: 7
                 width:buttonWidth
                 height:buttonHeight
                 text: "+"
                 onClicked: {
-                    
                     lightHr = (lightHr + 1) % 24;
                     panelLight.lightTimerChanged(lightHr, lightDuration)
                 }   
             }
 
             Button {
+                Material.background: "#7ccce7"
+                Material.elevation: 7
                 width:buttonWidth
                 height:buttonHeight
                 text: "-"
@@ -115,6 +114,8 @@ Item{
                 }
             }
             Button {
+                Material.background: "#7ccce7"
+                Material.elevation: 7
                 width:buttonWidth
                 height:buttonHeight
                 text: "+"

@@ -48,8 +48,7 @@ class LED():
             return
 
         GPIO.output(self.pin, GPIO.HIGH)
-        
-        
+
     def turn_off(self):
         self.status = LED.OFF
         SIGNALER.LIGHT_SWITCH.emit(self.pin, LED.OFF)
