@@ -158,6 +158,7 @@ Item{
                 id:"btnRobot"
                 objectName:"btnRobot"
                 text: qsTr("Robot Guy")    
+                imgSource: "images/icon_cap.bmp"
                 Item{
                     id: robotNotification
                     property alias text: txt.text
