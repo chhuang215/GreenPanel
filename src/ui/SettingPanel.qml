@@ -76,23 +76,35 @@ Item{
             width: 300
             height: 80
             ButtonGroup {
-                buttons: rowBtns.children
+                buttons: btnsLang.children
+                checkedButton: en
+                onClicked: {
+                    checkedButton = button
+                }
             }
 
             Row {
-                id: rowBtns
+                id: btnsLang
+                spacing:5
                 anchors.verticalCenter:parent.verticalCenter
 
                 Button {
-                    checked: true
+                    id: en
+                    checkable: true
                     text: qsTr("English")
                 }
 
                 Button {
+                    id: fr
+                    enabled: false
+                    checkable: true
                     text: qsTr("French")
                 }
 
                 Button {
+                    id: zh
+                    enabled: false
+                    checkable: true
                     text: qsTr("Chinese")
                 }
             }
