@@ -6,12 +6,14 @@ class Plant(QObject):
 
     nameChanged = pyqtSignal()
     descriptionChanged = pyqtSignal()
+    imgChanged = pyqtSignal()
 
-    def __init__(self, plant_id, name="Plant", days_harvest=21):
+    def __init__(self, plant_id, name="Plant", days_harvest=21, img_src="placeholder.png"):
         super().__init__()
         self._plant_id = plant_id
         self._name = name
         self._days_harvest = days_harvest
+        self._img = img_src
         self._description = "This is " + name \
                             + "\nShould be ready in " + str(days_harvest) + " days."
     
@@ -22,6 +24,7 @@ class Plant(QObject):
     @plant_id.setter
     def plant_id(self, pid):
         self._plant_id = pid
+    
     
     @pyqtProperty(str, notify=nameChanged)
     def name(self):
@@ -47,6 +50,14 @@ class Plant(QObject):
     def description(self, des):
         self._description = des
 
+    @pyqtProperty(str, notify=imgChanged)
+    def img(self):
+        return self._img
+
+    @img.setter
+    def img(self, img_src):
+        self._img = img_src
+
     def __getstate__(self):
         return self.__dict__
 
@@ -56,4 +67,4 @@ class Plant(QObject):
 
 def get_plant_data(plant_id):
     data = PLANTS_LIST[plant_id]
-    return data["name"], data["days"]
+    return data["name"], data["days"], data["img"]
