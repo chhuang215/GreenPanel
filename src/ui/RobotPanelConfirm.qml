@@ -99,7 +99,7 @@ Item{
         
                 Label {
                     width: 175
-                    text: "" + slotP + slotN
+                    text: "" + slotP + (slotN+1)
                     height: parent.height
                     font.pixelSize: 20
                     padding: 10

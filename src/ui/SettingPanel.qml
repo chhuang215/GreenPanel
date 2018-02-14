@@ -1,5 +1,5 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.1
 
 Item{
     id:"panelSetting"
@@ -57,7 +57,7 @@ Item{
         verticalItemAlignment:Grid.AlignVCenter
 
         // width:parent.width
-        rows: 4; columns: 2; spacing: 15
+        rows: 4; columns: 2; spacing: 10
 
         Item {
             x: 30
@@ -123,33 +123,20 @@ Item{
             }
         }
 
-        /*Rectangle {
-            x: 30
-            width: 300
-            height: 80
-            color: "transparent"
-            TextField {
-                objectName: "timeField"
-                placeholderText: qsTr("Hour: Minute")
-            }
-        }*/
+    
+        Button {
+            id:"btnSetTime"
+            objectName:"btnSetTime"
+            width:100
+            height:50
+            text: "Set Time"
 
-        Row{
-            x: 30
-            
-            Button {
-                id:"btnSetTime"
-                objectName:"btnSetTime"
-                width:100
-                height:50
-                text: "Set Time"
-
-                onClicked: {
-                    timePopup.open()
-                    getCurrentTime()
-                }
+            onClicked: {
+                timePopup.open()
+                getCurrentTime()
             }
         }
+    
 
         Item {
             x: 30
@@ -163,27 +150,13 @@ Item{
             }
         }
 
-        /*Rectangle {
-            x: 30
-            width: 300
-            height: 80
-            color: "transparent"
-            TextField {
-                objectName: "dateField"
-                placeholderText: qsTr("mm/dd/yyyy")
-            }
-        }*/
-
-        Item{
-            x: 30
             
-            Button {
-                id:"btnSetDate"
-                objectName:"btnSetDate"
-                width:100
-                height:50
-                text: "Set Date"
-            }
+        Button {
+            id:"btnSetDate"
+            objectName:"btnSetDate"
+            width:100
+            height:50
+            text: "Set Date"
         }
 
         Item {
@@ -198,6 +171,7 @@ Item{
             }
         }
 
+        
         Button{
             text: "scan"
             onClicked: scanWifi()
