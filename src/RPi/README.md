@@ -1,0 +1,1 @@
+This package is a mock package for mocking GPIO iteraction of the RaspberryPi. Intended to use on non-pi devices or pi's that don't have/want access to GPIO.
