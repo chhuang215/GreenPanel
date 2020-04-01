@@ -132,8 +132,8 @@ class PlantSlot(QObject):
 
         plant_id -- (int) ID of a plant
         """
-        pname, pdays = plants.get_plant_data(plant_id)
-        self._plant = plants.Plant(plant_id, name=pname, days_harvest=pdays)
+        pname, pdays , pimg= plants.get_plant_data(plant_id)
+        self._plant = plants.Plant(plant_id, name=pname, days_harvest=pdays, img_src=pimg)
         self.plantChanged.emit()
         # self.datePlanted = date_planted
         self.datePlanted = date_planted
@@ -262,10 +262,10 @@ def check_slots():
             elif s in NOTIFIED_SLOTS:
                 NOTIFIED_SLOTS.remove(s)
 
-    if len(NOTIFIED_SLOTS) == 1:
-        msg += "IS READY!"
-    elif len(NOTIFIED_SLOTS) > 1:
-        msg += "ARE READY!"
+    # if len(NOTIFIED_SLOTS) == 1:
+    #     msg += "IS READY!"
+    if len(NOTIFIED_SLOTS) >= 1:
+        msg = "READY!"
 
     controller.SIGNALER.SLOTS_REFRESH.emit(msg)
 

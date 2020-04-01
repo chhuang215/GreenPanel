@@ -87,7 +87,7 @@ Item{
         property var plantData : slotData.plant
         property string plantName: plantData ? plantData.name : "NO plant"
         property string description: plantData ? plantData.description : "NO plant"
-        property string imgSource: "images/placeholder.png"
+        property string imgSource: plantData ? "images/plant/" + plantData.img : "images/placeholder.png"
         property var datePlanted: slotData.datePlanted ? slotData.datePlanted : "NO plant"
         property var dateReady: slotData.dateReady ? slotData.dateReady : "NO plant"
         property var daysPassed: slotData.daysPassed
@@ -136,7 +136,7 @@ Item{
                 id: plantNameTxt1
                 anchors.verticalCenter: parent.verticalCenter
                 font.pointSize: 18; font.bold: true
-                text:popup.plantName /*+ " @" + popup.slotP + popup.slotN*/
+                text:popup.plantName + " (" + selectedP + selectedN + ")"
             }
         }
 

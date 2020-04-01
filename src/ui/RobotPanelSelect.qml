@@ -185,7 +185,8 @@ Item{
         id: "btnDoneAddSelect"
         width:150
         height:100
-        
+        anchors.top: parent.top
+        anchors.topMargin: 60
         anchors.right: parent.right
         text: "DONE"
 

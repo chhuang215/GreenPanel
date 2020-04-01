@@ -38,13 +38,20 @@ Item{
                     anchors.horizontalCenter : parent.horizontalCenter
                     width: 150
                     height: 150
-                    text: modelData["name"]
+                    // text: modelData["name"]
+                    Image{
+                        anchors.centerIn: parent
+                        fillMode: Image.PreserveAspectFit
+                        // width: 110
+                        height: 100
+                        source: "images/plant/" + modelData["img"]
+                    }
                     onClicked: panelRobotSelectPlant.plantSelected(index, modelData)
                 }
                 Text{
                     anchors.horizontalCenter : parent.horizontalCenter
                     anchors.bottom : parent.bottom
-                    text: modelData["name"] + " id:" + index 
+                    text: modelData["name"] //+ " id:" + index 
                     font.pointSize: 16
                 }
             }

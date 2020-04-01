@@ -11,7 +11,7 @@ Item{
         id: "txtStatus"
         text: {
             if(waterGood) "Water level is good";
-            else "Please add water\nYour plants will be ded."
+            else "Please add water."
         }
         anchors.horizontalCenter : parent.horizontalCenter
         anchors.verticalCenter : parent.verticalCenter

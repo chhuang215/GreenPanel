@@ -88,17 +88,18 @@ def reset_slots():
 def reset_plants_data():
     plants_data = [
         {
-            "name" : "Lettuce",
+            "id" : 1,
+            "name" : "Romaine Lettuce",
+            "img" : "icon_plant_1_romaine.png",
             "days" : 21
         },
         {
-            "name" : "PlantA",
+            "id" : 2,
+            "name" : "Bok Choy",
+            "img" : "icon_plant_2_bokchoy.png",
             "days" : 21
         },
-        {
-            "name" : "PlantB",
-            "days" : 21
-        }
+
     ]
     with open('db/plants.pickle', 'w+b') as plants_file:
         pickle.dump(plants_data, plants_file, protocol=pickle.HIGHEST_PROTOCOL)
