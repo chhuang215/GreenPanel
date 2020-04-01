@@ -6,4 +6,4 @@ __pycache__/
 *.pyc
 *.db
 *.pickle
-src/RPi
+#src/RPi
